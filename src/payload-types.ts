@@ -228,7 +228,16 @@ export interface Page {
     };
     media?: (number | null) | Media;
   };
-  layout: (CallToActionBlock | ContentBlock | MediaBlock | ArchiveBlock | FormBlock | MarqueeBlock)[];
+  layout: (
+    | CallToActionBlock
+    | ContentBlock
+    | MediaBlock
+    | ArchiveBlock
+    | FormBlock
+    | MarqueeBlock
+    | FeaturesBlock
+    | PricingBlock
+  )[];
   meta?: {
     title?: string | null;
     /**
@@ -835,6 +844,111 @@ export interface MarqueeBlock {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "FeaturesBlock".
+ */
+export interface FeaturesBlock {
+  /**
+   * Enables smooth scrolling to this section (e.g. "integracja"). Use this name in links like "#integracja".
+   */
+  anchor?: string | null;
+  tagline?: string | null;
+  title: string;
+  description?: string | null;
+  features?:
+    | {
+        icon: string;
+        title: string;
+        description: string;
+        footerLeft?: string | null;
+        footerRight?: string | null;
+        color?: ('purple' | 'brown' | 'green') | null;
+        link?: string | null;
+        id?: string | null;
+      }[]
+    | null;
+  id?: string | null;
+  blockName?: string | null;
+  blockType: 'features';
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "PricingBlock".
+ */
+export interface PricingBlock {
+  /**
+   * Enables smooth scrolling to this section (e.g. "cennik"). Use this name in links like "#cennik".
+   */
+  anchor?: string | null;
+  tagline?: string | null;
+  title: string;
+  description?: string | null;
+  plans?:
+    | {
+        name: string;
+        price: string;
+        badge?: string | null;
+        color?: ('white' | 'orange' | 'green') | null;
+        id?: string | null;
+      }[]
+    | null;
+  rows?:
+    | {
+        name: string;
+        description?: string | null;
+        checks?:
+          | {
+              checked?: boolean | null;
+              id?: string | null;
+            }[]
+          | null;
+        id?: string | null;
+      }[]
+    | null;
+  hotelCard?: {
+    image?: (number | null) | Media;
+    title?: string | null;
+    address?: string | null;
+    price?: string | null;
+    priceSuffix?: string | null;
+    details?:
+      | {
+          text?: string | null;
+          id?: string | null;
+        }[]
+      | null;
+  };
+  packageType?: ('card' | 'media') | null;
+  packageCard?: {
+    tagline?: string | null;
+    title?: string | null;
+    description?: string | null;
+  };
+  packageMedia?: (number | null) | Media;
+  link: {
+    type?: ('reference' | 'custom') | null;
+    newTab?: boolean | null;
+    reference?:
+      | ({
+          relationTo: 'pages';
+          value: number | Page;
+        } | null)
+      | ({
+          relationTo: 'posts';
+          value: number | Post;
+        } | null);
+    url?: string | null;
+    label: string;
+    /**
+     * Choose how the link should be rendered.
+     */
+    appearance?: ('default' | 'outline') | null;
+  };
+  id?: string | null;
+  blockName?: string | null;
+  blockType: 'pricing';
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "redirects".
  */
 export interface Redirect {
@@ -1171,6 +1285,8 @@ export interface PagesSelect<T extends boolean = true> {
         archive?: T | ArchiveBlockSelect<T>;
         formBlock?: T | FormBlockSelect<T>;
         marquee?: T | MarqueeBlockSelect<T>;
+        features?: T | FeaturesBlockSelect<T>;
+        pricing?: T | PricingBlockSelect<T>;
       };
   meta?:
     | T
@@ -1285,6 +1401,98 @@ export interface MarqueeBlockSelect<T extends boolean = true> {
   direction?: T;
   separator?: T;
   colorScheme?: T;
+  id?: T;
+  blockName?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "FeaturesBlock_select".
+ */
+export interface FeaturesBlockSelect<T extends boolean = true> {
+  anchor?: T;
+  tagline?: T;
+  title?: T;
+  description?: T;
+  features?:
+    | T
+    | {
+        icon?: T;
+        title?: T;
+        description?: T;
+        footerLeft?: T;
+        footerRight?: T;
+        color?: T;
+        link?: T;
+        id?: T;
+      };
+  id?: T;
+  blockName?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "PricingBlock_select".
+ */
+export interface PricingBlockSelect<T extends boolean = true> {
+  anchor?: T;
+  tagline?: T;
+  title?: T;
+  description?: T;
+  plans?:
+    | T
+    | {
+        name?: T;
+        price?: T;
+        badge?: T;
+        color?: T;
+        id?: T;
+      };
+  rows?:
+    | T
+    | {
+        name?: T;
+        description?: T;
+        checks?:
+          | T
+          | {
+              checked?: T;
+              id?: T;
+            };
+        id?: T;
+      };
+  hotelCard?:
+    | T
+    | {
+        image?: T;
+        title?: T;
+        address?: T;
+        price?: T;
+        priceSuffix?: T;
+        details?:
+          | T
+          | {
+              text?: T;
+              id?: T;
+            };
+      };
+  packageType?: T;
+  packageCard?:
+    | T
+    | {
+        tagline?: T;
+        title?: T;
+        description?: T;
+      };
+  packageMedia?: T;
+  link?:
+    | T
+    | {
+        type?: T;
+        newTab?: T;
+        reference?: T;
+        url?: T;
+        label?: T;
+        appearance?: T;
+      };
   id?: T;
   blockName?: T;
 }

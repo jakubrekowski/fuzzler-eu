@@ -19,6 +19,7 @@ const buttonVariants = cva(
         ghost:
           'rounded-full text-cream hover:bg-white/[0.06]',
         link: 'text-orange underline-offset-4 hover:underline font-semibold uppercase tracking-[0.06em]',
+        disabled: 'rounded-full bg-zinc-800 text-zinc-500 cursor-not-allowed opacity-50 grayscale pointer-events-none',
       },
       size: {
         clear: '',

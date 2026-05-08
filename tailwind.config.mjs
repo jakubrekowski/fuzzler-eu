@@ -27,6 +27,8 @@ const config = {
               '--tw-prose-headings': '#fdf9f3',
               '--tw-prose-links': '#ff9a42',
               '--tw-prose-bold': '#fdf9f3',
+              fontSize: '22px',
+              lineHeight: '1.4',
               h1: {
                 fontWeight: 'normal',
                 marginBottom: '0.25em',

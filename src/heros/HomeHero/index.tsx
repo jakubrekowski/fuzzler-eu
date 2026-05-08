@@ -7,6 +7,7 @@ import { StatItem } from '@/components/ui/stat-item'
 import { ArrowRight } from 'lucide-react'
 import type { Page } from '@/payload-types'
 import { CMSLink } from '@/components/Link'
+import { ActionButton } from '@/components/ActionButton'
 import RichText from '@/components/RichText'
 
 export const HomeHero: React.FC<Page['hero']> = (props) => {
@@ -76,7 +77,7 @@ export const HomeHero: React.FC<Page['hero']> = (props) => {
             </h1>
           </div>
 
-          <div className="mt-6 text-xl lg:text-2xl text-cream-dim max-w-[520px] leading-relaxed">
+          <div className="mt-6 text-[22px] text-cream-dim max-w-[520px] leading-relaxed">
             {richText ? (
               <RichText data={richText} enableGutter={false} className="prose-invert" />
             ) : (
@@ -98,20 +99,7 @@ export const HomeHero: React.FC<Page['hero']> = (props) => {
           <div className="mt-10 flex flex-wrap gap-4">
             {Array.isArray(links) && links.length > 0 ? (
               links.map(({ link }, i) => (
-                <CMSLink
-                  key={i}
-                  {...link}
-                  className={cn(
-                    'h-12 px-6 rounded-full text-sm font-bold uppercase tracking-[0.08em] transition-all duration-300',
-                    link.appearance === 'default' || link.appearance == null
-                      ? 'bg-orange text-graphite hover:bg-orange/90 hover:-translate-y-0.5 shadow-[0_6px_0_0_#B5641F,0_12px_32px_-8px_rgba(255,154,66,0.5)] active:translate-y-0.5 active:shadow-none'
-                      : 'bg-transparent border border-white/10 text-cream hover:bg-white/5 hover:border-white/30',
-                  )}
-                >
-                  {(link.appearance === 'default' || link.appearance == null) && (
-                    <ArrowRight className="ml-2 w-4 h-4 -rotate-45" />
-                  )}
-                </CMSLink>
+                <ActionButton key={i} link={link} />
               ))
             ) : (
               <>

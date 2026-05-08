@@ -40,7 +40,7 @@ export const CMSLink: React.FC<CMSLinkType> = (props) => {
         }`
       : url
 
-  if (!href) return null
+  if (!href && appearance !== 'disabled') return null
 
   const size = appearance === 'link' ? 'clear' : sizeFromProps
   const newTabProps = newTab ? { rel: 'noopener noreferrer', target: '_blank' } : {}
@@ -57,7 +57,11 @@ export const CMSLink: React.FC<CMSLinkType> = (props) => {
 
   return (
     <Button asChild className={className} size={size} variant={appearance}>
-      <Link className={cn(className)} href={href || url || ''} {...newTabProps}>
+      <Link 
+        className={cn(className, appearance === 'disabled' && 'pointer-events-none')} 
+        href={href || url || ''} 
+        {...newTabProps}
+      >
         {label && label}
         {children && children}
       </Link>

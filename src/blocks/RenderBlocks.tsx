@@ -8,6 +8,8 @@ import { ContentBlock } from '@/blocks/Content/Component'
 import { FormBlock } from '@/blocks/Form/Component'
 import { MediaBlock } from '@/blocks/MediaBlock/Component'
 import { MarqueeBlockComponent } from '@/blocks/Marquee/Component'
+import { FeaturesBlockComponent } from '@/blocks/Features/Component'
+import { PricingBlockComponent } from '@/blocks/Pricing/Component'
 
 const blockComponents = {
   archive: ArchiveBlock,
@@ -16,6 +18,8 @@ const blockComponents = {
   formBlock: FormBlock,
   mediaBlock: MediaBlock,
   marquee: MarqueeBlockComponent,
+  features: FeaturesBlockComponent,
+  pricing: PricingBlockComponent,
 }
 
 /** Block types that should render full-bleed (no vertical margin wrapper). */
