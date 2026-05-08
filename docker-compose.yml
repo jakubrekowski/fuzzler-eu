@@ -2,30 +2,30 @@ version: '3'
 
 services:
   payload:
-    image: node:18-alpine
+    image: oven/bun:1.1-alpine
     ports:
       - '3000:3000'
     volumes:
-      - .:/home/node/app
-      - node_modules:/home/node/app/node_modules
-    working_dir: /home/node/app/
-    command: sh -c "yarn install && yarn dev"
+      - .:/home/bun/app
+      - /home/bun/app/node_modules
+    working_dir: /home/bun/app/
+    command: sh -c "bun install && bun dev"
     depends_on:
-      - mongo
+      - db
     env_file:
       - .env
 
-  mongo:
-    image: mongo:latest
+  db:
+    image: postgres:15-alpine
+    restart: always
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: fuzzler-eu
     ports:
-      - '27017:27017'
-    command:
-      - --storageEngine=wiredTiger
+      - '5432:5432'
     volumes:
-      - data:/data/db
-    logging:
-      driver: none
+      - postgres_data:/var/lib/postgresql/data
 
 volumes:
-  data:
-  node_modules:
+  postgres_data:
