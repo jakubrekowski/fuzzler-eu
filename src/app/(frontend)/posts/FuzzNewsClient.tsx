@@ -113,6 +113,7 @@ export const FuzzNewsClient: React.FC<FuzzNewsClientProps> = ({
           background:
             'radial-gradient(80% 60% at 30% 20%, rgba(75,0,130,.55) 0%, transparent 60%), radial-gradient(60% 50% at 90% 80%, rgba(248,73,73,.25) 0%, transparent 60%), #1B1B19',
           padding: '80px 0 64px',
+          paddingTop: 'calc(96px + 80px)',
         }}
       >
         <div className="container">

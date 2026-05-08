@@ -1,19 +1,15 @@
 import type { Metadata } from 'next'
 
-import { RelatedPosts } from '@/blocks/RelatedPosts/Component'
 import { PayloadRedirects } from '@/components/PayloadRedirects'
 import configPromise from '@payload-config'
 import { getPayload } from 'payload'
 import { draftMode } from 'next/headers'
 import React, { cache } from 'react'
-import RichText from '@/components/RichText'
-
 import type { Post } from '@/payload-types'
-
-import { PostHero } from '@/heros/PostHero'
 import { generateMeta } from '@/utilities/generateMeta'
-import PageClient from './page.client'
 import { LivePreviewListener } from '@/components/LivePreviewListener'
+import PageClient from './page.client'
+import { FuzzArticleClient } from './FuzzArticleClient'
 
 export async function generateStaticParams() {
   const payload = await getPayload({ config: configPromise })
@@ -23,86 +19,70 @@ export async function generateStaticParams() {
     limit: 1000,
     overrideAccess: false,
     pagination: false,
-    select: {
-      slug: true,
-    },
+    select: { slug: true },
   })
-
-  const params = posts.docs.map(({ slug }) => {
-    return { slug }
-  })
-
-  return params
+  return posts.docs.map(({ slug }) => ({ slug }))
 }
 
-type Args = {
-  params: Promise<{
-    slug?: string
-  }>
-}
+type Args = { params: Promise<{ slug?: string }> }
 
-export default async function Post({ params: paramsPromise }: Args) {
+export default async function Page({ params: paramsPromise }: Args) {
   const { isEnabled: draft } = await draftMode()
   const { slug = '' } = await paramsPromise
-  // Decode to support slugs with special characters
   const decodedSlug = decodeURIComponent(slug)
   const url = '/posts/' + decodedSlug
   const post = await queryPostBySlug({ slug: decodedSlug })
 
   if (!post) return <PayloadRedirects url={url} />
 
+  // Fetch related posts as full Post objects
+  const relatedPostObjects: Post[] = (post.relatedPosts ?? [])
+    .filter((p): p is Post => typeof p === 'object')
+
+  // Fetch recent posts for "related" fallback when none are set
+  let recentPosts: Post[] = []
+  if (relatedPostObjects.length === 0) {
+    const payload = await getPayload({ config: configPromise })
+    const result = await payload.find({
+      collection: 'posts',
+      depth: 1,
+      limit: 3,
+      sort: '-publishedAt',
+      overrideAccess: false,
+      where: { slug: { not_equals: decodedSlug } },
+    })
+    recentPosts = result.docs as Post[]
+  }
+
   return (
-    <article className="pt-16 pb-16">
+    <>
       <PageClient />
-
-      {/* Allows redirects for valid pages too */}
       <PayloadRedirects disableNotFound url={url} />
-
       {draft && <LivePreviewListener />}
-
-      <PostHero post={post} />
-
-      <div className="flex flex-col items-center gap-4 pt-8">
-        <div className="container">
-          <RichText className="max-w-[48rem] mx-auto" data={post.content} enableGutter={false} />
-          {post.relatedPosts && post.relatedPosts.length > 0 && (
-            <RelatedPosts
-              className="mt-12 max-w-[52rem] lg:grid lg:grid-cols-subgrid col-start-1 col-span-3 grid-rows-[2fr]"
-              docs={post.relatedPosts.filter((post) => typeof post === 'object')}
-            />
-          )}
-        </div>
-      </div>
-    </article>
+      <FuzzArticleClient
+        post={post}
+        relatedPosts={relatedPostObjects.length > 0 ? relatedPostObjects : recentPosts}
+      />
+    </>
   )
 }
 
 export async function generateMetadata({ params: paramsPromise }: Args): Promise<Metadata> {
   const { slug = '' } = await paramsPromise
-  // Decode to support slugs with special characters
-  const decodedSlug = decodeURIComponent(slug)
-  const post = await queryPostBySlug({ slug: decodedSlug })
-
+  const post = await queryPostBySlug({ slug: decodeURIComponent(slug) })
   return generateMeta({ doc: post })
 }
 
 const queryPostBySlug = cache(async ({ slug }: { slug: string }) => {
   const { isEnabled: draft } = await draftMode()
-
   const payload = await getPayload({ config: configPromise })
-
   const result = await payload.find({
     collection: 'posts',
     draft,
     limit: 1,
     overrideAccess: draft,
     pagination: false,
-    where: {
-      slug: {
-        equals: slug,
-      },
-    },
+    where: { slug: { equals: slug } },
   })
-
   return result.docs?.[0] || null
 })
