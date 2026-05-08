@@ -51,7 +51,7 @@ export const HomeHero: React.FC<Page['hero']> = (props) => {
         <div className="absolute bottom-0 right-0 w-[50%] h-[50%] bg-red/10 blur-[100px] rounded-full" />
       </div>
 
-      <div className="container relative z-10 grid lg:grid-cols-[1.15fr_1fr] gap-12 items-center py-16 lg:pt-24 lg:pb-0">
+      <div className="container relative z-10 grid lg:grid-cols-[1.15fr_1fr] gap-12 items-center py-16 lg:pt-24 lg:pb-24">
         <div className="flex flex-col animate-in fade-in slide-in-from-left duration-700">
           {/* Eyebrow Badge */}
           <Badge dot variant="default" className="w-fit">
@@ -190,35 +190,6 @@ export const HomeHero: React.FC<Page['hero']> = (props) => {
           </div>
         </div>
       </div>
-
-      {/* Date Strip Marquee */}
-      <div className="mt-16 bg-orange text-graphite border-y-2 border-graphite-dark overflow-hidden py-3.5 relative">
-        <div className="flex gap-12 whitespace-nowrap animate-marquee font-bold uppercase tracking-[0.14em] text-lg">
-          {[...Array(4)].map((_, i) => (
-            <span key={i} className="flex items-center gap-8">
-              FUZZLER <span className="text-indigo">✦</span> 04.09{' '}
-              <span className="text-indigo">✦</span> 05.09 <span className="text-indigo">✦</span>{' '}
-              06.09 <span className="text-indigo">✦</span> AMELIÓWKA{' '}
-              <span className="text-indigo">✦</span> CHILL · INTEGRACJA · FUTRZAKI{' '}
-              <span className="text-indigo">✦</span>
-            </span>
-          ))}
-        </div>
-      </div>
-
-      <style jsx global>{`
-        @keyframes marquee {
-          0% {
-            transform: translateX(0);
-          }
-          100% {
-            transform: translateX(-50%);
-          }
-        }
-        .animate-marquee {
-          animation: marquee 40s linear infinite;
-        }
-      `}</style>
     </section>
   )
 }

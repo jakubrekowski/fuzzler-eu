@@ -205,16 +205,6 @@
   }
 }
 
-/* ------------------------------------------------------------------ */
-/* MARQUEE ANIMATION                                                    */
-/* ------------------------------------------------------------------ */
-@keyframes fuzzler-scroll {
-  from { transform: translateX(0); }
-  to   { transform: translateX(-50%); }
-}
-.animate-marquee {
-  animation: fuzzler-scroll 38s linear infinite;
-}
 
 /* ------------------------------------------------------------------ */
 /* PROSE OVERRIDES                                                      */
