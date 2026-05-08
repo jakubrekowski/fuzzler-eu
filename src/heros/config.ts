@@ -35,8 +35,40 @@ export const hero: Field = {
           label: 'Low Impact',
           value: 'lowImpact',
         },
+        {
+          label: 'Home Hero',
+          value: 'home',
+        },
       ],
       required: true,
+    },
+    {
+      name: 'eyebrow',
+      type: 'text',
+      admin: {
+        condition: (_, { type } = {}) => type === 'home',
+      },
+    },
+    {
+      name: 'homeTitle',
+      type: 'text',
+      admin: {
+        condition: (_, { type } = {}) => type === 'home',
+      },
+    },
+    {
+      name: 'meta',
+      type: 'array',
+      fields: [
+        {
+          name: 'label',
+          type: 'text',
+          required: true,
+        },
+      ],
+      admin: {
+        condition: (_, { type } = {}) => type === 'home',
+      },
     },
     {
       name: 'richText',
@@ -53,11 +85,74 @@ export const hero: Field = {
       }),
       label: false,
     },
+    {
+      name: 'stats',
+      type: 'array',
+      fields: [
+        {
+          name: 'label',
+          type: 'text',
+          required: true,
+        },
+        {
+          name: 'value',
+          type: 'text',
+          required: true,
+        },
+        {
+          name: 'suffix',
+          type: 'text',
+        },
+      ],
+      admin: {
+        condition: (_, { type } = {}) => type === 'home',
+      },
+    },
     linkGroup({
       overrides: {
         maxRows: 2,
       },
     }),
+    {
+      name: 'homeArt',
+      type: 'group',
+      fields: [
+        {
+          name: 'image',
+          type: 'upload',
+          relationTo: 'media',
+          required: true,
+        },
+        {
+          name: 'tags',
+          type: 'array',
+          maxRows: 3,
+          fields: [
+            {
+              name: 'label',
+              type: 'text',
+              required: true,
+            },
+            {
+              name: 'color',
+              type: 'select',
+              options: [
+                { label: 'Green', value: 'green' },
+                { label: 'Orange', value: 'orange' },
+                { label: 'White', value: 'white' },
+              ],
+            },
+            {
+              name: 'rotation',
+              type: 'number',
+            },
+          ],
+        },
+      ],
+      admin: {
+        condition: (_, { type } = {}) => type === 'home',
+      },
+    },
     {
       name: 'media',
       type: 'upload',

@@ -6,7 +6,6 @@ import React, { useEffect, useState } from 'react'
 
 import type { Header } from '@/payload-types'
 
-import { Logo } from '@/components/Logo/Logo'
 import { HeaderNav } from './Nav'
 
 interface HeaderClientProps {
@@ -14,7 +13,6 @@ interface HeaderClientProps {
 }
 
 export const HeaderClient: React.FC<HeaderClientProps> = ({ data }) => {
-  /* Storing the value in a useState to avoid hydration errors */
   const [theme, setTheme] = useState<string | null>(null)
   const { headerTheme, setHeaderTheme } = useHeaderTheme()
   const pathname = usePathname()
@@ -30,11 +28,27 @@ export const HeaderClient: React.FC<HeaderClientProps> = ({ data }) => {
   }, [headerTheme])
 
   return (
-    <header className="container relative z-20   " {...(theme ? { 'data-theme': theme } : {})}>
-      <div className="py-8 flex justify-between">
-        <Link href="/">
-          <Logo loading="eager" priority="high" className="invert dark:invert-0" />
+    <header
+      className="sticky top-0 z-50 border-b border-white/[0.08]"
+      style={{ background: 'rgba(27,27,25,0.85)', backdropFilter: 'blur(14px)', WebkitBackdropFilter: 'blur(14px)' }}
+      {...(theme ? { 'data-theme': theme } : {})}
+    >
+      <div className="container flex items-center justify-between gap-6 py-3.5">
+        {/* Brand */}
+        <Link href="/" className="flex items-center gap-3.5">
+          <span className="flex h-[38px] w-[38px] items-center justify-center overflow-hidden rounded-[10px] bg-orange">
+            <img
+              src="/assets/bun_color.svg"
+              alt="Fuzzler"
+              className="h-[90%] w-[90%] object-contain"
+            />
+          </span>
+          <span className="font-bold text-[22px] uppercase tracking-[0.06em] text-cream font-rajdhani">
+            Fuzzler
+          </span>
         </Link>
+
+        {/* Nav */}
         <HeaderNav data={data} />
       </div>
     </header>

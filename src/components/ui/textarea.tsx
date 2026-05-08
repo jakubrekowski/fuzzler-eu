@@ -9,7 +9,7 @@ const Textarea: React.FC<React.TextareaHTMLAttributes<HTMLTextAreaElement>> = ({
     <textarea
       data-slot="textarea"
       className={cn(
-        'border-input placeholder:text-muted-foreground ring-ring/10 dark:ring-ring/20 dark:outline-ring/40 outline-ring/50 aria-invalid:outline-destructive/60 dark:aria-invalid:outline-destructive dark:aria-invalid:ring-destructive/40 aria-invalid:ring-destructive/20 aria-invalid:border-destructive/60 dark:aria-invalid:border-destructive dark:aria-invalid:ring-destructive/50 flex field-sizing-content min-h-16 w-full rounded-md border bg-transparent px-3 py-2 text-base shadow-xs transition-[color,box-shadow] focus-visible:ring-4 focus-visible:outline-1 disabled:cursor-not-allowed disabled:opacity-50 aria-invalid:focus-visible:ring-[3px] aria-invalid:focus-visible:outline-none md:text-sm dark:aria-invalid:focus-visible:ring-4',
+        'flex field-sizing-content min-h-24 w-full rounded-xl border border-white/[0.12] bg-graphite px-4 py-3 text-[15px] text-cream placeholder:text-cream-dim/50 font-rajdhani transition-colors duration-200 focus-visible:outline-none focus-visible:border-orange/60 focus-visible:ring-2 focus-visible:ring-orange/20 disabled:cursor-not-allowed disabled:opacity-50 aria-invalid:border-red/60 resize-none',
         className,
       )}
       {...props}

@@ -159,7 +159,15 @@ export interface Page {
   id: number;
   title: string;
   hero: {
-    type: 'none' | 'highImpact' | 'mediumImpact' | 'lowImpact';
+    type: 'none' | 'highImpact' | 'mediumImpact' | 'lowImpact' | 'home';
+    eyebrow?: string | null;
+    homeTitle?: string | null;
+    meta?:
+      | {
+          label: string;
+          id?: string | null;
+        }[]
+      | null;
     richText?: {
       root: {
         type: string;
@@ -175,6 +183,14 @@ export interface Page {
       };
       [k: string]: unknown;
     } | null;
+    stats?:
+      | {
+          label: string;
+          value: string;
+          suffix?: string | null;
+          id?: string | null;
+        }[]
+      | null;
     links?:
       | {
           link: {
@@ -199,6 +215,17 @@ export interface Page {
           id?: string | null;
         }[]
       | null;
+    homeArt?: {
+      image: number | Media;
+      tags?:
+        | {
+            label: string;
+            color?: ('green' | 'orange' | 'white') | null;
+            rotation?: number | null;
+            id?: string | null;
+          }[]
+        | null;
+    };
     media?: (number | null) | Media;
   };
   layout: (CallToActionBlock | ContentBlock | MediaBlock | ArchiveBlock | FormBlock)[];
@@ -1063,7 +1090,23 @@ export interface PagesSelect<T extends boolean = true> {
     | T
     | {
         type?: T;
+        eyebrow?: T;
+        homeTitle?: T;
+        meta?:
+          | T
+          | {
+              label?: T;
+              id?: T;
+            };
         richText?: T;
+        stats?:
+          | T
+          | {
+              label?: T;
+              value?: T;
+              suffix?: T;
+              id?: T;
+            };
         links?:
           | T
           | {
@@ -1078,6 +1121,19 @@ export interface PagesSelect<T extends boolean = true> {
                     appearance?: T;
                   };
               id?: T;
+            };
+        homeArt?:
+          | T
+          | {
+              image?: T;
+              tags?:
+                | T
+                | {
+                    label?: T;
+                    color?: T;
+                    rotation?: T;
+                    id?: T;
+                  };
             };
         media?: T;
       };
