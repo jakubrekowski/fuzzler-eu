@@ -49,14 +49,20 @@ export default async function RootLayout({ children }: { children: React.ReactNo
       </head>
       <body>
         <Providers>
-          <AdminBar
-            adminBarProps={{
-              preview: isEnabled,
-            }}
-          />
+          <div className="fixed top-0 left-0 right-0 z-[100] pointer-events-none">
+            <div className="pointer-events-auto flex flex-col">
+              <AdminBar
+                adminBarProps={{
+                  preview: isEnabled,
+                }}
+              />
+              <Header />
+            </div>
+          </div>
 
-          <Header />
-          {children}
+          <main>
+            {children}
+          </main>
           <Footer />
         </Providers>
       </body>

@@ -50,10 +50,30 @@ export const hero: Field = {
       },
     },
     {
+      name: 'titleType',
+      type: 'select',
+      defaultValue: 'text',
+      options: [
+        { label: 'Text', value: 'text' },
+        { label: 'Media', value: 'media' },
+      ],
+      admin: {
+        condition: (_, { type } = {}) => type === 'home',
+      },
+    },
+    {
       name: 'homeTitle',
       type: 'text',
       admin: {
-        condition: (_, { type } = {}) => type === 'home',
+        condition: (_, { type, titleType } = {}) => type === 'home' && titleType === 'text',
+      },
+    },
+    {
+      name: 'titleMedia',
+      type: 'upload',
+      relationTo: 'media',
+      admin: {
+        condition: (_, { type, titleType } = {}) => type === 'home' && titleType === 'media',
       },
     },
     {

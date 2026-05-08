@@ -13,7 +13,9 @@ import RichText from '@/components/RichText'
 export const HomeHero: React.FC<Page['hero']> = (props) => {
   const {
     eyebrow,
+    titleType,
     homeTitle,
+    titleMedia,
     richText,
     meta,
     links,
@@ -22,6 +24,8 @@ export const HomeHero: React.FC<Page['hero']> = (props) => {
   } = props
 
   const displayTitle = homeTitle || 'FUZZLER'
+  const titleMediaUrl = typeof titleMedia === 'object' ? titleMedia?.url : null
+
   const displayEyebrow = eyebrow || 'Furr MeetUp · Edycja 03 · Wrzesień 2026'
   
   const displayMeta = meta || [
@@ -52,7 +56,7 @@ export const HomeHero: React.FC<Page['hero']> = (props) => {
         <div className="absolute bottom-0 right-0 w-[50%] h-[50%] bg-red/10 blur-[100px] rounded-full" />
       </div>
 
-      <div className="container relative z-10 grid lg:grid-cols-[1.15fr_1fr] gap-12 items-center py-16 lg:pt-24 lg:pb-24">
+      <div className="container relative z-10 grid lg:grid-cols-[1.15fr_1fr] gap-12 items-center py-20 lg:pt-40 lg:pb-24">
         <div className="flex flex-col animate-in fade-in slide-in-from-left duration-700">
           {/* Eyebrow Badge */}
           <Badge dot variant="default" className="w-fit">
@@ -61,20 +65,28 @@ export const HomeHero: React.FC<Page['hero']> = (props) => {
 
           {/* Main Title with SVG-like Wing */}
           <div className="relative mt-6 group">
-            <h1 className="text-[clamp(64px,10vw,140px)] font-bold leading-[0.85] tracking-tight uppercase select-none">
-              {displayTitle === 'FUZZLER' ? (
-                <span className="relative inline-block">
-                  FUZZLER
-                  <span className="absolute -top-[5%] -right-[15%] w-[40%] h-[80%] pointer-events-none transition-transform duration-500 group-hover:scale-110 group-hover:rotate-3">
-                    <svg viewBox="0 0 100 100" className="w-full h-full fill-cream">
-                      <path d="M80,40 L60,35 C60,35 75,30 80,20 C85,10 85,0 85,0 L70,5 C70,5 75,0 72,-10 C70,-20 60,-30 60,-30 C60,-30 50,-15 45,-5 C40,5 35,10 35,10 L45,25 L48,40 C48,40 55,42 60,42 C65,42 80,40 80,40 Z" />
-                    </svg>
+            {titleType === 'media' && titleMediaUrl ? (
+              <img
+                src={titleMediaUrl}
+                alt={displayTitle}
+                className="max-h-[140px] w-auto object-contain"
+              />
+            ) : (
+              <h1 className="text-[clamp(64px,10vw,140px)] font-bold leading-[0.85] tracking-tight uppercase select-none">
+                {displayTitle === 'FUZZLER' ? (
+                  <span className="relative inline-block">
+                    FUZZLER
+                    <span className="absolute -top-[5%] -right-[15%] w-[40%] h-[80%] pointer-events-none transition-transform duration-500 group-hover:scale-110 group-hover:rotate-3">
+                      <svg viewBox="0 0 100 100" className="w-full h-full fill-cream">
+                        <path d="M80,40 L60,35 C60,35 75,30 80,20 C85,10 85,0 85,0 L70,5 C70,5 75,0 72,-10 C70,-20 60,-30 60,-30 C60,-30 50,-15 45,-5 C40,5 35,10 35,10 L45,25 L48,40 C48,40 55,42 60,42 C65,42 80,40 80,40 Z" />
+                      </svg>
+                    </span>
                   </span>
-                </span>
-              ) : (
-                displayTitle
-              )}
-            </h1>
+                ) : (
+                  displayTitle
+                )}
+              </h1>
+            )}
           </div>
 
           <div className="mt-6 text-[22px] text-cream-dim max-w-[520px] leading-relaxed">

@@ -10,6 +10,30 @@ export const Header: GlobalConfig = {
   },
   fields: [
     {
+      name: 'logoType',
+      type: 'select',
+      defaultValue: 'text',
+      options: [
+        { label: 'Text', value: 'text' },
+        { label: 'Media', value: 'media' },
+      ],
+    },
+    {
+      name: 'logoText',
+      type: 'text',
+      admin: {
+        condition: (_, { logoType } = {}) => logoType === 'text',
+      },
+    },
+    {
+      name: 'logoMedia',
+      type: 'upload',
+      relationTo: 'media',
+      admin: {
+        condition: (_, { logoType } = {}) => logoType === 'media',
+      },
+    },
+    {
       name: 'navItems',
       type: 'array',
       fields: [

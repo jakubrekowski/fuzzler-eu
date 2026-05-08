@@ -9,6 +9,10 @@ export async function Footer() {
 
   const navItems = footerData?.navItems || []
 
+  const { logoType, logoText, logoMedia } = footerData
+  const logoMediaUrl = typeof logoMedia === 'object' ? logoMedia?.url : null
+  const displayLogoText = logoText || 'Fuzzler'
+
   return (
     <footer className="mt-auto bg-graphite-dark pt-20 pb-10 px-7">
       <div className="container">
@@ -20,18 +24,32 @@ export async function Footer() {
           {/* Brand column */}
           <div className="flex flex-col gap-3.5 max-w-[36ch]">
             <Link href="/" className="flex items-center gap-3">
-              <span className="flex h-9 w-9 items-center justify-center overflow-hidden rounded-[10px] bg-orange flex-shrink-0">
+              {logoType === 'media' && logoMediaUrl ? (
                 <img
-                  src="/assets/bun_color.svg"
-                  alt="Fuzzler"
-                  className="h-[90%] w-[90%] object-contain"
+                  src={logoMediaUrl}
+                  alt={displayLogoText}
+                  className="h-10 w-auto object-contain"
                 />
-              </span>
-              <span
-                className="font-bold text-[42px] uppercase tracking-[0.04em] leading-[0.9] text-cream font-rajdhani"
-              >
-                Fuzz<span className="text-orange">ler</span>
-              </span>
+              ) : (
+                <>
+                  <span className="flex h-9 w-9 items-center justify-center overflow-hidden rounded-[10px] bg-orange flex-shrink-0">
+                    <img
+                      src="/assets/bun_color.svg"
+                      alt="Fuzzler"
+                      className="h-[90%] w-[90%] object-contain"
+                    />
+                  </span>
+                  <span className="font-bold text-[42px] uppercase tracking-[0.04em] leading-[0.9] text-cream font-rajdhani">
+                    {displayLogoText === 'Fuzzler' ? (
+                      <>
+                        Fuzz<span className="text-orange">ler</span>
+                      </>
+                    ) : (
+                      displayLogoText
+                    )}
+                  </span>
+                </>
+              )}
             </Link>
             <p className="text-cream-dim text-[15px]">
               Chill, integracja i futrzaki. Furr MeetUp — edycja 03.

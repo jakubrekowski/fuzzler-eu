@@ -120,7 +120,9 @@ export const Dashboard: Block = {
           name: 'icon',
           type: 'text',
           label: 'Lucide Icon Name (e.g. Car, Train, MapPin)',
-          description: 'Check icons at lucide.dev',
+          admin: {
+            description: 'Check icons at lucide.dev',
+          },
         },
         { name: 'title', type: 'text', label: 'Title' },
         { name: 'description', type: 'text', label: 'Short Description' },
