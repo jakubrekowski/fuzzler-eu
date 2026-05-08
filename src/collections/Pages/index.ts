@@ -10,6 +10,9 @@ import { MediaBlock } from '../../blocks/MediaBlock/config'
 import { MarqueeBlock } from '../../blocks/Marquee/config'
 import { FeaturesBlock } from '../../blocks/Features/config'
 import { PricingBlock } from '../../blocks/Pricing/config'
+import { Schedule } from '../../blocks/Schedule/config'
+import { Countdown } from '../../blocks/Countdown/config'
+import { Dashboard } from '../../blocks/Dashboard/config'
 import { hero } from '@/heros/config'
 import { slugField } from 'payload'
 import { populatePublishedAt } from '../../hooks/populatePublishedAt'
@@ -75,7 +78,7 @@ export const Pages: CollectionConfig<'pages'> = {
             {
               name: 'layout',
               type: 'blocks',
-              blocks: [CallToAction, Content, MediaBlock, Archive, FormBlock, MarqueeBlock, FeaturesBlock, PricingBlock],
+              blocks: [CallToAction, Content, MediaBlock, Archive, FormBlock, MarqueeBlock, FeaturesBlock, PricingBlock, Schedule, Countdown, Dashboard],
               required: true,
               admin: {
                 initCollapsed: true,

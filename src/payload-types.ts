@@ -237,6 +237,9 @@ export interface Page {
     | MarqueeBlock
     | FeaturesBlock
     | PricingBlock
+    | ScheduleBlock
+    | CountdownBlock
+    | DashboardBlock
   )[];
   meta?: {
     title?: string | null;
@@ -949,6 +952,102 @@ export interface PricingBlock {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "ScheduleBlock".
+ */
+export interface ScheduleBlock {
+  /**
+   * Enables smooth scrolling to this section (e.g. "program").
+   */
+  anchor?: string | null;
+  tagline?: string | null;
+  title: string;
+  description?: string | null;
+  /**
+   * URL to the JSON file containing the schedule data.
+   */
+  scheduleUrl: string;
+  id?: string | null;
+  blockName?: string | null;
+  blockType: 'schedule';
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "CountdownBlock".
+ */
+export interface CountdownBlock {
+  layout?: ('side' | 'center' | 'left') | null;
+  size?: ('default' | 'big') | null;
+  anchor?: string | null;
+  title?: string | null;
+  endDate: string;
+  limitText?: string | null;
+  showNotifyButton?: boolean | null;
+  notifyButton?: {
+    type?: ('reference' | 'custom') | null;
+    newTab?: boolean | null;
+    reference?:
+      | ({
+          relationTo: 'pages';
+          value: number | Page;
+        } | null)
+      | ({
+          relationTo: 'posts';
+          value: number | Post;
+        } | null);
+    url?: string | null;
+    label: string;
+    /**
+     * Choose how the link should be rendered.
+     */
+    appearance?: ('default' | 'outline' | 'disabled') | null;
+  };
+  id?: string | null;
+  blockName?: string | null;
+  blockType: 'countdown';
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "DashboardBlock".
+ */
+export interface DashboardBlock {
+  anchor?: string | null;
+  tagline?: string | null;
+  title?: string | null;
+  description?: string | null;
+  mainMedia?: {
+    type?: ('media' | 'map') | null;
+    image?: (number | null) | Media;
+    mapUrl?: string | null;
+    title?: string | null;
+  };
+  stat1?: {
+    title?: string | null;
+    value?: string | null;
+    color?: ('orange' | 'red' | 'purple' | 'graphite') | null;
+  };
+  stat2?: {
+    title?: string | null;
+    value?: string | null;
+    color?: ('orange' | 'red' | 'purple' | 'graphite') | null;
+  };
+  infoCard?: {
+    title?: string | null;
+    content?: string | null;
+  };
+  features?:
+    | {
+        icon?: string | null;
+        title?: string | null;
+        description?: string | null;
+        id?: string | null;
+      }[]
+    | null;
+  id?: string | null;
+  blockName?: string | null;
+  blockType: 'dashboard';
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "redirects".
  */
 export interface Redirect {
@@ -1287,6 +1386,9 @@ export interface PagesSelect<T extends boolean = true> {
         marquee?: T | MarqueeBlockSelect<T>;
         features?: T | FeaturesBlockSelect<T>;
         pricing?: T | PricingBlockSelect<T>;
+        schedule?: T | ScheduleBlockSelect<T>;
+        countdown?: T | CountdownBlockSelect<T>;
+        dashboard?: T | DashboardBlockSelect<T>;
       };
   meta?:
     | T
@@ -1492,6 +1594,92 @@ export interface PricingBlockSelect<T extends boolean = true> {
         url?: T;
         label?: T;
         appearance?: T;
+      };
+  id?: T;
+  blockName?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "ScheduleBlock_select".
+ */
+export interface ScheduleBlockSelect<T extends boolean = true> {
+  anchor?: T;
+  tagline?: T;
+  title?: T;
+  description?: T;
+  scheduleUrl?: T;
+  id?: T;
+  blockName?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "CountdownBlock_select".
+ */
+export interface CountdownBlockSelect<T extends boolean = true> {
+  layout?: T;
+  size?: T;
+  anchor?: T;
+  title?: T;
+  endDate?: T;
+  limitText?: T;
+  showNotifyButton?: T;
+  notifyButton?:
+    | T
+    | {
+        type?: T;
+        newTab?: T;
+        reference?: T;
+        url?: T;
+        label?: T;
+        appearance?: T;
+      };
+  id?: T;
+  blockName?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "DashboardBlock_select".
+ */
+export interface DashboardBlockSelect<T extends boolean = true> {
+  anchor?: T;
+  tagline?: T;
+  title?: T;
+  description?: T;
+  mainMedia?:
+    | T
+    | {
+        type?: T;
+        image?: T;
+        mapUrl?: T;
+        title?: T;
+      };
+  stat1?:
+    | T
+    | {
+        title?: T;
+        value?: T;
+        color?: T;
+      };
+  stat2?:
+    | T
+    | {
+        title?: T;
+        value?: T;
+        color?: T;
+      };
+  infoCard?:
+    | T
+    | {
+        title?: T;
+        content?: T;
+      };
+  features?:
+    | T
+    | {
+        icon?: T;
+        title?: T;
+        description?: T;
+        id?: T;
       };
   id?: T;
   blockName?: T;

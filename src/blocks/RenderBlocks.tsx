@@ -10,6 +10,9 @@ import { MediaBlock } from '@/blocks/MediaBlock/Component'
 import { MarqueeBlockComponent } from '@/blocks/Marquee/Component'
 import { FeaturesBlockComponent } from '@/blocks/Features/Component'
 import { PricingBlockComponent } from '@/blocks/Pricing/Component'
+import { ScheduleBlockComponent } from '@/blocks/Schedule/Component'
+import { CountdownBlockComponent } from '@/blocks/Countdown/Component'
+import { DashboardBlockComponent } from '@/blocks/Dashboard/Component'
 
 const blockComponents = {
   archive: ArchiveBlock,
@@ -20,6 +23,9 @@ const blockComponents = {
   marquee: MarqueeBlockComponent,
   features: FeaturesBlockComponent,
   pricing: PricingBlockComponent,
+  schedule: ScheduleBlockComponent,
+  countdown: CountdownBlockComponent,
+  dashboard: DashboardBlockComponent,
 }
 
 /** Block types that should render full-bleed (no vertical margin wrapper). */
@@ -49,7 +55,7 @@ export const RenderBlocks: React.FC<{
                   <Block {...block} disableInnerContainer />
                 </React.Fragment>
               ) : (
-                <div className="my-16" key={index}>
+                <div className="my-8" key={index}>
                   {/* @ts-expect-error there may be some mismatch between the expected types here */}
                   <Block {...block} disableInnerContainer />
                 </div>

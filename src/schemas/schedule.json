@@ -1,0 +1,81 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Conference Event Schedule",
+  "type": "object",
+  "required": ["days", "rooms", "categories", "presenters", "events"],
+  "properties": {
+    "days": {
+      "type": "array",
+      "description": "List of dates for the conference (e.g., 04/09, 05/09).",
+      "items": {
+        "type": "object",
+        "required": ["id", "date", "label"],
+        "properties": {
+          "id": { "type": "string", "description": "Unique ID for the day." },
+          "date": { "type": "string", "format": "date" },
+          "label": { "type": "string", "description": "e.g., 'Sobota'" }
+        }
+      }
+    },
+    "rooms": {
+      "type": "array",
+      "description": "Available conference rooms/locations.",
+      "items": {
+        "type": "object",
+        "required": ["id", "name"],
+        "properties": {
+          "id": { "type": "string" },
+          "name": { "type": "string", "description": "e.g., 'Sala Główna'" }
+        }
+      }
+    },
+    "categories": {
+      "type": "array",
+      "description": "Event types with associated UI colors.",
+      "items": {
+        "type": "object",
+        "required": ["id", "name", "color"],
+        "properties": {
+          "id": { "type": "string" },
+          "name": { "type": "string", "description": "e.g., 'Panel', 'Warsztat'" },
+          "color": { "type": "string", "pattern": "^#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$", "description": "Hex color code." }
+        }
+      }
+    },
+    "presenters": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["id", "name"],
+        "properties": {
+          "id": { "type": "string" },
+          "name": { "type": "string" },
+          "bio": { "type": "string" }
+        }
+      }
+    },
+    "events": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["id", "dayId", "roomId", "categoryId", "startTime", "endTime", "title"],
+        "properties": {
+          "id": { "type": "string" },
+          "dayId": { "type": "string", "description": "Reference to days.id" },
+          "roomId": { "type": "string", "description": "Reference to rooms.id" },
+          "categoryId": { "type": "string", "description": "Reference to categories.id" },
+          "presenterIds": { 
+            "type": "array", 
+            "items": { "type": "string" },
+            "description": "References to presenters.id"
+          },
+          "startTime": { "type": "string", "pattern": "^[0-2][0-9]:[0-5][0-9]$", "description": "HH:mm" },
+          "endTime": { "type": "string", "pattern": "^[0-2][0-9]:[0-5][0-9]$", "description": "HH:mm" },
+          "title": { "type": "string" },
+          "description": { "type": "string" },
+          "location_detail": { "type": "string", "description": "Specifics like 'Stolik #2' or 'Stołówka'" }
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,131 @@
+{
+  "days": [
+    { "id": "day_1", "date": "04/09", "label": "Piątek" },
+    { "id": "day_2", "date": "05/09", "label": "Sobota" },
+    { "id": "day_3", "date": "06/09", "label": "Niedziela" }
+  ],
+  "rooms": [
+    { "id": "room_1", "name": "Sala Główna" },
+    { "id": "room_2", "name": "Warsztatowa" },
+    { "id": "room_3", "name": "Kawiarnia" }
+  ],
+  "categories": [
+    { "id": "cat_panel", "name": "PANEL", "color": "#ff9000" },
+    { "id": "cat_workshop", "name": "WARSZTAT", "color": "#a855f7" },
+    { "id": "cat_chill", "name": "CHILL", "color": "#4f46e5" },
+    { "id": "cat_food", "name": "LUNCH", "color": "#ef4444" }
+  ],
+  "presenters": [
+    { "id": "p1", "name": "Yuki" },
+    { "id": "p2", "name": "Bree" },
+    { "id": "p3", "name": "Mira" },
+    { "id": "p4", "name": "Sava" },
+    { "id": "p5", "name": "Korr" }
+  ],
+  "events": [
+    {
+      "id": "evt_001",
+      "dayId": "day_1",
+      "roomId": "room_1",
+      "categoryId": "cat_panel",
+      "startTime": "18:00",
+      "endTime": "19:30",
+      "title": "OTWARCIE MEETUPU",
+      "description": "Oficjalne rozpoczęcie trzeciej edycji Fuzzlera. Przywitanie gości i omówienie planu na weekend."
+    },
+    {
+      "id": "evt_002",
+      "dayId": "day_1",
+      "roomId": "room_3",
+      "categoryId": "cat_chill",
+      "startTime": "20:00",
+      "endTime": "22:00",
+      "title": "WIECZORNA INTEGRACJA",
+      "location_detail": "Lobby Bar"
+    },
+    {
+      "id": "evt_101",
+      "dayId": "day_2",
+      "roomId": "room_1",
+      "categoryId": "cat_panel",
+      "presenterIds": ["p1", "p2"],
+      "startTime": "10:00",
+      "endTime": "11:30",
+      "title": "FURSUIT 101 – OD POMYSŁU DO METY",
+      "description": "Kompleksowy poradnik budowania Twojego pierwszego suitu."
+    },
+    {
+      "id": "evt_102",
+      "dayId": "day_2",
+      "roomId": "room_2",
+      "categoryId": "cat_workshop",
+      "presenterIds": ["p3"],
+      "startTime": "11:00",
+      "endTime": "12:30",
+      "title": "SZYCIE OGONA – BASICS",
+      "description": "Warsztaty praktyczne z szycia ogonów."
+    },
+    {
+      "id": "evt_103",
+      "dayId": "day_2",
+      "roomId": "room_3",
+      "categoryId": "cat_chill",
+      "startTime": "10:00",
+      "endTime": "12:00",
+      "title": "OPEN CAFÉ – KAWA & GADANIE",
+      "location_detail": "Bar Area"
+    },
+    {
+      "id": "evt_104",
+      "dayId": "day_2",
+      "roomId": "room_1",
+      "categoryId": "cat_food",
+      "startTime": "13:00",
+      "endTime": "13:30",
+      "title": "WSPÓLNY OBIAD",
+      "location_detail": "Stołówka hotelowa"
+    },
+    {
+      "id": "evt_105",
+      "dayId": "day_2",
+      "roomId": "room_1",
+      "categoryId": "cat_panel",
+      "presenterIds": ["p5"],
+      "startTime": "15:00",
+      "endTime": "16:30",
+      "title": "TOŻSAMOŚĆ W FANDOMIE",
+      "description": "Dyskusja o tożsamości i przynależności do społeczności futrzaków."
+    },
+    {
+      "id": "evt_106",
+      "dayId": "day_2",
+      "roomId": "room_2",
+      "categoryId": "cat_workshop",
+      "presenterIds": ["p4"],
+      "startTime": "15:00",
+      "endTime": "15:30",
+      "title": "RYSUUNEK ANTROPOMORFICZNY",
+      "description": "Warsztaty z proporcji i anatomii postaci."
+    },
+    {
+      "id": "evt_201",
+      "dayId": "day_3",
+      "roomId": "room_1",
+      "categoryId": "cat_panel",
+      "startTime": "10:00",
+      "endTime": "11:00",
+      "title": "PODSUMOWANIE EDYCJI",
+      "description": "Wspólne oglądanie zdjęć i nagrań z minionych dni."
+    },
+    {
+      "id": "evt_202",
+      "dayId": "day_3",
+      "roomId": "room_1",
+      "categoryId": "cat_chill",
+      "startTime": "12:00",
+      "endTime": "13:00",
+      "title": "POŻEGNANIE I WYJAZD",
+      "description": "Zakończenie meetup'u i czas na ostatnie uściski."
+    }
+  ]
+}
