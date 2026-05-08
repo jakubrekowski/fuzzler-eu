@@ -14,6 +14,8 @@ import { ScheduleBlockComponent } from '@/blocks/Schedule/Component'
 import { CountdownBlockComponent } from '@/blocks/Countdown/Component'
 import { DashboardBlockComponent } from '@/blocks/Dashboard/Component'
 import { FAQBlockComponent } from '@/blocks/FAQ/Component'
+import { SocialBlockComponent } from '@/blocks/Social/Component'
+import { PostsArchiveBlockComponent } from '@/blocks/PostsArchive/Component'
 
 const blockComponents = {
   archive: ArchiveBlock,
@@ -28,6 +30,8 @@ const blockComponents = {
   countdown: CountdownBlockComponent,
   dashboard: DashboardBlockComponent,
   faq: FAQBlockComponent,
+  social: SocialBlockComponent,
+  postsArchive: PostsArchiveBlockComponent,
 }
 
 /** Block types that should render full-bleed (no vertical margin wrapper). */

@@ -221,6 +221,23 @@
   font-family: var(--font-rajdhani, 'Rajdhani'), sans-serif;
 }
 
+/* ------------------------------------------------------------------ */
+/* FUZZLER UI COMPONENTS                                              */
+/* ------------------------------------------------------------------ */
+@layer components {
+  .btn-ghost {
+    @apply inline-flex items-center gap-[10px] px-5 py-[11px] rounded-full border border-white/10 text-cream font-semibold uppercase tracking-[0.1em] text-sm transition-all duration-200 hover:bg-white/[0.06] hover:border-cream-dim;
+  }
+  
+  .mono {
+    font-family: var(--font-jetbrains, 'JetBrains Mono'), monospace;
+  }
+  
+  .upper {
+    @apply uppercase tracking-[0.04em];
+  }
+}
+
 html {
   opacity: 0;
 }

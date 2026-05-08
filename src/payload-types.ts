@@ -243,6 +243,8 @@ export interface Page {
     | CountdownBlock
     | DashboardBlock
     | FAQBlock
+    | SocialBlock
+    | PostsArchiveBlock
   )[];
   meta?: {
     title?: string | null;
@@ -1075,6 +1077,44 @@ export interface FAQBlock {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "SocialBlock".
+ */
+export interface SocialBlock {
+  tagline?: string | null;
+  title: string;
+  description?: string | null;
+  links?:
+    | {
+        label: string;
+        subtext?: string | null;
+        url: string;
+        icon: string;
+        color?: ('purple' | 'orange' | 'green' | 'red' | 'graphite') | null;
+        id?: string | null;
+      }[]
+    | null;
+  anchor?: string | null;
+  id?: string | null;
+  blockName?: string | null;
+  blockType: 'social';
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "PostsArchiveBlock".
+ */
+export interface PostsArchiveBlock {
+  tagline?: string | null;
+  title: string;
+  description?: string | null;
+  limit?: number | null;
+  categories?: (number | Category)[] | null;
+  anchor?: string | null;
+  id?: string | null;
+  blockName?: string | null;
+  blockType: 'postsArchive';
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "redirects".
  */
 export interface Redirect {
@@ -1419,6 +1459,8 @@ export interface PagesSelect<T extends boolean = true> {
         countdown?: T | CountdownBlockSelect<T>;
         dashboard?: T | DashboardBlockSelect<T>;
         faq?: T | FAQBlockSelect<T>;
+        social?: T | SocialBlockSelect<T>;
+        postsArchive?: T | PostsArchiveBlockSelect<T>;
       };
   meta?:
     | T
@@ -1731,6 +1773,42 @@ export interface FAQBlockSelect<T extends boolean = true> {
         answer?: T;
         id?: T;
       };
+  id?: T;
+  blockName?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "SocialBlock_select".
+ */
+export interface SocialBlockSelect<T extends boolean = true> {
+  tagline?: T;
+  title?: T;
+  description?: T;
+  links?:
+    | T
+    | {
+        label?: T;
+        subtext?: T;
+        url?: T;
+        icon?: T;
+        color?: T;
+        id?: T;
+      };
+  anchor?: T;
+  id?: T;
+  blockName?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "PostsArchiveBlock_select".
+ */
+export interface PostsArchiveBlockSelect<T extends boolean = true> {
+  tagline?: T;
+  title?: T;
+  description?: T;
+  limit?: T;
+  categories?: T;
+  anchor?: T;
   id?: T;
   blockName?: T;
 }

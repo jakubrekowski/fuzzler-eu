@@ -100,7 +100,7 @@ export async function Footer() {
             {[
               { href: '#', label: 'Telegram' },
               { href: '#', label: 'E-mail' },
-              { href: '#', label: 'Wieści' },
+              { href: '#', label: 'Newsy' },
             ].map((item) => (
               <a
                 key={item.label}
