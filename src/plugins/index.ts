@@ -3,6 +3,7 @@ import { nestedDocsPlugin } from '@payloadcms/plugin-nested-docs'
 import { redirectsPlugin } from '@payloadcms/plugin-redirects'
 import { seoPlugin } from '@payloadcms/plugin-seo'
 import { searchPlugin } from '@payloadcms/plugin-search'
+import { gcsStorage } from '@payloadcms/storage-gcs'
 import { Plugin } from 'payload'
 import { revalidateRedirects } from '@/hooks/revalidateRedirects'
 import { GenerateTitle, GenerateURL } from '@payloadcms/plugin-seo/types'
@@ -88,5 +89,22 @@ export const plugins: Plugin[] = [
         return [...defaultFields, ...searchFields]
       },
     },
+  }),
+  gcsStorage({
+    collections: {
+      media: {
+        disableLocalStorage: true,
+      },
+    },
+    bucket: process.env.GCS_BUCKET || '',
+    options: {
+      projectId: process.env.GCS_PROJECT_ID,
+      ...(process.env.GCS_CREDENTIALS
+        ? { credentials: JSON.parse(process.env.GCS_CREDENTIALS) }
+        : process.env.GCS_KEYFILENAME
+          ? { keyFilename: process.env.GCS_KEYFILENAME }
+          : {}),
+    },
+    enabled: !!process.env.GCS_BUCKET,
   }),
 ]
