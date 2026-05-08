@@ -240,6 +240,7 @@ export interface Page {
     | ScheduleBlock
     | CountdownBlock
     | DashboardBlock
+    | FAQBlock
   )[];
   meta?: {
     title?: string | null;
@@ -1034,6 +1035,7 @@ export interface DashboardBlock {
     title?: string | null;
     content?: string | null;
   };
+  featuresTagline?: string | null;
   features?:
     | {
         icon?: string | null;
@@ -1045,6 +1047,26 @@ export interface DashboardBlock {
   id?: string | null;
   blockName?: string | null;
   blockType: 'dashboard';
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "FAQBlock".
+ */
+export interface FAQBlock {
+  anchor?: string | null;
+  tagline?: string | null;
+  title?: string | null;
+  description?: string | null;
+  questions?:
+    | {
+        question: string;
+        answer: string;
+        id?: string | null;
+      }[]
+    | null;
+  id?: string | null;
+  blockName?: string | null;
+  blockType: 'faq';
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
@@ -1389,6 +1411,7 @@ export interface PagesSelect<T extends boolean = true> {
         schedule?: T | ScheduleBlockSelect<T>;
         countdown?: T | CountdownBlockSelect<T>;
         dashboard?: T | DashboardBlockSelect<T>;
+        faq?: T | FAQBlockSelect<T>;
       };
   meta?:
     | T
@@ -1673,12 +1696,32 @@ export interface DashboardBlockSelect<T extends boolean = true> {
         title?: T;
         content?: T;
       };
+  featuresTagline?: T;
   features?:
     | T
     | {
         icon?: T;
         title?: T;
         description?: T;
+        id?: T;
+      };
+  id?: T;
+  blockName?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "FAQBlock_select".
+ */
+export interface FAQBlockSelect<T extends boolean = true> {
+  anchor?: T;
+  tagline?: T;
+  title?: T;
+  description?: T;
+  questions?:
+    | T
+    | {
+        question?: T;
+        answer?: T;
         id?: T;
       };
   id?: T;
