@@ -57,12 +57,10 @@ export const RenderBlocks: React.FC<{
               const fullBleed = FULL_BLEED_BLOCKS.has(blockType)
               return fullBleed ? (
                 <React.Fragment key={index}>
-                  {/* @ts-expect-error there may be some mismatch between the expected types here */}
                   <Block {...block} disableInnerContainer />
                 </React.Fragment>
               ) : (
                 <div className="my-8" key={index}>
-                  {/* @ts-expect-error there may be some mismatch between the expected types here */}
                   <Block {...block} disableInnerContainer />
                 </div>
               )

@@ -53,7 +53,7 @@ const iconBoxVariants = cva(
 )
 
 interface FeatureCardProps
-  extends React.HTMLAttributes<HTMLDivElement>,
+  extends Omit<React.HTMLAttributes<HTMLDivElement>, 'color'>,
     VariantProps<typeof featureCardVariants> {
   iconName?: string
   index?: number
