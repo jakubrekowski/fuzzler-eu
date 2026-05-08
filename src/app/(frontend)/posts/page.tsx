@@ -1,12 +1,10 @@
 import type { Metadata } from 'next/types'
 
-import { CollectionArchive } from '@/components/CollectionArchive'
-import { PageRange } from '@/components/PageRange'
-import { Pagination } from '@/components/Pagination'
 import configPromise from '@payload-config'
 import { getPayload } from 'payload'
 import React from 'react'
-import PageClient from './page.client'
+import type { Post } from '@/payload-types'
+import { FuzzNewsClient } from './FuzzNewsClient'
 
 export const dynamic = 'force-static'
 export const revalidate = 600
@@ -14,50 +12,65 @@ export const revalidate = 600
 export default async function Page() {
   const payload = await getPayload({ config: configPromise })
 
-  const posts = await payload.find({
+  // Featured posts — top 3 by publishedAt
+  const featuredResult = await payload.find({
     collection: 'posts',
     depth: 1,
-    limit: 12,
+    limit: 3,
+    sort: '-publishedAt',
     overrideAccess: false,
     select: {
       title: true,
       slug: true,
       categories: true,
       meta: true,
+      publishedAt: true,
+      heroImage: true,
+      populatedAuthors: true,
     },
   })
 
+  // Grid posts — next 9
+  const gridResult = await payload.find({
+    collection: 'posts',
+    depth: 1,
+    limit: 9,
+    page: 1,
+    sort: '-publishedAt',
+    overrideAccess: false,
+    select: {
+      title: true,
+      slug: true,
+      categories: true,
+      meta: true,
+      publishedAt: true,
+      heroImage: true,
+    },
+  })
+
+  // All categories for filter chips
+  const categoriesResult = await payload.find({
+    collection: 'categories',
+    depth: 0,
+    limit: 50,
+  })
+
   return (
-    <div className="pt-24 pb-24">
-      <PageClient />
-      <div className="container mb-16">
-        <div className="prose dark:prose-invert max-w-none">
-          <h1>Posts</h1>
-        </div>
-      </div>
-
-      <div className="container mb-8">
-        <PageRange
-          collection="posts"
-          currentPage={posts.page}
-          limit={12}
-          totalDocs={posts.totalDocs}
-        />
-      </div>
-
-      <CollectionArchive posts={posts.docs} />
-
-      <div className="container">
-        {posts.totalPages > 1 && posts.page && (
-          <Pagination page={posts.page} totalPages={posts.totalPages} />
-        )}
-      </div>
-    </div>
+    <FuzzNewsClient
+      featuredPosts={featuredResult.docs as Post[]}
+      gridPosts={gridResult.docs as Post[]}
+      categories={categoriesResult.docs}
+      totalDocs={gridResult.totalDocs}
+      totalPages={gridResult.totalPages}
+      currentPage={gridResult.page ?? 1}
+    />
   )
 }
 
 export function generateMetadata(): Metadata {
   return {
-    title: `Payload Website Template Posts`,
+    title: 'Furr Wieści — Fuzzler',
+    description:
+      'Co u nas piszczy. Aktualizacje programu, nowi prowadzący, kulisy organizacji i fotorelacje z poprzednich edycji.',
   }
 }
