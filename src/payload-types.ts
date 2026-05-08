@@ -210,7 +210,7 @@ export interface Page {
             /**
              * Choose how the link should be rendered.
              */
-            appearance?: ('default' | 'outline') | null;
+            appearance?: ('default' | 'outline' | 'disabled') | null;
           };
           id?: string | null;
         }[]
@@ -564,7 +564,7 @@ export interface ContentBlock {
           /**
            * Choose how the link should be rendered.
            */
-          appearance?: ('default' | 'outline') | null;
+          appearance?: ('default' | 'outline' | 'disabled') | null;
         };
         id?: string | null;
       }[]
@@ -941,7 +941,7 @@ export interface PricingBlock {
     /**
      * Choose how the link should be rendered.
      */
-    appearance?: ('default' | 'outline') | null;
+    appearance?: ('default' | 'outline' | 'disabled') | null;
   };
   id?: string | null;
   blockName?: string | null;

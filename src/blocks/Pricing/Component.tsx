@@ -194,11 +194,9 @@ export const PricingBlockComponent: React.FC<PricingBlockProps> = (props) => {
           )}
 
           {link && (
-            <ActionButton 
-              link={link} 
-              size="lg" 
-              className="w-full"
-            />
+            <div className="">
+              <ActionButton link={link} />
+            </div>
           )}
         </div>
       </div>
