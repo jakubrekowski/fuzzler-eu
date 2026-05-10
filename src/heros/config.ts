@@ -8,6 +8,7 @@ import {
 } from '@payloadcms/richtext-lexical'
 
 import { linkGroup } from '@/fields/linkGroup'
+import { mediaSizeOptions } from '@/utilities/mediaSizeOptions'
 
 export const hero: Field = {
   name: 'hero',
@@ -77,12 +78,13 @@ export const hero: Field = {
       },
     },
     {
-      name: 'titleResolution',
-      type: 'number',
-      defaultValue: 400,
+      name: 'titleSize',
+      type: 'select',
+      defaultValue: 'original',
+      options: mediaSizeOptions,
       admin: {
         condition: (_, { type, titleType } = {}) => type === 'home' && titleType === 'media',
-        description: 'Set the width of the title media in pixels',
+        description: 'Select the file size for the title media',
       },
     },
     {
@@ -153,11 +155,12 @@ export const hero: Field = {
           required: true,
         },
         {
-          name: 'imageResolution',
-          type: 'number',
-          defaultValue: 600,
+          name: 'imageSize',
+          type: 'select',
+          defaultValue: 'original',
+          options: mediaSizeOptions,
           admin: {
-            description: 'Set the width of the art image in pixels',
+            description: 'Select the file size for the art image',
           },
         },
         {
@@ -200,12 +203,13 @@ export const hero: Field = {
       required: true,
     },
     {
-      name: 'mediaResolution',
-      type: 'number',
-      defaultValue: 1200,
+      name: 'mediaSize',
+      type: 'select',
+      defaultValue: 'original',
+      options: mediaSizeOptions,
       admin: {
         condition: (_, { type } = {}) => ['highImpact', 'mediumImpact'].includes(type),
-        description: 'Set the width of the hero media in pixels',
+        description: 'Select the file size for the hero media',
       },
     },
   ],

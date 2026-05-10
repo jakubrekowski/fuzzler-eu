@@ -165,9 +165,9 @@ export interface Page {
     homeTitle?: string | null;
     titleMedia?: (number | null) | Media;
     /**
-     * Set the width of the title media in pixels
+     * Select the file size for the title media
      */
-    titleResolution?: number | null;
+    titleSize?: ('original' | 'thumbnail' | 'square' | 'small' | 'medium' | 'large' | 'xlarge' | 'og') | null;
     meta?:
       | {
           label: string;
@@ -224,9 +224,9 @@ export interface Page {
     homeArt?: {
       image: number | Media;
       /**
-       * Set the width of the art image in pixels
+       * Select the file size for the art image
        */
-      imageResolution?: number | null;
+      imageSize?: ('original' | 'thumbnail' | 'square' | 'small' | 'medium' | 'large' | 'xlarge' | 'og') | null;
       tags?:
         | {
             label: string;
@@ -238,9 +238,9 @@ export interface Page {
     };
     media?: (number | null) | Media;
     /**
-     * Set the width of the hero media in pixels
+     * Select the file size for the hero media
      */
-    mediaResolution?: number | null;
+    mediaSize?: ('original' | 'thumbnail' | 'square' | 'small' | 'medium' | 'large' | 'xlarge' | 'og') | null;
   };
   layout: (
     | CallToActionBlock
@@ -1411,7 +1411,7 @@ export interface PagesSelect<T extends boolean = true> {
         titleType?: T;
         homeTitle?: T;
         titleMedia?: T;
-        titleResolution?: T;
+        titleSize?: T;
         meta?:
           | T
           | {
@@ -1446,7 +1446,7 @@ export interface PagesSelect<T extends boolean = true> {
           | T
           | {
               image?: T;
-              imageResolution?: T;
+              imageSize?: T;
               tags?:
                 | T
                 | {
@@ -1457,7 +1457,7 @@ export interface PagesSelect<T extends boolean = true> {
                   };
             };
         media?: T;
-        mediaResolution?: T;
+        mediaSize?: T;
       };
   layout?:
     | T
@@ -2280,9 +2280,9 @@ export interface Header {
   logoText?: string | null;
   logoMedia?: (number | null) | Media;
   /**
-   * Set the width of the logo in pixels
+   * Select the file size to load for the logo
    */
-  logoResolution?: number | null;
+  logoSize?: ('original' | 'thumbnail' | 'square' | 'small' | 'medium' | 'large' | 'xlarge' | 'og') | null;
   navItems?:
     | {
         link: {
@@ -2316,9 +2316,9 @@ export interface Footer {
   logoText?: string | null;
   logoMedia?: (number | null) | Media;
   /**
-   * Set the width of the logo in pixels
+   * Select the file size to load for the logo
    */
-  logoResolution?: number | null;
+  logoSize?: ('original' | 'thumbnail' | 'square' | 'small' | 'medium' | 'large' | 'xlarge' | 'og') | null;
   navItems?:
     | {
         link: {
@@ -2350,7 +2350,7 @@ export interface HeaderSelect<T extends boolean = true> {
   logoType?: T;
   logoText?: T;
   logoMedia?: T;
-  logoResolution?: T;
+  logoSize?: T;
   navItems?:
     | T
     | {
@@ -2377,7 +2377,7 @@ export interface FooterSelect<T extends boolean = true> {
   logoType?: T;
   logoText?: T;
   logoMedia?: T;
-  logoResolution?: T;
+  logoSize?: T;
   navItems?:
     | T
     | {

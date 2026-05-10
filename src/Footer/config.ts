@@ -2,6 +2,7 @@ import type { GlobalConfig } from 'payload'
 
 import { link } from '@/fields/link'
 import { revalidateFooter } from './hooks/revalidateFooter'
+import { mediaSizeOptions } from '@/utilities/mediaSizeOptions'
 
 export const Footer: GlobalConfig = {
   slug: 'footer',
@@ -34,12 +35,13 @@ export const Footer: GlobalConfig = {
       },
     },
     {
-      name: 'logoResolution',
-      type: 'number',
-      defaultValue: 150,
+      name: 'logoSize',
+      type: 'select',
+      defaultValue: 'original',
+      options: mediaSizeOptions,
       admin: {
         condition: (_, { logoType } = {}) => logoType === 'media',
-        description: 'Set the width of the logo in pixels',
+        description: 'Select the file size to load for the logo',
       },
     },
     {

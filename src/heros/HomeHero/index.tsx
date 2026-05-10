@@ -9,6 +9,7 @@ import type { Page } from '@/payload-types'
 import { CMSLink } from '@/components/Link'
 import { ActionButton } from '@/components/ActionButton'
 import RichText from '@/components/RichText'
+import { Media } from '@/components/Media'
 
 export const HomeHero: React.FC<Page['hero']> = (props) => {
   const {
@@ -65,12 +66,12 @@ export const HomeHero: React.FC<Page['hero']> = (props) => {
 
           {/* Main Title with SVG-like Wing */}
           <div className="relative mt-6 group">
-            {titleType === 'media' && titleMediaUrl ? (
-              <img
-                src={titleMediaUrl}
+            {titleType === 'media' && titleMedia ? (
+              <Media
+                resource={titleMedia}
                 alt={displayTitle}
-                style={{ width: props.titleResolution ? `${props.titleResolution}px` : 'auto' }}
-                className="h-auto object-contain"
+                mediaSize={(props as any).titleSize}
+                imgClassName="h-auto object-contain"
               />
             ) : (
               <h1 className="text-[clamp(64px,10vw,140px)] font-bold leading-[0.85] tracking-tight uppercase select-none">
@@ -163,12 +164,12 @@ export const HomeHero: React.FC<Page['hero']> = (props) => {
             </div>
 
             {/* Mascot Image */}
-            {artImage && (
-              <img
-                src={artImage}
+            {homeArt?.image && (
+              <Media
+                resource={homeArt.image}
                 alt="Hero Art"
-                style={{ width: homeArt?.imageResolution ? `${homeArt.imageResolution}px` : '78%' }}
-                className="relative z-10 h-auto drop-shadow-[0_30px_50px_rgba(0,0,0,0.55)] transition-transform duration-700 hover:scale-[1.02]"
+                mediaSize={(homeArt as any).imageSize}
+                imgClassName="relative z-10 h-auto drop-shadow-[0_30px_50px_rgba(0,0,0,0.55)] transition-transform duration-700 hover:scale-[1.02]"
               />
             )}
 
