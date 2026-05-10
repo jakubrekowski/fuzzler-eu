@@ -12,16 +12,20 @@ import PageClient from './page.client'
 import { FuzzArticleClient } from './FuzzArticleClient'
 
 export async function generateStaticParams() {
-  const payload = await getPayload({ config: configPromise })
-  const posts = await payload.find({
-    collection: 'posts',
-    draft: false,
-    limit: 1000,
-    overrideAccess: false,
-    pagination: false,
-    select: { slug: true },
-  })
-  return posts.docs.map(({ slug }) => ({ slug }))
+  try {
+    const payload = await getPayload({ config: configPromise })
+    const posts = await payload.find({
+      collection: 'posts',
+      draft: false,
+      limit: 1000,
+      overrideAccess: false,
+      pagination: false,
+      select: { slug: true },
+    })
+    return posts.docs.map(({ slug }) => ({ slug }))
+  } catch (error) {
+    return []
+  }
 }
 
 type Args = { params: Promise<{ slug?: string }> }
@@ -42,16 +46,20 @@ export default async function Page({ params: paramsPromise }: Args) {
   // Fetch recent posts for "related" fallback when none are set
   let recentPosts: Post[] = []
   if (relatedPostObjects.length === 0) {
-    const payload = await getPayload({ config: configPromise })
-    const result = await payload.find({
-      collection: 'posts',
-      depth: 1,
-      limit: 3,
-      sort: '-publishedAt',
-      overrideAccess: false,
-      where: { slug: { not_equals: decodedSlug } },
-    })
-    recentPosts = result.docs as Post[]
+    try {
+      const payload = await getPayload({ config: configPromise })
+      const result = await payload.find({
+        collection: 'posts',
+        depth: 1,
+        limit: 3,
+        sort: '-publishedAt',
+        overrideAccess: false,
+        where: { slug: { not_equals: decodedSlug } },
+      })
+      recentPosts = result.docs as Post[]
+    } catch (error) {
+      recentPosts = []
+    }
   }
 
   return (
@@ -76,13 +84,17 @@ export async function generateMetadata({ params: paramsPromise }: Args): Promise
 const queryPostBySlug = cache(async ({ slug }: { slug: string }) => {
   const { isEnabled: draft } = await draftMode()
   const payload = await getPayload({ config: configPromise })
-  const result = await payload.find({
-    collection: 'posts',
-    draft,
-    limit: 1,
-    overrideAccess: draft,
-    pagination: false,
-    where: { slug: { equals: slug } },
-  })
-  return result.docs?.[0] || null
+  try {
+    const result = await payload.find({
+      collection: 'posts',
+      draft,
+      limit: 1,
+      overrideAccess: draft,
+      pagination: false,
+      where: { slug: { equals: slug } },
+    })
+    return result.docs?.[0] || null
+  } catch (error) {
+    return null
+  }
 })
