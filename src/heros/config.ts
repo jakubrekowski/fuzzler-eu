@@ -36,6 +36,10 @@ export const hero: Field = {
           value: 'lowImpact',
         },
         {
+          label: 'SubPage Hero',
+          value: 'subPage',
+        },
+        {
           label: 'Home Hero',
           value: 'home',
         },
@@ -46,7 +50,7 @@ export const hero: Field = {
       name: 'eyebrow',
       type: 'text',
       admin: {
-        condition: (_, { type } = {}) => type === 'home',
+        condition: (_, { type } = {}) => ['home', 'subPage'].includes(type),
       },
     },
     {

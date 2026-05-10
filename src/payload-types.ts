@@ -159,7 +159,7 @@ export interface Page {
   id: number;
   title: string;
   hero: {
-    type: 'none' | 'highImpact' | 'mediumImpact' | 'lowImpact' | 'home';
+    type: 'none' | 'highImpact' | 'mediumImpact' | 'lowImpact' | 'subPage' | 'home';
     eyebrow?: string | null;
     titleType?: ('text' | 'media') | null;
     homeTitle?: string | null;

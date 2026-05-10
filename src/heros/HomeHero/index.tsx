@@ -60,10 +60,10 @@ export const HomeHero: React.FC<Page['hero']> = (props) => {
                 mediaSize="medium"
                 priority
                 htmlElement={null}
-                imgClassName="h-auto max-w-full object-contain"
+                imgClassName="h-auto max-w-[400px] object-contain"
               />
             ) : (
-              <h1 className="text-[clamp(64px,10vw,140px)] font-bold leading-[0.85] tracking-tight uppercase select-none">
+              <h1 className="text-[clamp(64px,10vw,110px)] font-bold leading-[0.85] tracking-tight uppercase select-none">
                 {displayTitle === 'FUZZLER' ? (
                   <span className="relative inline-block">
                     FUZZLER
@@ -156,7 +156,7 @@ export const HomeHero: React.FC<Page['hero']> = (props) => {
                 resource={homeArt.image}
                 mediaSize="large"
                 htmlElement={null}
-                imgClassName="relative z-10 w-[78%] h-auto drop-shadow-[0_30px_50_rgba(0,0,0,0.55)] transition-transform duration-700 hover:scale-[1.02]"
+                imgClassName="relative z-10 w-[78%] mx-auto h-auto drop-shadow-[0_30px_50_rgba(0,0,0,0.55)] transition-transform duration-700 hover:scale-[1.02] block"
               />
             )}
 
