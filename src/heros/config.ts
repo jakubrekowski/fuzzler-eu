@@ -77,6 +77,15 @@ export const hero: Field = {
       },
     },
     {
+      name: 'titleResolution',
+      type: 'number',
+      defaultValue: 400,
+      admin: {
+        condition: (_, { type, titleType } = {}) => type === 'home' && titleType === 'media',
+        description: 'Set the width of the title media in pixels',
+      },
+    },
+    {
       name: 'meta',
       type: 'array',
       fields: [
@@ -144,6 +153,14 @@ export const hero: Field = {
           required: true,
         },
         {
+          name: 'imageResolution',
+          type: 'number',
+          defaultValue: 600,
+          admin: {
+            description: 'Set the width of the art image in pixels',
+          },
+        },
+        {
           name: 'tags',
           type: 'array',
           maxRows: 3,
@@ -181,6 +198,15 @@ export const hero: Field = {
       },
       relationTo: 'media',
       required: true,
+    },
+    {
+      name: 'mediaResolution',
+      type: 'number',
+      defaultValue: 1200,
+      admin: {
+        condition: (_, { type } = {}) => ['highImpact', 'mediumImpact'].includes(type),
+        description: 'Set the width of the hero media in pixels',
+      },
     },
   ],
   label: false,

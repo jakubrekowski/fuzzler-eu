@@ -34,6 +34,15 @@ export const Header: GlobalConfig = {
       },
     },
     {
+      name: 'logoResolution',
+      type: 'number',
+      defaultValue: 150,
+      admin: {
+        condition: (_, { logoType } = {}) => logoType === 'media',
+        description: 'Set the width of the logo in pixels',
+      },
+    },
+    {
       name: 'navItems',
       type: 'array',
       fields: [

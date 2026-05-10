@@ -164,6 +164,10 @@ export interface Page {
     titleType?: ('text' | 'media') | null;
     homeTitle?: string | null;
     titleMedia?: (number | null) | Media;
+    /**
+     * Set the width of the title media in pixels
+     */
+    titleResolution?: number | null;
     meta?:
       | {
           label: string;
@@ -219,6 +223,10 @@ export interface Page {
       | null;
     homeArt?: {
       image: number | Media;
+      /**
+       * Set the width of the art image in pixels
+       */
+      imageResolution?: number | null;
       tags?:
         | {
             label: string;
@@ -229,6 +237,10 @@ export interface Page {
         | null;
     };
     media?: (number | null) | Media;
+    /**
+     * Set the width of the hero media in pixels
+     */
+    mediaResolution?: number | null;
   };
   layout: (
     | CallToActionBlock
@@ -1399,6 +1411,7 @@ export interface PagesSelect<T extends boolean = true> {
         titleType?: T;
         homeTitle?: T;
         titleMedia?: T;
+        titleResolution?: T;
         meta?:
           | T
           | {
@@ -1433,6 +1446,7 @@ export interface PagesSelect<T extends boolean = true> {
           | T
           | {
               image?: T;
+              imageResolution?: T;
               tags?:
                 | T
                 | {
@@ -1443,6 +1457,7 @@ export interface PagesSelect<T extends boolean = true> {
                   };
             };
         media?: T;
+        mediaResolution?: T;
       };
   layout?:
     | T
@@ -2264,6 +2279,10 @@ export interface Header {
   logoType?: ('text' | 'media') | null;
   logoText?: string | null;
   logoMedia?: (number | null) | Media;
+  /**
+   * Set the width of the logo in pixels
+   */
+  logoResolution?: number | null;
   navItems?:
     | {
         link: {
@@ -2296,6 +2315,10 @@ export interface Footer {
   logoType?: ('text' | 'media') | null;
   logoText?: string | null;
   logoMedia?: (number | null) | Media;
+  /**
+   * Set the width of the logo in pixels
+   */
+  logoResolution?: number | null;
   navItems?:
     | {
         link: {
@@ -2327,6 +2350,7 @@ export interface HeaderSelect<T extends boolean = true> {
   logoType?: T;
   logoText?: T;
   logoMedia?: T;
+  logoResolution?: T;
   navItems?:
     | T
     | {
@@ -2353,6 +2377,7 @@ export interface FooterSelect<T extends boolean = true> {
   logoType?: T;
   logoText?: T;
   logoMedia?: T;
+  logoResolution?: T;
   navItems?:
     | T
     | {

@@ -69,7 +69,8 @@ export const HomeHero: React.FC<Page['hero']> = (props) => {
               <img
                 src={titleMediaUrl}
                 alt={displayTitle}
-                className="max-h-[140px] w-auto object-contain"
+                style={{ width: props.titleResolution ? `${props.titleResolution}px` : 'auto' }}
+                className="h-auto object-contain"
               />
             ) : (
               <h1 className="text-[clamp(64px,10vw,140px)] font-bold leading-[0.85] tracking-tight uppercase select-none">
@@ -166,7 +167,8 @@ export const HomeHero: React.FC<Page['hero']> = (props) => {
               <img
                 src={artImage}
                 alt="Hero Art"
-                className="relative z-10 w-[78%] h-auto drop-shadow-[0_30px_50px_rgba(0,0,0,0.55)] transition-transform duration-700 hover:scale-[1.02]"
+                style={{ width: homeArt?.imageResolution ? `${homeArt.imageResolution}px` : '78%' }}
+                className="relative z-10 h-auto drop-shadow-[0_30px_50px_rgba(0,0,0,0.55)] transition-transform duration-700 hover:scale-[1.02]"
               />
             )}
 
