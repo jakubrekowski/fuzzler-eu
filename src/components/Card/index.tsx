@@ -49,7 +49,7 @@ export const Card: React.FC<{
           />
         )}
         {metaImage && typeof metaImage !== 'string' && (
-          <Media resource={metaImage} size="33vw" imgClassName="object-cover w-full h-full" />
+          <Media resource={metaImage} mediaSize="medium" size="33vw" imgClassName="object-cover w-full h-full" />
         )}
       </div>
 

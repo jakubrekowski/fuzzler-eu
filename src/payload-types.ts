@@ -587,6 +587,7 @@ export interface ContentBlock {
  */
 export interface MediaBlock {
   media: number | Media;
+  mediaSize?: ('thumbnail' | 'small' | 'medium' | 'large' | 'xlarge') | null;
   id?: string | null;
   blockName?: string | null;
   blockType: 'mediaBlock';
@@ -1532,6 +1533,7 @@ export interface ContentBlockSelect<T extends boolean = true> {
  */
 export interface MediaBlockSelect<T extends boolean = true> {
   media?: T;
+  mediaSize?: T;
   id?: T;
   blockName?: T;
 }
@@ -2296,6 +2298,10 @@ export interface Footer {
   logoType?: ('text' | 'media') | null;
   logoText?: string | null;
   logoMedia?: (number | null) | Media;
+  /**
+   * Small text next to the mark (e.g. FUZZLER EDYCJA 2026)
+   */
+  logoSubtext?: string | null;
   description?: string | null;
   columns?:
     | {
@@ -2349,6 +2355,7 @@ export interface Footer {
       }[]
     | null;
   copyright?: string | null;
+  creditNote?: string | null;
   updatedAt?: string | null;
   createdAt?: string | null;
 }
@@ -2386,6 +2393,7 @@ export interface FooterSelect<T extends boolean = true> {
   logoType?: T;
   logoText?: T;
   logoMedia?: T;
+  logoSubtext?: T;
   description?: T;
   columns?:
     | T
@@ -2424,6 +2432,7 @@ export interface FooterSelect<T extends boolean = true> {
         id?: T;
       };
   copyright?: T;
+  creditNote?: T;
   updatedAt?: T;
   createdAt?: T;
   globalType?: T;

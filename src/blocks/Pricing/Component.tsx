@@ -129,6 +129,7 @@ export const PricingBlockComponent: React.FC<PricingBlockProps> = (props) => {
             {hotelCard?.image && (
               <Media
                 resource={hotelCard.image}
+                mediaSize="medium"
                 className="w-full h-full"
                 imgClassName="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
                 fill
@@ -175,6 +176,7 @@ export const PricingBlockComponent: React.FC<PricingBlockProps> = (props) => {
             <div className="flex-1 bg-[#1a0b2e] border border-purple-500/20 rounded-[32px] overflow-hidden relative group">
               <Media
                 resource={packageMedia}
+                mediaSize="medium"
                 className="w-full h-full"
                 imgClassName="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
                 fill

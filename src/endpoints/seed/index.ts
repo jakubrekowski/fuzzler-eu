@@ -243,33 +243,33 @@ export const seed = async ({
     payload.updateGlobal({
       slug: 'footer',
       data: {
+        logoType: 'text',
+        logoText: 'Fuzzler',
+        logoSubtext: 'FUZZLER\nEDYCJA 2026',
+        description: 'Furr MeetUp · chill, integracja i futrzaki. Trzy dni offline w Górach Świętokrzyskich. Edycja 2026.',
         columns: [
           {
-            label: 'Nawigacja',
+            label: 'Event',
             navItems: [
-              {
-                link: {
-                  type: 'custom',
-                  label: 'Admin',
-                  url: '/admin',
-                },
-              },
-              {
-                link: {
-                  type: 'custom',
-                  label: 'Source Code',
-                  newTab: true,
-                  url: 'https://github.com/payloadcms/payload/tree/3.x/templates/website',
-                },
-              },
-              {
-                link: {
-                  type: 'custom',
-                  label: 'Payload',
-                  newTab: true,
-                  url: 'https://payloadcms.com/',
-                },
-              },
+              { link: { type: 'custom', label: 'Cennik', url: '#cennik' } },
+              { link: { type: 'custom', label: 'Program', url: '#program' } },
+              { link: { type: 'custom', label: 'Lokalizacja', url: '#lokalizacja' } },
+              { link: { type: 'custom', label: 'FAQ', url: '#faq' } },
+            ],
+          },
+          {
+            label: 'Społeczność',
+            navItems: [
+              { link: { type: 'custom', label: 'Telegram · kanał', url: '#' } },
+              { link: { type: 'custom', label: 'Telegram · grupa', url: '#' } },
+              { link: { type: 'custom', label: 'X / Twitter', url: '#' } },
+            ],
+          },
+          {
+            label: 'Pomoc',
+            navItems: [
+              { link: { type: 'custom', label: 'Regulamin', url: '#' } },
+              { link: { type: 'custom', label: 'Polityka prywatności', url: '#' } },
             ],
           },
         ],
@@ -302,6 +302,8 @@ export const seed = async ({
             },
           },
         ],
+        copyright: '© 2026 Fuzzler · Furr MeetUp',
+        creditNote: 'Made with ★ in Kielce',
       },
     }),
   ])

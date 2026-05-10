@@ -52,6 +52,7 @@ export const ImageMedia: React.FC<MediaProps> = (props) => {
     size: sizeFromProps,
     src: srcFromProps,
     loading: loadingFromProps,
+    mediaSize,
   } = props
 
   let width: number | undefined
@@ -60,15 +61,30 @@ export const ImageMedia: React.FC<MediaProps> = (props) => {
   let src: StaticImageData | string = srcFromProps || ''
 
   if (!src && resource && typeof resource === 'object') {
-    const { alt: altFromResource, height: fullHeight, url, width: fullWidth } = resource
+    const { alt: altFromResource, height: fullHeight, url, width: fullWidth, sizes: resourceSizes } = resource
 
     width = fullWidth!
     height = fullHeight!
     alt = altFromResource || ''
 
+    let imageURL = url
+
+    if (mediaSize && resourceSizes && (resourceSizes as any)[mediaSize]) {
+      const size = (resourceSizes as any)[mediaSize]
+      if (size.url) {
+        imageURL = size.url
+        width = size.width || width
+        height = size.height || height
+      }
+    }
+
     const cacheTag = resource.updatedAt
 
-    src = getMediaUrl(url, cacheTag)
+    src = getMediaUrl(imageURL, cacheTag)
+  }
+
+  if (!src) {
+    return null
   }
 
   const loading = loadingFromProps || (!priority ? 'lazy' : undefined)
@@ -86,13 +102,12 @@ export const ImageMedia: React.FC<MediaProps> = (props) => {
         alt={alt || ''}
         className={cn(imgClassName)}
         fill={fill}
-        height={!fill ? height : undefined}
+        height={!fill ? (height || 1000) : undefined}
         priority={priority}
-        quality={100}
         loading={loading}
         sizes={sizes}
         src={src}
-        width={!fill ? width : undefined}
+        width={!fill ? (width || 1000) : undefined}
       />
     </picture>
   )

@@ -9,12 +9,12 @@ import type { Page } from '@/payload-types'
 import { CMSLink } from '@/components/Link'
 import { ActionButton } from '@/components/ActionButton'
 import RichText from '@/components/RichText'
+import { Media } from '@/components/Media'
 
 export const HomeHero: React.FC<Page['hero']> = (props) => {
   const { eyebrow, titleType, homeTitle, titleMedia, richText, meta, links, stats, homeArt } = props
 
   const displayTitle = homeTitle || 'FUZZLER'
-  const titleMediaUrl = typeof titleMedia === 'object' ? titleMedia?.url : null
 
   const displayEyebrow = eyebrow || 'Furr MeetUp · Edycja 03 · Wrzesień 2026'
 
@@ -31,7 +31,6 @@ export const HomeHero: React.FC<Page['hero']> = (props) => {
     { label: 'Ognisk', value: '∞' },
   ]
 
-  const artImage = typeof homeArt?.image === 'object' ? homeArt.image?.url : '/assets/bun_color.svg'
   const displayTags = homeArt?.tags || [
     { label: '★ Edycja 2026', color: 'green', rotation: -6 },
     { label: 'Hotel Ameliówka', color: 'orange', rotation: 5 },
@@ -55,11 +54,13 @@ export const HomeHero: React.FC<Page['hero']> = (props) => {
 
           {/* Main Title with SVG-like Wing */}
           <div className="relative mt-6 group">
-            {titleType === 'media' && titleMediaUrl ? (
-              <img
-                src={titleMediaUrl}
-                alt={displayTitle}
-                className="h-auto max-w-full object-contain"
+            {titleType === 'media' && titleMedia ? (
+              <Media
+                resource={titleMedia}
+                mediaSize="medium"
+                priority
+                htmlElement={null}
+                imgClassName="h-auto max-w-full object-contain"
               />
             ) : (
               <h1 className="text-[clamp(64px,10vw,140px)] font-bold leading-[0.85] tracking-tight uppercase select-none">
@@ -150,11 +151,12 @@ export const HomeHero: React.FC<Page['hero']> = (props) => {
             </div>
 
             {/* Mascot Image */}
-            {artImage && (
-              <img
-                src={artImage}
-                alt="Hero Art"
-                className="relative z-10 w-[78%] h-auto drop-shadow-[0_30px_50_rgba(0,0,0,0.55)] transition-transform duration-700 hover:scale-[1.02]"
+            {homeArt?.image && (
+              <Media
+                resource={homeArt.image}
+                mediaSize="large"
+                htmlElement={null}
+                imgClassName="relative z-10 w-[78%] h-auto drop-shadow-[0_30px_50_rgba(0,0,0,0.55)] transition-transform duration-700 hover:scale-[1.02]"
               />
             )}
 

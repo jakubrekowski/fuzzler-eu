@@ -34,6 +34,13 @@ export const Footer: GlobalConfig = {
       },
     },
     {
+      name: 'logoSubtext',
+      type: 'text',
+      admin: {
+        description: 'Small text next to the mark (e.g. FUZZLER EDYCJA 2026)',
+      },
+    },
+    {
       name: 'description',
       type: 'textarea',
     },
@@ -87,6 +94,10 @@ export const Footer: GlobalConfig = {
     },
     {
       name: 'copyright',
+      type: 'text',
+    },
+    {
+      name: 'creditNote',
       type: 'text',
     },
   ],
