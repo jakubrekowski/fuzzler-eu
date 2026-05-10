@@ -28,8 +28,7 @@ export async function Footer() {
                 <img
                   src={logoMediaUrl}
                   alt={displayLogoText}
-                  style={{ height: 'auto', width: footerData.logoResolution ? `${footerData.logoResolution}px` : 'auto' }}
-                  className="object-contain"
+                  className="h-10 w-auto object-contain"
                 />
               ) : (
                 <>

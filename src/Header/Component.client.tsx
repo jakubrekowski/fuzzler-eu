@@ -58,8 +58,7 @@ export const HeaderClient: React.FC<HeaderClientProps> = ({ data }) => {
             <img
               src={logoMediaUrl}
               alt={displayLogoText}
-              style={{ height: 'auto', width: data.logoResolution ? `${data.logoResolution}px` : 'auto' }}
-              className="object-contain"
+              className="h-10 w-auto object-contain"
             />
           ) : (
             <>
