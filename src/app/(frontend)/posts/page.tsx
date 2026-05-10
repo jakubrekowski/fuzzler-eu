@@ -8,10 +8,7 @@ import { FuzzNewsClient } from './FuzzNewsClient'
 
 export const dynamic = 'force-static'
 export const revalidate = 600
-
 export default async function Page() {
-  const payload = await getPayload({ config: configPromise })
-
   let featuredPosts: Post[] = []
   let gridPosts: Post[] = []
   let categories: any[] = []
@@ -20,6 +17,7 @@ export default async function Page() {
   let currentPage = 1
 
   try {
+    const payload = await getPayload({ config: configPromise })
     // Featured posts — top 3 by publishedAt
     const featuredResult = await payload.find({
       collection: 'posts',

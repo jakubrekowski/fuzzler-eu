@@ -19,29 +19,33 @@ export const ArchiveBlock: React.FC<
   let posts: Post[] = []
 
   if (populateBy === 'collection') {
-    const payload = await getPayload({ config: configPromise })
-
     const flattenedCategories = categories?.map((category) => {
       if (typeof category === 'object') return category.id
       else return category
     })
 
-    const fetchedPosts = await payload.find({
-      collection: 'posts',
-      depth: 1,
-      limit,
-      ...(flattenedCategories && flattenedCategories.length > 0
-        ? {
-            where: {
-              categories: {
-                in: flattenedCategories,
+    try {
+      const payload = await getPayload({ config: configPromise })
+      const fetchedPosts = await payload.find({
+        collection: 'posts',
+        depth: 1,
+        limit,
+        ...(flattenedCategories && flattenedCategories.length > 0
+          ? {
+              where: {
+                categories: {
+                  in: flattenedCategories,
+                },
               },
-            },
-          }
-        : {}),
-    })
+            }
+          : {}),
+      })
 
-    posts = fetchedPosts.docs
+      posts = fetchedPosts.docs
+    } catch (error) {
+      console.error('Error fetching posts for ArchiveBlock:', error)
+      posts = []
+    }
   } else {
     if (selectedDocs?.length) {
       const filteredSelectedPosts = selectedDocs.map((post) => {

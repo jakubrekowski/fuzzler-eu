@@ -2,6 +2,7 @@ import { getServerSideSitemap } from 'next-sitemap'
 import { getPayload } from 'payload'
 import config from '@payload-config'
 import { unstable_cache } from 'next/cache'
+import type { Page } from '@/payload-types'
 
 const getPagesSitemap = unstable_cache(
   async () => {
@@ -11,23 +12,28 @@ const getPagesSitemap = unstable_cache(
       process.env.VERCEL_PROJECT_PRODUCTION_URL ||
       'https://example.com'
 
-    const results = await payload.find({
-      collection: 'pages',
-      overrideAccess: false,
-      draft: false,
-      depth: 0,
-      limit: 1000,
-      pagination: false,
-      where: {
-        _status: {
-          equals: 'published',
+    let results: any = { docs: [] }
+    try {
+      results = await payload.find({
+        collection: 'pages',
+        overrideAccess: false,
+        draft: false,
+        depth: 0,
+        limit: 1000,
+        pagination: false,
+        where: {
+          _status: {
+            equals: 'published',
+          },
         },
-      },
-      select: {
-        slug: true,
-        updatedAt: true,
-      },
-    })
+        select: {
+          slug: true,
+          updatedAt: true,
+        },
+      })
+    } catch (error) {
+      console.error('Error fetching pages for sitemap:', error)
+    }
 
     const dateFallback = new Date().toISOString()
 
@@ -43,7 +49,7 @@ const getPagesSitemap = unstable_cache(
     ]
 
     const sitemap = results.docs
-      ? results.docs
+      ? (results.docs as Page[])
           .filter((page) => Boolean(page?.slug))
           .map((page) => {
             return {

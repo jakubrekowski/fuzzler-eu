@@ -8,6 +8,7 @@ import { getPayload } from 'payload'
 import React from 'react'
 import PageClient from './page.client'
 import { notFound } from 'next/navigation'
+import type { Post } from '@/payload-types'
 
 export const revalidate = 600
 
@@ -19,15 +20,19 @@ type Args = {
 
 export default async function Page({ params: paramsPromise }: Args) {
   const { pageNumber } = await paramsPromise
-  const payload = await getPayload({ config: configPromise })
-
   const sanitizedPageNumber = Number(pageNumber)
 
   if (!Number.isInteger(sanitizedPageNumber)) notFound()
 
-  let posts: any = { docs: [], page: 1, totalDocs: 0, totalPages: 1 }
+  let posts: { docs: Post[]; page?: number; totalDocs: number; totalPages: number } = {
+    docs: [],
+    page: 1,
+    totalDocs: 0,
+    totalPages: 1,
+  }
 
   try {
+    const payload = await getPayload({ config: configPromise })
     posts = await payload.find({
       collection: 'posts',
       depth: 1,
