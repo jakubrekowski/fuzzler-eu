@@ -34,20 +34,60 @@ export const Footer: GlobalConfig = {
       },
     },
     {
-      name: 'navItems',
+      name: 'description',
+      type: 'textarea',
+    },
+    {
+      name: 'columns',
       type: 'array',
       fields: [
+        {
+          name: 'label',
+          type: 'text',
+          required: true,
+        },
+        {
+          name: 'navItems',
+          type: 'array',
+          fields: [
+            link({
+              appearances: false,
+            }),
+          ],
+          admin: {
+            initCollapsed: true,
+            components: {
+              RowLabel: '@/Footer/RowLabel#RowLabel',
+            },
+          },
+        },
+      ],
+      maxRows: 3,
+    },
+    {
+      name: 'socialLinks',
+      type: 'array',
+      fields: [
+        {
+          name: 'label',
+          type: 'text',
+          required: true,
+        },
+        {
+          name: 'icon',
+          type: 'text',
+          admin: {
+            description: 'Simple Icons name (e.g. telegram, x, instagram)',
+          },
+        },
         link({
           appearances: false,
         }),
       ],
-      maxRows: 6,
-      admin: {
-        initCollapsed: true,
-        components: {
-          RowLabel: '@/Footer/RowLabel#RowLabel',
-        },
-      },
+    },
+    {
+      name: 'copyright',
+      type: 'text',
     },
   ],
   hooks: {

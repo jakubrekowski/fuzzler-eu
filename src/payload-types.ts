@@ -2296,8 +2296,40 @@ export interface Footer {
   logoType?: ('text' | 'media') | null;
   logoText?: string | null;
   logoMedia?: (number | null) | Media;
-  navItems?:
+  description?: string | null;
+  columns?:
     | {
+        label: string;
+        navItems?:
+          | {
+              link: {
+                type?: ('reference' | 'custom') | null;
+                newTab?: boolean | null;
+                reference?:
+                  | ({
+                      relationTo: 'pages';
+                      value: number | Page;
+                    } | null)
+                  | ({
+                      relationTo: 'posts';
+                      value: number | Post;
+                    } | null);
+                url?: string | null;
+                label: string;
+              };
+              id?: string | null;
+            }[]
+          | null;
+        id?: string | null;
+      }[]
+    | null;
+  socialLinks?:
+    | {
+        label: string;
+        /**
+         * Simple Icons name (e.g. telegram, x, instagram)
+         */
+        icon?: string | null;
         link: {
           type?: ('reference' | 'custom') | null;
           newTab?: boolean | null;
@@ -2316,6 +2348,7 @@ export interface Footer {
         id?: string | null;
       }[]
     | null;
+  copyright?: string | null;
   updatedAt?: string | null;
   createdAt?: string | null;
 }
@@ -2353,9 +2386,32 @@ export interface FooterSelect<T extends boolean = true> {
   logoType?: T;
   logoText?: T;
   logoMedia?: T;
-  navItems?:
+  description?: T;
+  columns?:
     | T
     | {
+        label?: T;
+        navItems?:
+          | T
+          | {
+              link?:
+                | T
+                | {
+                    type?: T;
+                    newTab?: T;
+                    reference?: T;
+                    url?: T;
+                    label?: T;
+                  };
+              id?: T;
+            };
+        id?: T;
+      };
+  socialLinks?:
+    | T
+    | {
+        label?: T;
+        icon?: T;
         link?:
           | T
           | {
@@ -2367,6 +2423,7 @@ export interface FooterSelect<T extends boolean = true> {
             };
         id?: T;
       };
+  copyright?: T;
   updatedAt?: T;
   createdAt?: T;
   globalType?: T;

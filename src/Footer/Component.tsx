@@ -7,9 +7,7 @@ import { CMSLink } from '@/components/Link'
 export async function Footer() {
   const footerData = await getCachedGlobal('footer', 1)()
 
-  const navItems = footerData?.navItems || []
-
-  const { logoType, logoText, logoMedia } = footerData
+  const { logoType, logoText, logoMedia, description, columns, socialLinks, copyright } = footerData
   const logoMediaUrl = typeof logoMedia === 'object' ? logoMedia?.url : null
   const displayLogoText = logoText || 'Fuzzler'
 
@@ -51,87 +49,75 @@ export async function Footer() {
                 </>
               )}
             </Link>
-            <p className="text-cream-dim text-[15px]">
-              Chill, integracja i futrzaki. Furr MeetUp — edycja 03.
-            </p>
+            {description && <p className="text-cream-dim text-[15px]">{description}</p>}
           </div>
 
-          {/* Nav columns from CMS */}
-          {navItems.length > 0 && (
-            <div className="flex flex-col gap-1">
+          {/* Dynamic columns from CMS */}
+          {columns?.map((column, i) => (
+            <div key={i} className="flex flex-col gap-1">
               <h5 className="text-[14px] uppercase tracking-[0.18em] mb-3.5 text-cream-dim font-semibold">
-                Nawigacja
+                {column.label}
               </h5>
-              {navItems.map(({ link }, i) => (
+              {column.navItems?.map(({ link }, j) => (
                 <CMSLink
-                  key={i}
+                  key={j}
                   {...link}
                   className="py-1.5 text-cream font-medium text-[15px] hover:text-orange transition-colors duration-200"
                 />
               ))}
             </div>
-          )}
-
-          {/* Static link columns */}
-          <div className="flex flex-col gap-1">
-            <h5 className="text-[14px] uppercase tracking-[0.18em] mb-3.5 text-cream-dim font-semibold">
-              Event
-            </h5>
-            {[
-              { href: '#cennik', label: 'Cennik' },
-              { href: '#program', label: 'Program' },
-              { href: '#lokalizacja', label: 'Lokalizacja' },
-              { href: '#faq', label: 'FAQ' },
-            ].map((item) => (
-              <a
-                key={item.href}
-                href={item.href}
-                className="py-1.5 text-cream font-medium text-[15px] hover:text-orange transition-colors duration-200"
-              >
-                {item.label}
-              </a>
-            ))}
-          </div>
-
-          <div className="flex flex-col gap-1">
-            <h5 className="text-[14px] uppercase tracking-[0.18em] mb-3.5 text-cream-dim font-semibold">
-              Kontakt
-            </h5>
-            {[
-              { href: '#', label: 'Telegram' },
-              { href: '#', label: 'E-mail' },
-              { href: '#', label: 'Newsy' },
-            ].map((item) => (
-              <a
-                key={item.label}
-                href={item.href}
-                className="py-1.5 text-cream font-medium text-[15px] hover:text-orange transition-colors duration-200"
-              >
-                {item.label}
-              </a>
-            ))}
-          </div>
+          ))}
         </div>
 
         {/* Bottom bar */}
-        <div className="mt-6 flex items-center justify-between flex-wrap gap-3.5 text-cream-dim text-[13px] tracking-[0.12em] uppercase font-jetbrains">
-          <span>© {new Date().getFullYear()} Fuzzler — Furr MeetUp</span>
+        <div className="mt-12 flex flex-col gap-8">
+          <div className="flex items-center justify-between flex-wrap gap-6 text-cream-dim text-[12px] tracking-[0.15em] uppercase font-jetbrains border-t border-white/[0.05] pt-8">
+            <div className="flex items-center gap-4">
+              <span>{copyright || `© ${new Date().getFullYear()} Fuzzler — Furr MeetUp`}</span>
+            </div>
 
-          {/* Socials */}
-          <div className="flex gap-2">
-            {[
-              { href: '#', label: 'TG' },
-              { href: '#', label: 'TW' },
-              { href: '#', label: 'IG' },
-            ].map((s) => (
-              <a
-                key={s.label}
-                href={s.href}
-                className="flex h-[38px] w-[38px] items-center justify-center rounded-[10px] bg-graphite border border-white/[0.08] text-cream hover:bg-orange hover:text-graphite hover:border-orange transition-all duration-200 text-xs font-bold"
-              >
-                {s.label}
-              </a>
-            ))}
+            {/* Socials */}
+            <div className="flex items-center gap-3">
+              {socialLinks?.map((social, i) => {
+                const iconName = social.icon?.toLowerCase() || ''
+                
+                return (
+                  <CMSLink
+                    key={i}
+                    {...social.link}
+                    className="group relative flex h-10 w-10 items-center justify-center rounded-full bg-white/[0.03] border border-white/[0.08] text-cream hover:bg-orange hover:border-orange hover:-translate-y-1 transition-all duration-300 ease-out"
+                  >
+                    <span className="relative z-10">
+                      {iconName ? (
+                        <img
+                          src={`https://cdn.simpleicons.org/${iconName}/white`}
+                          alt={social.label}
+                          className="h-5 w-5 object-contain transition-all duration-300 group-hover:brightness-0"
+                        />
+                      ) : (
+                        <span className="text-[10px] font-bold tracking-tighter">
+                          {social.label?.substring(0, 2).toUpperCase()}
+                        </span>
+                      )}
+                    </span>
+                    <div className="absolute inset-0 rounded-full bg-orange/20 blur-md opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+                  </CMSLink>
+                )
+              })}
+            </div>
+          </div>
+
+          {/* Credit Note */}
+          <div className="flex justify-center md:justify-end">
+            <a
+              href="https://reqlynx.dev"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="group flex items-center gap-2 text-[10px] text-cream/20 uppercase tracking-[0.3em] font-medium hover:text-orange transition-colors duration-300"
+            >
+              <span className="h-px w-8 bg-white/10 group-hover:bg-orange/50 transition-colors" />
+              Crafted by ReqLynx Digitalworks
+            </a>
           </div>
         </div>
       </div>

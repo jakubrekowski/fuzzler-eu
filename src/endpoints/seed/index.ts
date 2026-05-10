@@ -48,9 +48,7 @@ export const seed = async ({
     globals.map((global) =>
       payload.updateGlobal({
         slug: global,
-        data: {
-          navItems: [],
-        },
+        data: {},
         depth: 0,
         context: {
           disableRevalidate: true,
@@ -245,28 +243,62 @@ export const seed = async ({
     payload.updateGlobal({
       slug: 'footer',
       data: {
-        navItems: [
+        columns: [
           {
+            label: 'Nawigacja',
+            navItems: [
+              {
+                link: {
+                  type: 'custom',
+                  label: 'Admin',
+                  url: '/admin',
+                },
+              },
+              {
+                link: {
+                  type: 'custom',
+                  label: 'Source Code',
+                  newTab: true,
+                  url: 'https://github.com/payloadcms/payload/tree/3.x/templates/website',
+                },
+              },
+              {
+                link: {
+                  type: 'custom',
+                  label: 'Payload',
+                  newTab: true,
+                  url: 'https://payloadcms.com/',
+                },
+              },
+            ],
+          },
+        ],
+        socialLinks: [
+          {
+            label: 'Telegram',
+            icon: 'telegram',
             link: {
               type: 'custom',
-              label: 'Admin',
-              url: '/admin',
+              label: 'Telegram',
+              url: '#',
             },
           },
           {
+            label: 'X',
+            icon: 'x',
             link: {
               type: 'custom',
-              label: 'Source Code',
-              newTab: true,
-              url: 'https://github.com/payloadcms/payload/tree/3.x/templates/website',
+              label: 'X',
+              url: '#',
             },
           },
           {
+            label: 'Instagram',
+            icon: 'instagram',
             link: {
               type: 'custom',
-              label: 'Payload',
-              newTab: true,
-              url: 'https://payloadcms.com/',
+              label: 'Instagram',
+              url: '#',
             },
           },
         ],
