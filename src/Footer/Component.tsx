@@ -3,7 +3,6 @@ import Link from 'next/link'
 import React from 'react'
 
 import { CMSLink } from '@/components/Link'
-import { Media } from '@/components/Media'
 
 export async function Footer() {
   const footerData = await getCachedGlobal('footer', 1)()
@@ -25,12 +24,12 @@ export async function Footer() {
           {/* Brand column */}
           <div className="flex flex-col gap-3.5 max-w-[36ch]">
             <Link href="/" className="flex items-center gap-3">
-              {logoType === 'media' && logoMedia ? (
-                <Media
-                  resource={logoMedia}
+              {logoType === 'media' && logoMediaUrl ? (
+                <img
+                  src={logoMediaUrl}
                   alt={displayLogoText}
-                  mediaSize={(footerData as any).logoSize}
-                  imgClassName="object-contain"
+                  style={{ height: 'auto', width: footerData.logoResolution ? `${footerData.logoResolution}px` : 'auto' }}
+                  className="object-contain"
                 />
               ) : (
                 <>

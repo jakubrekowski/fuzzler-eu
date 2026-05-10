@@ -8,7 +8,6 @@ import React, { useEffect, useState } from 'react'
 import type { Header } from '@/payload-types'
 
 import { HeaderNav } from './Nav'
-import { Media } from '@/components/Media'
 
 interface HeaderClientProps {
   data: Header
@@ -55,12 +54,12 @@ export const HeaderClient: React.FC<HeaderClientProps> = ({ data }) => {
       <div className="container flex items-center justify-between gap-6">
         {/* Brand */}
         <Link href="/" className="flex items-center gap-3.5">
-          {logoType === 'media' && logoMedia ? (
-            <Media
-              resource={logoMedia}
+          {logoType === 'media' && logoMediaUrl ? (
+            <img
+              src={logoMediaUrl}
               alt={displayLogoText}
-              mediaSize={(data as any).logoSize}
-              imgClassName="object-contain"
+              style={{ height: 'auto', width: data.logoResolution ? `${data.logoResolution}px` : 'auto' }}
+              className="object-contain"
             />
           ) : (
             <>

@@ -6,8 +6,7 @@ import { CMSLink } from '@/components/Link'
 import { Media } from '@/components/Media'
 import RichText from '@/components/RichText'
 
-export const MediumImpactHero: React.FC<Page['hero']> = ({ links, media, richText, ...props }) => {
-  const mediaSize = (props as any).mediaSize
+export const MediumImpactHero: React.FC<Page['hero']> = ({ links, media, richText, mediaResolution }) => {
   return (
     <div className="">
       <div className="container mb-8">
@@ -27,13 +26,12 @@ export const MediumImpactHero: React.FC<Page['hero']> = ({ links, media, richTex
       </div>
       <div className="container ">
         {media && typeof media === 'object' && (
-          <div>
+          <div style={{ maxWidth: mediaResolution ? `${mediaResolution}px` : 'none', margin: '0 auto' }}>
             <Media
               className="-mx-4 md:-mx-8 2xl:-mx-16"
               imgClassName=""
               priority
               resource={media}
-              mediaSize={mediaSize}
             />
             {media?.caption && (
               <div className="mt-3">

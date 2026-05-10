@@ -9,26 +9,15 @@ import type { Page } from '@/payload-types'
 import { CMSLink } from '@/components/Link'
 import { ActionButton } from '@/components/ActionButton'
 import RichText from '@/components/RichText'
-import { Media } from '@/components/Media'
 
 export const HomeHero: React.FC<Page['hero']> = (props) => {
-  const {
-    eyebrow,
-    titleType,
-    homeTitle,
-    titleMedia,
-    richText,
-    meta,
-    links,
-    stats,
-    homeArt,
-  } = props
+  const { eyebrow, titleType, homeTitle, titleMedia, richText, meta, links, stats, homeArt } = props
 
   const displayTitle = homeTitle || 'FUZZLER'
   const titleMediaUrl = typeof titleMedia === 'object' ? titleMedia?.url : null
 
   const displayEyebrow = eyebrow || 'Furr MeetUp · Edycja 03 · Wrzesień 2026'
-  
+
   const displayMeta = meta || [
     { label: '4–6 września' },
     { label: 'Hotel Ameliówka' },
@@ -66,12 +55,12 @@ export const HomeHero: React.FC<Page['hero']> = (props) => {
 
           {/* Main Title with SVG-like Wing */}
           <div className="relative mt-6 group">
-            {titleType === 'media' && titleMedia ? (
-              <Media
-                resource={titleMedia}
+            {titleType === 'media' && titleMediaUrl ? (
+              <img
+                src={titleMediaUrl}
                 alt={displayTitle}
-                mediaSize={(props as any).titleSize}
-                imgClassName="h-auto object-contain"
+                style={{ width: props.titleResolution ? `${props.titleResolution}px` : 'auto' }}
+                className="h-auto object-contain"
               />
             ) : (
               <h1 className="text-[clamp(64px,10vw,140px)] font-bold leading-[0.85] tracking-tight uppercase select-none">
@@ -112,9 +101,7 @@ export const HomeHero: React.FC<Page['hero']> = (props) => {
           {/* Actions */}
           <div className="mt-10 flex flex-wrap gap-4">
             {Array.isArray(links) && links.length > 0 ? (
-              links.map(({ link }, i) => (
-                <ActionButton key={i} link={link} />
-              ))
+              links.map(({ link }, i) => <ActionButton key={i} link={link} />)
             ) : (
               <>
                 <Badge variant="orange" className="h-12 px-6 rounded-full cursor-pointer">
@@ -164,12 +151,12 @@ export const HomeHero: React.FC<Page['hero']> = (props) => {
             </div>
 
             {/* Mascot Image */}
-            {homeArt?.image && (
-              <Media
-                resource={homeArt.image}
+            {artImage && (
+              <img
+                src={artImage}
                 alt="Hero Art"
-                mediaSize={(homeArt as any).imageSize}
-                imgClassName="relative z-10 h-auto drop-shadow-[0_30px_50px_rgba(0,0,0,0.55)] transition-transform duration-700 hover:scale-[1.02]"
+                style={{ width: homeArt?.imageResolution ? `${homeArt.imageResolution}px` : '78%' }}
+                className="relative z-10 h-auto drop-shadow-[0_30px_50px_rgba(0,0,0,0.55)] transition-transform duration-700 hover:scale-[1.02]"
               />
             )}
 
@@ -177,7 +164,7 @@ export const HomeHero: React.FC<Page['hero']> = (props) => {
             {displayTags.map((tag, i) => (
               <Badge
                 key={i}
-                variant={tag.color as any || 'white'}
+                variant={(tag.color as any) || 'white'}
                 className="absolute z-20 rounded-lg shadow-[0_6px_0_0_rgba(0,0,0,0.25)] whitespace-nowrap"
                 style={{
                   transform: `rotate(${tag.rotation}deg)`,
