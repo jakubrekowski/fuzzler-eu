@@ -7,6 +7,7 @@ import type { Header as HeaderType } from '@/payload-types'
 import { CMSLink } from '@/components/Link'
 import Link from 'next/link'
 import { SearchIcon } from 'lucide-react'
+import { Button, ButtonArrow } from '@/components/ui/button'
 
 export const HeaderNav: React.FC<{ data: HeaderType }> = ({ data }) => {
   const navItems = data?.navItems || []
@@ -30,13 +31,11 @@ export const HeaderNav: React.FC<{ data: HeaderType }> = ({ data }) => {
         <span className="sr-only">Search</span>
         <SearchIcon className="h-4 w-4" />
       </Link>
-      <a
-        href="#zapis"
-        className="ml-2 inline-flex items-center gap-2.5 rounded-full bg-orange px-5 py-2.5 text-[14px] font-bold uppercase tracking-[0.08em] text-graphite transition-all duration-150 hover:translate-y-0.5"
-        style={{ boxShadow: '0 6px 0 0 #B5641F, 0 12px 32px -8px rgba(255,154,66,0.5)' }}
-      >
-        Zapisz się <span className="inline-block -rotate-45 font-black">→</span>
-      </a>
+      <Button asChild className="ml-2">
+        <a href="#zapis">
+          Zapisz się <ButtonArrow />
+        </a>
+      </Button>
     </nav>
   )
 }

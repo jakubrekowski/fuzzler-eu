@@ -5,6 +5,7 @@ import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 import type { Post, Category } from '@/payload-types'
 import { Media } from '@/components/Media'
+import { Button, ButtonArrow } from '@/components/ui/button'
 import { useHeaderTheme } from '@/providers/HeaderTheme'
 
 /* ─────────────────────────────────────────── helpers ── */
@@ -586,12 +587,13 @@ const NewsletterStrip: React.FC = () => {
           placeholder="twoj@email.pl"
           className="px-5 py-3.5 rounded-full border border-white/[0.1] bg-black/30 text-white placeholder:text-[#E8E2D6]/40 outline-none font-rajdhani text-[15px] min-w-[240px] focus:border-[#FF9A42]/50 transition-colors"
         />
-        <button
-          type="submit"
-          className="inline-flex items-center gap-2.5 px-6 py-3.5 rounded-full bg-[#FF9A42] text-[#2D2D2A] font-bold uppercase tracking-[0.08em] text-[14px] shadow-[0_6px_0_0_#B5641F,0_12px_32px_-8px_rgba(255,154,66,.5)] transition-all duration-150 hover:translate-y-0.5 hover:shadow-[0_4px_0_0_#B5641F,0_8px_22px_-8px_rgba(255,154,66,.5)]"
-        >
-          {sent ? '✓ Zapisano!' : <>Zapisz <span className="-rotate-45 inline-block font-black">→</span></>}
-        </button>
+        <Button type="submit" size="lg" disabled={sent}>
+          {sent ? '✓ Zapisano!' : (
+            <>
+              Zapisz <ButtonArrow />
+            </>
+          )}
+        </Button>
       </form>
     </div>
   )

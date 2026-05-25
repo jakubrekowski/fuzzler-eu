@@ -35,27 +35,25 @@ export const PricingBlockComponent: React.FC<PricingBlockProps> = (props) => {
           className="grid border-b border-white/10 bg-white/[0.02]"
           style={{ gridTemplateColumns }}
         >
-          <div className="p-8 md:p-12">
-            <span className="bg-red-500 text-white text-[10px] font-bold px-2 py-1 rounded uppercase tracking-widest">
-              KORZYŚCI
-            </span>
-            <p className="mt-4 text-zinc-400 text-xs font-mono uppercase tracking-[0.2em]">
+          <div className="px-6 py-5 md:px-10 md:py-6 flex flex-col justify-center">
+            <p className="mt-3 text-zinc-400 text-xs font-mono uppercase tracking-[0.2em]">
               CO DOSTAJESZ W PAKIECIE
             </p>
           </div>
           {plans?.map((plan, i) => (
             <div
               key={i}
-              className="p-8 md:p-12 border-l border-white/10 text-center flex flex-col items-center justify-center relative"
+              className="px-6 py-5 md:px-10 md:py-6 border-l border-white/10 text-center flex flex-col items-center justify-center relative"
             >
               {plan.badge && (
-                <div className="absolute top-8 flex items-center gap-1.5 bg-zinc-800 text-white text-[9px] px-2 py-1 rounded uppercase font-bold tracking-widest border border-white/10">
+                <div className="absolute top-4 flex items-center gap-1.5 bg-zinc-800 text-white text-[9px] px-2 py-1 rounded uppercase font-bold tracking-widest border border-white/10">
                   <span className="text-orange-400">★</span> {plan.badge}
                 </div>
               )}
               <div
                 className={cn(
-                  'mt-4 text-xs font-mono uppercase tracking-[0.2em]',
+                  'text-xs font-mono uppercase tracking-[0.2em]',
+                  plan.badge ? 'mt-6' : 'mt-0',
                   i === 0 ? 'text-zinc-400' : 'text-orange-400',
                 )}
               >
@@ -76,10 +74,10 @@ export const PricingBlockComponent: React.FC<PricingBlockProps> = (props) => {
           {rows?.map((row, i) => (
             <div
               key={i}
-              className="grid hover:bg-white/[0.01] transition-colors"
+              className="grid items-center hover:bg-white/[0.01] transition-colors"
               style={{ gridTemplateColumns }}
             >
-              <div className="p-6 md:px-12 md:py-8 text-zinc-300">
+              <div className="px-6 py-3 md:px-12 md:py-3 text-zinc-300 flex items-center">
                 <div className="text-sm font-bold uppercase tracking-widest font-rajdhani">
                   {row.name}
                 </div>
@@ -94,7 +92,7 @@ export const PricingBlockComponent: React.FC<PricingBlockProps> = (props) => {
                 return (
                   <div
                     key={planIndex}
-                    className="p-6 md:py-8 border-l border-white/5 flex items-center justify-center"
+                    className="px-6 py-3 md:py-3 border-l border-white/5 flex items-center justify-center"
                   >
                     {isChecked ? (
                       <div

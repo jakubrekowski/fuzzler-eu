@@ -2,6 +2,7 @@
 
 import React, { useState, useEffect, useRef } from 'react'
 import Link from 'next/link'
+import { Button, ButtonArrow } from '@/components/ui/button'
 import type { Post } from '@/payload-types'
 import { Media } from '@/components/Media'
 import RichText from '@/components/RichText'
@@ -422,12 +423,11 @@ const MetaSidebar: React.FC<{ post: Post }> = ({ post }) => {
         <p className="text-[14px] text-[#E8E2D6]/60 mb-4 leading-snug">
           Limit miejsc 120. Rejestracja trwa.
         </p>
-        <Link
-          href="/#zapis"
-          className="flex items-center justify-center gap-2 w-full px-4 py-2.5 rounded-full bg-[#FF9A42] text-[#2D2D2A] font-bold uppercase tracking-[0.08em] text-[13px] shadow-[0_6px_0_0_#B5641F] hover:translate-y-0.5 hover:shadow-[0_4px_0_0_#B5641F] transition-all duration-150"
-        >
-          Zapisz się <span className="-rotate-45 inline-block font-black">→</span>
-        </Link>
+        <Button asChild size="sm" className="w-full">
+          <Link href="/#zapis">
+            Zapisz się <ButtonArrow />
+          </Link>
+        </Button>
       </div>
     </aside>
   )

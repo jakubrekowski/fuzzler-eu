@@ -1,4 +1,4 @@
-import React, { Fragment } from 'react'
+import React from 'react'
 
 import type { Page } from '@/payload-types'
 
@@ -46,7 +46,7 @@ export const RenderBlocks: React.FC<{
 
   if (hasBlocks) {
     return (
-      <Fragment>
+      <div className="divide-y divide-border">
         {blocks.map((block, index) => {
           const { blockType } = block
 
@@ -55,12 +55,8 @@ export const RenderBlocks: React.FC<{
 
             if (Block) {
               const fullBleed = FULL_BLEED_BLOCKS.has(blockType)
-              return fullBleed ? (
-                <React.Fragment key={index}>
-                  <Block {...block} disableInnerContainer />
-                </React.Fragment>
-              ) : (
-                <div className="my-8" key={index}>
+              return (
+                <div className={fullBleed ? undefined : 'py-4'} key={index}>
                   <Block {...block} disableInnerContainer />
                 </div>
               )
@@ -68,7 +64,7 @@ export const RenderBlocks: React.FC<{
           }
           return null
         })}
-      </Fragment>
+      </div>
     )
   }
 
