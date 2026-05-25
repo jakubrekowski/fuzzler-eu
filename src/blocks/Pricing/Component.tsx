@@ -36,178 +36,178 @@ export const PricingBlockComponent: React.FC<PricingBlockProps> = (props) => {
       <div className="container relative py-24">
         <SectionHeader tagline={tagline} title={title} description={description} />
 
-      {/* Pricing Table */}
-      <div className="bg-[#1a1a1a]/50 border border-white/10 rounded-[32px] overflow-hidden mb-12 shadow-2xl backdrop-blur-sm">
-        {/* Table Header */}
-        <div
-          className="grid border-b border-white/10 bg-white/[0.02]"
-          style={{ gridTemplateColumns }}
-        >
-          <div className="px-6 py-5 md:px-10 md:py-6 flex flex-col justify-center">
-            <p className="mt-3 text-zinc-400 text-xs font-mono uppercase tracking-[0.2em]">
-              CO DOSTAJESZ W PAKIECIE
-            </p>
+        {/* Pricing Table */}
+        <div className="bg-[#1a1a1a]/50 border border-white/10 rounded-[32px] overflow-hidden mb-12 shadow-2xl backdrop-blur-sm">
+          {/* Table Header */}
+          <div
+            className="grid border-b border-white/10 bg-white/[0.02]"
+            style={{ gridTemplateColumns }}
+          >
+            <div className="px-6 py-5 md:px-10 md:py-6 flex flex-col justify-center">
+              <p className="mt-3 text-zinc-400 text-xs font-mono uppercase tracking-[0.2em]">
+                CO DOSTAJESZ W PAKIECIE
+              </p>
+            </div>
+            {plans?.map((plan, i) => (
+              <div
+                key={i}
+                className="px-6 py-5 md:px-10 md:py-6 border-l border-white/10 text-center flex flex-col items-center justify-center relative"
+              >
+                {plan.badge && (
+                  <div className="absolute top-4 flex items-center gap-1.5 bg-zinc-800 text-white text-[9px] px-2 py-1 rounded uppercase font-bold tracking-widest border border-white/10">
+                    <span className="text-orange-400">★</span> {plan.badge}
+                  </div>
+                )}
+                <div
+                  className={cn(
+                    'text-xs font-mono uppercase tracking-[0.2em]',
+                    plan.badge ? 'mt-6' : 'mt-0',
+                    i === 0 ? 'text-zinc-400' : 'text-orange-400',
+                  )}
+                >
+                  {plan.name}
+                </div>
+                <div className="text-4xl md:text-5xl font-bold font-rajdhani mt-2">
+                  {plan.price.split(' ')[0]}{' '}
+                  <span className="text-xl md:text-2xl text-zinc-500 font-normal">
+                    {plan.price.split(' ')[1]}
+                  </span>
+                </div>
+              </div>
+            ))}
           </div>
-          {plans?.map((plan, i) => (
-            <div
-              key={i}
-              className="px-6 py-5 md:px-10 md:py-6 border-l border-white/10 text-center flex flex-col items-center justify-center relative"
-            >
-              {plan.badge && (
-                <div className="absolute top-4 flex items-center gap-1.5 bg-zinc-800 text-white text-[9px] px-2 py-1 rounded uppercase font-bold tracking-widest border border-white/10">
-                  <span className="text-orange-400">★</span> {plan.badge}
+
+          {/* Table Rows */}
+          <div className="divide-y divide-white/5">
+            {rows?.map((row, i) => (
+              <div
+                key={i}
+                className="grid items-center hover:bg-white/[0.01] transition-colors"
+                style={{ gridTemplateColumns }}
+              >
+                <div className="px-6 py-3 md:px-12 md:py-3 text-zinc-300 flex items-center">
+                  <div className="text-sm font-bold uppercase tracking-widest font-rajdhani">
+                    {row.name}
+                  </div>
+                  {row.description && (
+                    <p className="mt-1.5 text-zinc-500 text-xs leading-relaxed max-w-sm">
+                      {row.description}
+                    </p>
+                  )}
+                </div>
+                {plans?.map((_, planIndex) => {
+                  const isChecked = row.checks?.[planIndex]?.checked
+                  return (
+                    <div
+                      key={planIndex}
+                      className="px-6 py-3 md:py-3 border-l border-white/5 flex items-center justify-center"
+                    >
+                      {isChecked ? (
+                        <div
+                          className={cn(
+                            'w-8 h-8 rounded-full flex items-center justify-center transition-transform hover:scale-110',
+                            planIndex === 0
+                              ? 'bg-orange-500/20 text-orange-400'
+                              : 'bg-green-500/20 text-green-400',
+                          )}
+                        >
+                          <Check size={18} strokeWidth={3} />
+                        </div>
+                      ) : (
+                        <Minus size={18} className="text-zinc-800" />
+                      )}
+                    </div>
+                  )
+                })}
+              </div>
+            ))}
+          </div>
+        </div>
+
+        {/* Bottom Cards */}
+        <div className="grid grid-cols-1 lg:grid-cols-[1.4fr_1fr] gap-8 items-stretch">
+          {/* Hotel Card */}
+          <div className="bg-[#222] border border-white/10 rounded-[32px] overflow-hidden flex flex-col md:flex-row relative group min-h-[340px]">
+            {/* Glow effect */}
+            <div className="absolute -inset-24 bg-purple-600/10 blur-[100px] rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-700 pointer-events-none" />
+
+            <div className="w-full md:w-[42%] relative z-10 shrink-0 overflow-hidden">
+              {hotelCard?.image && (
+                <Media
+                  resource={hotelCard.image}
+                  mediaSize="medium"
+                  className="w-full h-full"
+                  imgClassName="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
+                  fill
+                />
+              )}
+              <div className="absolute inset-0 bg-gradient-to-r from-transparent to-[#222]/90 hidden md:block pointer-events-none" />
+              <div className="absolute inset-0 bg-gradient-to-t from-[#222]/90 to-transparent md:hidden pointer-events-none" />
+            </div>
+
+            <div className="flex flex-col justify-center p-8 md:p-10 relative z-10 flex-1">
+              <h4 className="text-3xl font-bold uppercase tracking-tight font-rajdhani mb-1">
+                {hotelCard?.title}
+              </h4>
+              <p className="text-zinc-500 text-xs font-mono uppercase tracking-widest mb-6">
+                {hotelCard?.address}
+              </p>
+
+              {hotelCard?.price && (
+                <div className="flex items-baseline gap-2 mb-6">
+                  <span className="text-4xl font-bold text-[#ff9000] font-rajdhani">
+                    {hotelCard.price.split(' ')[0]} {hotelCard.price.split(' ')[1]}
+                  </span>
+                  <span className="text-zinc-500 text-sm">{hotelCard?.priceSuffix}</span>
                 </div>
               )}
-              <div
-                className={cn(
-                  'text-xs font-mono uppercase tracking-[0.2em]',
-                  plan.badge ? 'mt-6' : 'mt-0',
-                  i === 0 ? 'text-zinc-400' : 'text-orange-400',
-                )}
-              >
-                {plan.name}
-              </div>
-              <div className="text-4xl md:text-5xl font-bold font-rajdhani mt-2">
-                {plan.price.split(' ')[0]}{' '}
-                <span className="text-xl md:text-2xl text-zinc-500 font-normal">
-                  {plan.price.split(' ')[1]}
-                </span>
-              </div>
-            </div>
-          ))}
-        </div>
 
-        {/* Table Rows */}
-        <div className="divide-y divide-white/5">
-          {rows?.map((row, i) => (
-            <div
-              key={i}
-              className="grid items-center hover:bg-white/[0.01] transition-colors"
-              style={{ gridTemplateColumns }}
-            >
-              <div className="px-6 py-3 md:px-12 md:py-3 text-zinc-300 flex items-center">
-                <div className="text-sm font-bold uppercase tracking-widest font-rajdhani">
-                  {row.name}
-                </div>
-                {row.description && (
-                  <p className="mt-1.5 text-zinc-500 text-xs leading-relaxed max-w-sm">
-                    {row.description}
-                  </p>
-                )}
-              </div>
-              {plans?.map((_, planIndex) => {
-                const isChecked = row.checks?.[planIndex]?.checked
-                return (
-                  <div
-                    key={planIndex}
-                    className="px-6 py-3 md:py-3 border-l border-white/5 flex items-center justify-center"
+              <ul className="space-y-2">
+                {hotelCard?.details?.map((detail, i) => (
+                  <li
+                    key={i}
+                    className="flex items-start gap-3 text-zinc-200 text-[13px] leading-snug"
                   >
-                    {isChecked ? (
-                      <div
-                        className={cn(
-                          'w-8 h-8 rounded-full flex items-center justify-center transition-transform hover:scale-110',
-                          planIndex === 0
-                            ? 'bg-orange-500/20 text-orange-400'
-                            : 'bg-green-500/20 text-green-400',
-                        )}
-                      >
-                        <Check size={18} strokeWidth={3} />
-                      </div>
-                    ) : (
-                      <Minus size={18} className="text-zinc-800" />
-                    )}
-                  </div>
-                )
-              })}
+                    <span className="text-orange-500 mt-1">✦</span>
+                    {detail.text}
+                  </li>
+                ))}
+              </ul>
             </div>
-          ))}
-        </div>
-      </div>
-
-      {/* Bottom Cards */}
-      <div className="grid grid-cols-1 lg:grid-cols-[1.4fr_1fr] gap-8 items-stretch">
-        {/* Hotel Card */}
-        <div className="bg-[#222] border border-white/10 rounded-[32px] overflow-hidden flex flex-col md:flex-row relative group min-h-[340px]">
-          {/* Glow effect */}
-          <div className="absolute -inset-24 bg-purple-600/10 blur-[100px] rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-700 pointer-events-none" />
-
-          <div className="w-full md:w-[42%] relative z-10 shrink-0 overflow-hidden">
-            {hotelCard?.image && (
-              <Media
-                resource={hotelCard.image}
-                mediaSize="medium"
-                className="w-full h-full"
-                imgClassName="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
-                fill
-              />
-            )}
-            <div className="absolute inset-0 bg-gradient-to-r from-transparent to-[#222]/90 hidden md:block pointer-events-none" />
-            <div className="absolute inset-0 bg-gradient-to-t from-[#222]/90 to-transparent md:hidden pointer-events-none" />
           </div>
 
-          <div className="flex flex-col justify-center p-8 md:p-10 relative z-10 flex-1">
-            <h4 className="text-3xl font-bold uppercase tracking-tight font-rajdhani mb-1">
-              {hotelCard?.title}
-            </h4>
-            <p className="text-zinc-500 text-xs font-mono uppercase tracking-widest mb-6">
-              {hotelCard?.address}
-            </p>
-
-            {hotelCard?.price && (
-              <div className="flex items-baseline gap-2 mb-6">
-                <span className="text-4xl font-bold text-[#ff9000] font-rajdhani">
-                  {hotelCard.price.split(' ')[0]} {hotelCard.price.split(' ')[1]}
-                </span>
-                <span className="text-zinc-500 text-sm">{hotelCard?.priceSuffix}</span>
+          {/* Package & CTA Card */}
+          <div className="flex flex-col gap-6">
+            {packageType === 'media' && packageMedia ? (
+              <div className="flex-1 bg-[#1a0b2e] border border-purple-500/20 rounded-[32px] overflow-hidden relative group">
+                <Media
+                  resource={packageMedia}
+                  mediaSize="medium"
+                  className="w-full h-full"
+                  imgClassName="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
+                  fill
+                />
+              </div>
+            ) : (
+              <div className="flex-1 bg-[#1a0b2e] border border-purple-500/20 rounded-[32px] p-10 relative overflow-hidden flex flex-col justify-center">
+                <div className="absolute top-0 right-0 w-32 h-32 bg-purple-600/5 blur-3xl rounded-full" />
+                <p className="font-mono text-[10px] text-purple-400 uppercase tracking-[0.3em] mb-4">
+                  {packageCard?.tagline}
+                </p>
+                <h4 className="text-3xl font-bold uppercase tracking-tight font-rajdhani mb-4">
+                  {packageCard?.title}
+                </h4>
+                <p className="text-zinc-400 text-sm leading-relaxed">{packageCard?.description}</p>
               </div>
             )}
 
-            <ul className="space-y-2">
-              {hotelCard?.details?.map((detail, i) => (
-                <li
-                  key={i}
-                  className="flex items-start gap-3 text-zinc-400 text-[13px] leading-snug"
-                >
-                  <span className="text-orange-500 mt-1">✦</span>
-                  {detail.text}
-                </li>
-              ))}
-            </ul>
+            {link && (
+              <div className="">
+                <ActionButton link={link} />
+              </div>
+            )}
           </div>
         </div>
-
-        {/* Package & CTA Card */}
-        <div className="flex flex-col gap-6">
-          {packageType === 'media' && packageMedia ? (
-            <div className="flex-1 bg-[#1a0b2e] border border-purple-500/20 rounded-[32px] overflow-hidden relative group">
-              <Media
-                resource={packageMedia}
-                mediaSize="medium"
-                className="w-full h-full"
-                imgClassName="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
-                fill
-              />
-            </div>
-          ) : (
-            <div className="flex-1 bg-[#1a0b2e] border border-purple-500/20 rounded-[32px] p-10 relative overflow-hidden flex flex-col justify-center">
-              <div className="absolute top-0 right-0 w-32 h-32 bg-purple-600/5 blur-3xl rounded-full" />
-              <p className="font-mono text-[10px] text-purple-400 uppercase tracking-[0.3em] mb-4">
-                {packageCard?.tagline}
-              </p>
-              <h4 className="text-3xl font-bold uppercase tracking-tight font-rajdhani mb-4">
-                {packageCard?.title}
-              </h4>
-              <p className="text-zinc-400 text-sm leading-relaxed">{packageCard?.description}</p>
-            </div>
-          )}
-
-          {link && (
-            <div className="">
-              <ActionButton link={link} />
-            </div>
-          )}
-        </div>
-      </div>
       </div>
     </section>
   )
