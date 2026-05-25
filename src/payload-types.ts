@@ -428,6 +428,9 @@ export interface Post {
      * Maximum upload file size: 12MB. Recommended file size for images is <500KB.
      */
     image?: (number | null) | Media;
+    /**
+     * Opis dla wyszukiwarek i podglądu linków (Open Graph).
+     */
     description?: string | null;
   };
   publishedAt?: string | null;

@@ -1,10 +1,10 @@
-import type { CollectionConfig } from 'payload'
+import type { CollectionConfig, SelectFieldSingleValidation } from 'payload'
 
 import { anyone } from '../access/anyone'
 import { authenticated } from '../access/authenticated'
 import { slugField } from 'payload'
 
-import { CATEGORY_BADGE_COLORS } from '../utilities/categoryBadge'
+import { CATEGORY_BADGE_COLORS, type CategoryBadgeColor } from '../utilities/categoryBadge'
 
 export const Categories: CollectionConfig = {
   slug: 'categories',
@@ -40,13 +40,13 @@ export const Categories: CollectionConfig = {
       admin: {
         description: 'Kolor etykiety kategorii na kartach i stronach wpisów.',
       },
-      validate: (value) => {
+      validate: ((value: string | null | undefined) => {
         if (!value) return 'Wybierz kolor badge.'
-        if (!CATEGORY_BADGE_COLORS.includes(value as (typeof CATEGORY_BADGE_COLORS)[number])) {
+        if (!CATEGORY_BADGE_COLORS.includes(value as CategoryBadgeColor)) {
           return 'Nieprawidłowy kolor badge.'
         }
         return true
-      },
+      }) as SelectFieldSingleValidation,
     },
     slugField({
       position: undefined,

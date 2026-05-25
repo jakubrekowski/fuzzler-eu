@@ -183,8 +183,10 @@ export const Posts: CollectionConfig<'posts'> = {
             }),
 
             MetaDescriptionField({
-              admin: {
-                description: 'Opis dla wyszukiwarek i podglądu linków (Open Graph).',
+              overrides: {
+                admin: {
+                  description: 'Opis dla wyszukiwarek i podglądu linków (Open Graph).',
+                },
               },
             }),
             PreviewField({
