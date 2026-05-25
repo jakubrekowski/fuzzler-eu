@@ -3,6 +3,7 @@
 import React, { useState } from 'react'
 import type { FAQBlock as FAQBlockProps } from '@/payload-types'
 import { SectionHeader } from '@/components/SectionHeader'
+import { HighlightedText } from '@/components/HighlightedText'
 import { cn } from '@/utilities/ui'
 import { Plus, X } from 'lucide-react'
 
@@ -44,7 +45,7 @@ export const FAQBlockComponent: React.FC<FAQBlockProps> = (props) => {
                   "font-mono text-sm sm:text-[15px] font-black uppercase tracking-widest transition-colors duration-300",
                   isOpen ? "text-white" : "text-zinc-400 group-hover:text-zinc-200"
                 )}>
-                  {item.question}
+                  <HighlightedText>{item.question}</HighlightedText>
                 </span>
                 
                 <div className={cn(
@@ -64,7 +65,7 @@ export const FAQBlockComponent: React.FC<FAQBlockProps> = (props) => {
                 <div className="overflow-hidden">
                   <div className="p-7 sm:p-9 pt-0">
                     <p className="text-zinc-400 font-mono text-sm sm:text-base leading-relaxed uppercase tracking-wide max-w-3xl">
-                      {item.answer}
+                      <HighlightedText>{item.answer}</HighlightedText>
                     </p>
                   </div>
                 </div>

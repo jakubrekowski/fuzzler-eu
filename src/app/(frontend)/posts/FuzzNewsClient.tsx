@@ -7,6 +7,7 @@ import type { Post, Category } from '@/payload-types'
 import { Media } from '@/components/Media'
 import { Button, ButtonArrow } from '@/components/ui/button'
 import { useHeaderTheme } from '@/providers/HeaderTheme'
+import { HighlightedText } from '@/components/HighlightedText'
 
 /* ─────────────────────────────────────────── helpers ── */
 
@@ -316,7 +317,7 @@ const FilterChip: React.FC<{
         : 'border-white/[0.1] text-[#E8E2D6]/60 hover:text-white hover:border-[#E8E2D6]/40',
     ].join(' ')}
   >
-    {label}
+    <HighlightedText>{label}</HighlightedText>
     {count !== undefined && (
       <span className="font-mono text-[11px] opacity-70 ml-1.5">{count}</span>
     )}
@@ -362,11 +363,11 @@ const FeatHeroCard: React.FC<{ post: Post }> = ({ post }) => {
           // {cat || 'newsy'} · {fmtDate(publishedAt)}
         </span>
         <h2 className="font-rajdhani font-bold text-[34px] leading-[1.05] uppercase tracking-tight mb-3 group-hover:text-[#FF9A42] transition-colors">
-          {title}
+          <HighlightedText>{title}</HighlightedText>
         </h2>
         {meta?.description && (
           <p className="text-[#E8E2D6]/60 text-base flex-1 line-clamp-3 max-w-[54ch]">
-            {meta.description}
+            <HighlightedText>{meta.description}</HighlightedText>
           </p>
         )}
         <div className="mt-5 flex justify-between items-center font-mono text-[11px] tracking-[0.16em] text-[#E8E2D6]/40 uppercase">
@@ -414,11 +415,11 @@ const FeatSideCard: React.FC<{ post: Post }> = ({ post }) => {
           // {cat || 'newsy'} · {fmtDate(publishedAt)}
         </span>
         <h3 className="font-rajdhani font-bold text-[22px] leading-[1.1] uppercase tracking-tight mb-1.5 group-hover:text-[#FF9A42] transition-colors">
-          {title}
+          <HighlightedText>{title}</HighlightedText>
         </h3>
         {meta?.description && (
           <p className="text-[#E8E2D6]/55 text-[14px] line-clamp-2 flex-1">
-            {meta.description}
+            <HighlightedText>{meta.description}</HighlightedText>
           </p>
         )}
         <div className="mt-3 flex justify-between font-mono text-[11px] text-[#E8E2D6]/40 uppercase tracking-widest">
@@ -464,11 +465,13 @@ const NewsCard: React.FC<{ post: Post }> = ({ post }) => {
           // {cat || 'newsy'}
         </span>
         <h3 className="font-rajdhani font-bold text-[20px] leading-[1.15] uppercase tracking-tight mb-2 group-hover:text-[#FF9A42] transition-colors">
-          <Link href={`/posts/${slug}`}>{title}</Link>
+          <Link href={`/posts/${slug}`}>
+            <HighlightedText>{title}</HighlightedText>
+          </Link>
         </h3>
         {meta?.description && (
           <p className="text-[#E8E2D6]/60 text-[14px] line-clamp-2 flex-1">
-            {meta.description}
+            <HighlightedText>{meta.description}</HighlightedText>
           </p>
         )}
         <div className="mt-4 flex justify-between items-center font-mono text-[11px] tracking-[0.14em] text-[#E8E2D6]/40 uppercase">

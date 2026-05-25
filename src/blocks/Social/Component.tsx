@@ -3,25 +3,10 @@
 import React from 'react'
 import type { SocialBlock as SocialBlockProps } from '@/payload-types'
 import { cn } from '@/utilities/ui'
-import Image from 'next/image'
+import { HighlightedText } from '@/components/HighlightedText'
 
 export const SocialBlockComponent: React.FC<SocialBlockProps> = (props) => {
   const { tagline, title, description, links, anchor } = props
-
-  const renderTitle = (text: string) => {
-    if (!text) return null
-    const parts = text.split(/(\[\[.*?\]\])/g)
-    return parts.map((part, i) => {
-      if (part.startsWith('[[') && part.endsWith(']]')) {
-        return (
-          <span key={i} className="text-[#ff9000]">
-            {part.slice(2, -2)}
-          </span>
-        )
-      }
-      return part
-    })
-  }
 
   const colorVariants = {
     purple: 'bg-gradient-to-b from-[#4B0082]/30 to-[#4B0082]/5 border-[#4B0082]/50',
@@ -44,15 +29,15 @@ export const SocialBlockComponent: React.FC<SocialBlockProps> = (props) => {
       <div className="max-w-4xl mx-auto text-center mb-16">
         {tagline && (
           <p className="font-mono text-xs uppercase tracking-[0.3em] text-[#ff9000] mb-4">
-            {tagline}
+            <HighlightedText>{tagline}</HighlightedText>
           </p>
         )}
         <h2 className="text-5xl md:text-7xl font-black uppercase tracking-tight font-rajdhani leading-none mb-6">
-          {renderTitle(title)}
+          <HighlightedText>{title}</HighlightedText>
         </h2>
         {description && (
           <p className="text-zinc-400 text-lg md:text-xl font-medium leading-relaxed">
-            {description}
+            <HighlightedText>{description}</HighlightedText>
           </p>
         )}
       </div>
@@ -82,11 +67,11 @@ export const SocialBlockComponent: React.FC<SocialBlockProps> = (props) => {
               </div>
               <div className="text-left">
                 <div className="font-bold text-xl md:text-2xl uppercase tracking-wider text-white leading-tight">
-                  {link.label}
+                  <HighlightedText>{link.label}</HighlightedText>
                 </div>
                 {link.subtext && (
                   <div className="font-mono text-[10px] md:text-[12px] uppercase tracking-[0.15em] text-zinc-500 mt-1 font-bold">
-                    {link.subtext}
+                    <HighlightedText>{link.subtext}</HighlightedText>
                   </div>
                 )}
               </div>

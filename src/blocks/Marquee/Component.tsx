@@ -2,6 +2,7 @@
 
 import React, { useId } from 'react'
 import { cn } from '@/utilities/ui'
+import { HighlightedText } from '@/components/HighlightedText'
 
 export type MarqueeBlockProps = {
   items?: Array<{ text: string }>
@@ -64,7 +65,9 @@ export const MarqueeBlockComponent: React.FC<MarqueeBlockProps> = ({
     <span className="flex items-center gap-7 shrink-0" aria-hidden>
       {displayItems.map((item, i) => (
         <React.Fragment key={i}>
-          <span className="font-bold uppercase tracking-[0.14em] text-[18px]">{item.text}</span>
+          <span className="font-bold uppercase tracking-[0.14em] text-[18px]">
+            <HighlightedText>{item.text}</HighlightedText>
+          </span>
           <span
             className={cn(
               'text-[18px] shrink-0',

@@ -1,6 +1,7 @@
 import React from 'react'
 import type { PricingBlock as PricingBlockProps } from '@/payload-types'
 import { SectionHeader } from '@/components/SectionHeader'
+import { HighlightedText } from '@/components/HighlightedText'
 import { cn } from '@/utilities/ui'
 import { Check, Minus } from 'lucide-react'
 import { Media } from '@/components/Media'
@@ -55,7 +56,8 @@ export const PricingBlockComponent: React.FC<PricingBlockProps> = (props) => {
               >
                 {plan.badge && (
                   <div className="absolute top-4 flex items-center gap-1.5 bg-zinc-800 text-white text-[9px] px-2 py-1 rounded uppercase font-bold tracking-widest border border-white/10">
-                    <span className="text-orange-400">★</span> {plan.badge}
+                    <span className="text-orange-400">★</span>{' '}
+                    <HighlightedText>{plan.badge}</HighlightedText>
                   </div>
                 )}
                 <div
@@ -65,7 +67,7 @@ export const PricingBlockComponent: React.FC<PricingBlockProps> = (props) => {
                     i === 0 ? 'text-zinc-400' : 'text-orange-400',
                   )}
                 >
-                  {plan.name}
+                  <HighlightedText>{plan.name}</HighlightedText>
                 </div>
                 <div className="text-4xl md:text-5xl font-bold font-rajdhani mt-2">
                   {plan.price.split(' ')[0]}{' '}
@@ -87,11 +89,11 @@ export const PricingBlockComponent: React.FC<PricingBlockProps> = (props) => {
               >
                 <div className="px-6 py-3 md:px-12 md:py-3 text-zinc-300 flex items-center">
                   <div className="text-sm font-bold uppercase tracking-widest font-rajdhani">
-                    {row.name}
+                    <HighlightedText>{row.name}</HighlightedText>
                   </div>
                   {row.description && (
                     <p className="mt-1.5 text-zinc-500 text-xs leading-relaxed max-w-sm">
-                      {row.description}
+                      <HighlightedText>{row.description}</HighlightedText>
                     </p>
                   )}
                 </div>
@@ -147,10 +149,10 @@ export const PricingBlockComponent: React.FC<PricingBlockProps> = (props) => {
 
             <div className="flex flex-col justify-center p-8 md:p-10 relative z-10 flex-1">
               <h4 className="text-3xl font-bold uppercase tracking-tight font-rajdhani mb-1">
-                {hotelCard?.title}
+                <HighlightedText>{hotelCard?.title}</HighlightedText>
               </h4>
               <p className="text-zinc-500 text-xs font-mono uppercase tracking-widest mb-6">
-                {hotelCard?.address}
+                <HighlightedText>{hotelCard?.address}</HighlightedText>
               </p>
 
               {hotelCard?.price && (
@@ -158,7 +160,9 @@ export const PricingBlockComponent: React.FC<PricingBlockProps> = (props) => {
                   <span className="text-4xl font-bold text-[#ff9000] font-rajdhani">
                     {hotelCard.price.split(' ')[0]} {hotelCard.price.split(' ')[1]}
                   </span>
-                  <span className="text-zinc-500 text-sm">{hotelCard?.priceSuffix}</span>
+                  <span className="text-zinc-500 text-sm">
+                    <HighlightedText>{hotelCard?.priceSuffix}</HighlightedText>
+                  </span>
                 </div>
               )}
 
@@ -169,7 +173,7 @@ export const PricingBlockComponent: React.FC<PricingBlockProps> = (props) => {
                     className="flex items-start gap-3 text-zinc-200 text-[13px] leading-snug"
                   >
                     <span className="text-orange-500 mt-1">✦</span>
-                    {detail.text}
+                    <HighlightedText>{detail.text}</HighlightedText>
                   </li>
                 ))}
               </ul>
@@ -192,12 +196,14 @@ export const PricingBlockComponent: React.FC<PricingBlockProps> = (props) => {
               <div className="flex-1 bg-[#1a0b2e] border border-purple-500/20 rounded-[32px] p-10 relative overflow-hidden flex flex-col justify-center">
                 <div className="absolute top-0 right-0 w-32 h-32 bg-purple-600/5 blur-3xl rounded-full" />
                 <p className="font-mono text-[10px] text-purple-400 uppercase tracking-[0.3em] mb-4">
-                  {packageCard?.tagline}
+                  <HighlightedText>{packageCard?.tagline}</HighlightedText>
                 </p>
                 <h4 className="text-3xl font-bold uppercase tracking-tight font-rajdhani mb-4">
-                  {packageCard?.title}
+                  <HighlightedText>{packageCard?.title}</HighlightedText>
                 </h4>
-                <p className="text-zinc-400 text-sm leading-relaxed">{packageCard?.description}</p>
+                <p className="text-zinc-400 text-sm leading-relaxed">
+                  <HighlightedText>{packageCard?.description}</HighlightedText>
+                </p>
               </div>
             )}
 

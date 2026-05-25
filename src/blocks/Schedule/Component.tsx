@@ -3,6 +3,7 @@
 import React, { useState, useEffect } from 'react'
 import type { ScheduleBlock as ScheduleBlockProps } from '@/payload-types'
 import { SectionHeader } from '@/components/SectionHeader'
+import { HighlightedText } from '@/components/HighlightedText'
 import { cn } from '@/utilities/ui'
 import { X, Calendar, Clock, MapPin, User } from 'lucide-react'
 
@@ -125,7 +126,7 @@ export const ScheduleBlockComponent: React.FC<ScheduleBlockProps> = (props) => {
               )}
             >
               <span className="opacity-60 mr-2">{day.date}</span>
-              {day.label}
+              <HighlightedText>{day.label}</HighlightedText>
             </button>
           ))}
         </div>
@@ -145,7 +146,7 @@ export const ScheduleBlockComponent: React.FC<ScheduleBlockProps> = (props) => {
               </div>
               {data.rooms.map((room) => (
                 <div key={room.id} className="p-4 text-[11px] font-bold uppercase tracking-[0.2em] text-zinc-400 text-center">
-                  {room.name}
+                  <HighlightedText>{room.name}</HighlightedText>
                 </div>
               ))}
             </div>
@@ -244,7 +245,7 @@ export const ScheduleBlockComponent: React.FC<ScheduleBlockProps> = (props) => {
                                         textColor
                                     )}
                                 >
-                                    {category?.name}
+                                    <HighlightedText>{category?.name}</HighlightedText>
                                 </span>
                                 <span className={cn(
                                     "font-mono font-bold transition-opacity", 
@@ -260,7 +261,7 @@ export const ScheduleBlockComponent: React.FC<ScheduleBlockProps> = (props) => {
                                 isShort ? "text-[12px] line-clamp-1 mb-1" : "text-[14px] line-clamp-2 mb-1",
                                 textColor
                               )}>
-                                {event.title}
+                                <HighlightedText>{event.title}</HighlightedText>
                               </h5>
                               
                               <div className="flex flex-col gap-0.5 mt-auto shrink-0">
@@ -275,7 +276,7 @@ export const ScheduleBlockComponent: React.FC<ScheduleBlockProps> = (props) => {
                                   )}
                                   {!isShort && event.location_detail && !isMedium && (
                                       <p className={cn("text-[9px] font-mono uppercase tracking-[0.15em] font-bold truncate", subtextColor)}>
-                                          {event.location_detail}
+                                          <HighlightedText>{event.location_detail}</HighlightedText>
                                       </p>
                                   )}
                               </div>
@@ -332,7 +333,7 @@ export const ScheduleBlockComponent: React.FC<ScheduleBlockProps> = (props) => {
                     color: getCategory(selectedEvent.categoryId)?.color 
                   }}
                 >
-                  {getCategory(selectedEvent.categoryId)?.name}
+                  <HighlightedText>{getCategory(selectedEvent.categoryId)?.name}</HighlightedText>
                 </span>
                 <span className="text-zinc-500 text-xs font-mono uppercase tracking-widest">
                   // {selectedEvent.startTime} – {selectedEvent.endTime}
@@ -340,7 +341,7 @@ export const ScheduleBlockComponent: React.FC<ScheduleBlockProps> = (props) => {
               </div>
 
               <h3 className="text-4xl md:text-5xl font-bold uppercase tracking-tight font-rajdhani mb-8 text-white leading-none">
-                {selectedEvent.title}
+                <HighlightedText>{selectedEvent.title}</HighlightedText>
               </h3>
 
               <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-10">
@@ -351,7 +352,9 @@ export const ScheduleBlockComponent: React.FC<ScheduleBlockProps> = (props) => {
                     </div>
                     <div>
                       <p className="text-[10px] text-zinc-500 uppercase font-mono tracking-widest mb-0.5">Dzień</p>
-                      <p className="font-bold">{activeDay?.date} · {activeDay?.label}</p>
+                      <p className="font-bold">
+                        {activeDay?.date} · <HighlightedText>{activeDay?.label}</HighlightedText>
+                      </p>
                     </div>
                   </div>
 
@@ -373,7 +376,14 @@ export const ScheduleBlockComponent: React.FC<ScheduleBlockProps> = (props) => {
                     </div>
                     <div>
                       <p className="text-[10px] text-zinc-500 uppercase font-mono tracking-widest mb-0.5">Miejsce</p>
-                      <p className="font-bold">{getRoomName(selectedEvent.roomId)} {selectedEvent.location_detail && <span className="text-zinc-500 font-normal ml-1">({selectedEvent.location_detail})</span>}</p>
+                      <p className="font-bold">
+                        <HighlightedText>{getRoomName(selectedEvent.roomId)}</HighlightedText>
+                        {selectedEvent.location_detail && (
+                          <span className="text-zinc-500 font-normal ml-1">
+                            (<HighlightedText>{selectedEvent.location_detail}</HighlightedText>)
+                          </span>
+                        )}
+                      </p>
                     </div>
                   </div>
 
@@ -384,7 +394,9 @@ export const ScheduleBlockComponent: React.FC<ScheduleBlockProps> = (props) => {
                       </div>
                       <div>
                         <p className="text-[10px] text-zinc-500 uppercase font-mono tracking-widest mb-0.5">Prowadzący</p>
-                        <p className="font-bold">{getPresenterNames(selectedEvent.presenterIds)}</p>
+                        <p className="font-bold">
+                          <HighlightedText>{getPresenterNames(selectedEvent.presenterIds)}</HighlightedText>
+                        </p>
                       </div>
                     </div>
                   )}
@@ -394,7 +406,7 @@ export const ScheduleBlockComponent: React.FC<ScheduleBlockProps> = (props) => {
               {selectedEvent.description && (
                 <div className="pt-10 border-t border-white/5">
                   <p className="text-zinc-400 text-lg leading-relaxed">
-                    {selectedEvent.description}
+                    <HighlightedText>{selectedEvent.description}</HighlightedText>
                   </p>
                 </div>
               )}

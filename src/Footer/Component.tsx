@@ -4,6 +4,7 @@ import React from 'react'
 
 import { CMSLink } from '@/components/Link'
 import { Media } from '@/components/Media'
+import { HighlightedText } from '@/components/HighlightedText'
 
 export async function Footer() {
   const footerData = await getCachedGlobal('footer', 1)()
@@ -55,7 +56,7 @@ export async function Footer() {
                         Fuzz<span className="text-orange">ler</span>
                       </>
                     ) : (
-                      displayLogoText
+                      <HighlightedText>{displayLogoText}</HighlightedText>
                     )}
                   </div>
                 </>
@@ -63,7 +64,7 @@ export async function Footer() {
             </Link>
             {description && (
               <p className="text-cream-dim text-[15px] leading-relaxed max-w-[36ch]">
-                {description}
+                <HighlightedText>{description}</HighlightedText>
               </p>
             )}
           </div>
@@ -72,7 +73,7 @@ export async function Footer() {
           {columns?.map((column, i) => (
             <div key={i} className="flex flex-col gap-1">
               <h5 className="text-[14px] uppercase tracking-[0.18em] mb-4 text-cream-dim font-semibold">
-                {column.label}
+                <HighlightedText>{column.label}</HighlightedText>
               </h5>
               {column.navItems?.map(({ link }, j) => (
                 <CMSLink
@@ -87,7 +88,11 @@ export async function Footer() {
 
         {/* Bottom bar */}
         <div className="mt-8 flex flex-col md:flex-row items-center justify-between gap-8 text-cream-dim text-[13px] tracking-[0.12em] uppercase font-jetbrains">
-          <span>{copyright || `© ${new Date().getFullYear()} Fuzzler · Furr MeetUp`}</span>
+          <span>
+            <HighlightedText>
+              {copyright || `© ${new Date().getFullYear()} Fuzzler · Furr MeetUp`}
+            </HighlightedText>
+          </span>
 
           {/* Socials */}
           <div className="flex items-center gap-2">
@@ -117,7 +122,9 @@ export async function Footer() {
           </div>
 
           <div className="flex items-center gap-2">
-            {creditNote || (
+            {creditNote ? (
+              <HighlightedText>{creditNote}</HighlightedText>
+            ) : (
               <a
                 href="https://reqlynx.dev"
                 target="_blank"

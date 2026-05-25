@@ -4,6 +4,7 @@ import Link from 'next/link'
 import React from 'react'
 
 import type { Page, Post } from '@/payload-types'
+import { HighlightedText } from '@/components/HighlightedText'
 
 type CMSLinkType = {
   appearance?: 'inline' | ButtonProps['variant']
@@ -49,7 +50,7 @@ export const CMSLink: React.FC<CMSLinkType> = (props) => {
   if (appearance === 'inline') {
     return (
       <Link className={cn(className)} href={href || url || ''} {...newTabProps}>
-        {label && label}
+        {label && <HighlightedText>{label}</HighlightedText>}
         {children && children}
       </Link>
     )
@@ -62,7 +63,7 @@ export const CMSLink: React.FC<CMSLinkType> = (props) => {
         href={href || url || ''} 
         {...newTabProps}
       >
-        {label && label}
+        {label && <HighlightedText>{label}</HighlightedText>}
         {children && children}
       </Link>
     </Button>

@@ -10,6 +10,7 @@ import { CMSLink } from '@/components/Link'
 import { ActionButton } from '@/components/ActionButton'
 import RichText from '@/components/RichText'
 import { Media } from '@/components/Media'
+import { HighlightedText } from '@/components/HighlightedText'
 
 export const HomeHero: React.FC<Page['hero']> = (props) => {
   const { eyebrow, titleType, homeTitle, titleMedia, richText, meta, links, stats, homeArt } = props
@@ -49,7 +50,7 @@ export const HomeHero: React.FC<Page['hero']> = (props) => {
         <div className="flex flex-col animate-in fade-in slide-in-from-left duration-700">
           {/* Eyebrow Badge */}
           <Badge dot variant="default" className="w-fit">
-            {displayEyebrow}
+            <HighlightedText>{displayEyebrow}</HighlightedText>
           </Badge>
 
           {/* Main Title with SVG-like Wing */}
@@ -74,7 +75,7 @@ export const HomeHero: React.FC<Page['hero']> = (props) => {
                     </span>
                   </span>
                 ) : (
-                  displayTitle
+                  <HighlightedText>{displayTitle}</HighlightedText>
                 )}
               </h1>
             )}
@@ -93,7 +94,7 @@ export const HomeHero: React.FC<Page['hero']> = (props) => {
             {displayMeta.map((item, i) => (
               <span key={i} className="flex items-center gap-2">
                 <span className="w-1.5 h-1.5 bg-orange rotate-45" />
-                {item.label}
+                <HighlightedText>{item.label}</HighlightedText>
               </span>
             ))}
           </div>
@@ -174,7 +175,7 @@ export const HomeHero: React.FC<Page['hero']> = (props) => {
                   right: i === 1 ? '-4%' : 'auto',
                 }}
               >
-                {tag.label}
+                <HighlightedText>{tag.label}</HighlightedText>
               </Badge>
             ))}
           </div>

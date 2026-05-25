@@ -3,6 +3,7 @@
 import React from 'react'
 import type { Post } from '@/payload-types'
 import { SectionHeader } from '@/components/SectionHeader'
+import { HighlightedText } from '@/components/HighlightedText'
 import { cn } from '@/utilities/ui'
 import Link from 'next/link'
 import { Media } from '@/components/Media'
@@ -42,21 +43,6 @@ const PostCard = ({ post }: { post: Post }) => {
 
   const category = categories?.[0]
   const categoryTitle = typeof category === 'object' ? category.title : ''
-
-  const renderTitle = (text: string) => {
-    if (!text) return null
-    const parts = text.split(/(\[\[.*?\]\])/g)
-    return parts.map((part, i) => {
-      if (part.startsWith('[[') && part.endsWith(']]')) {
-        return (
-          <span key={i} className="text-orange">
-            {part.slice(2, -2)}
-          </span>
-        )
-      }
-      return part
-    })
-  }
 
   // Deterministic gradient based on title or ID
   const gradients = [
@@ -100,9 +86,13 @@ const PostCard = ({ post }: { post: Post }) => {
           // {categoryTitle || 'newsy'}
         </div>
         <h3 className="font-bold text-xl leading-[1.15] uppercase tracking-tight text-white mb-3 group-hover:text-orange transition-colors">
-          <Link href={`/posts/${slug}`}>{renderTitle(title)}</Link>
+          <Link href={`/posts/${slug}`}>
+            <HighlightedText>{title}</HighlightedText>
+          </Link>
         </h3>
-        <p className="text-[#E8E2D6]/70 text-[15px] line-clamp-2 mb-6 flex-1">{description}</p>
+        <p className="text-[#E8E2D6]/70 text-[15px] line-clamp-2 mb-6 flex-1">
+          <HighlightedText>{description}</HighlightedText>
+        </p>
 
         <div className="flex justify-between items-center pt-4 border-t border-white/10 font-mono text-[11px] uppercase tracking-widest text-[#E8E2D6]/50">
           <span>{publishedAt ? new Date(publishedAt).toLocaleDateString('pl-PL') : ''}</span>

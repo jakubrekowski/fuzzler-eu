@@ -6,6 +6,7 @@ import type { Post } from '@/payload-types'
 import { Media } from '@/components/Media'
 import { formatAuthors } from '@/utilities/formatAuthors'
 import { Badge } from '@/components/ui/badge'
+import { HighlightedText } from '@/components/HighlightedText'
 
 export const PostHero: React.FC<{
   post: Post
@@ -30,7 +31,7 @@ export const PostHero: React.FC<{
               if (typeof category === 'object' && category !== null) {
                 return (
                   <Badge key={index} variant="outline" className="text-orange border-orange/30">
-                    {category.title || 'Untitled category'}
+                    <HighlightedText>{category.title || 'Untitled category'}</HighlightedText>
                   </Badge>
                 )
               }
@@ -39,7 +40,7 @@ export const PostHero: React.FC<{
           </div>
 
           <h1 className="text-[clamp(40px,6vw,72px)] font-bold uppercase leading-[0.95] tracking-tight mb-8">
-            {title}
+            <HighlightedText>{title}</HighlightedText>
           </h1>
 
           <div className="flex flex-wrap gap-8 text-cream-dim text-sm uppercase tracking-widest font-semibold border-t border-white/5 pt-8">

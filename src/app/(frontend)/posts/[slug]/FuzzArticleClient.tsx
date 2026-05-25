@@ -6,6 +6,7 @@ import { Button, ButtonArrow } from '@/components/ui/button'
 import type { Post } from '@/payload-types'
 import { Media } from '@/components/Media'
 import RichText from '@/components/RichText'
+import { HighlightedText } from '@/components/HighlightedText'
 import { useHeaderTheme } from '@/providers/HeaderTheme'
 
 /* ─── helpers ─── */
@@ -102,7 +103,9 @@ export const FuzzArticleClient: React.FC<Props> = ({ post, relatedPosts }) => {
             <span className="text-[#FF9A42]">/</span>
             <Link href="/posts" className="hover:text-[#FF9A42] transition-colors">Wieści</Link>
             <span className="text-[#FF9A42]">/</span>
-            <span className="text-[#E8E2D6]/70 truncate max-w-[20ch]">{title}</span>
+            <span className="text-[#E8E2D6]/70 truncate max-w-[20ch]">
+              <HighlightedText>{title}</HighlightedText>
+            </span>
           </nav>
 
           {/* category badge */}
@@ -115,13 +118,13 @@ export const FuzzArticleClient: React.FC<Props> = ({ post, relatedPosts }) => {
             className="font-rajdhani font-bold uppercase leading-[1] tracking-tight text-white mb-5"
             style={{ fontSize: 'clamp(36px,5.6vw,72px)' }}
           >
-            {title}
+            <HighlightedText>{title}</HighlightedText>
           </h1>
 
           {/* lede */}
           {meta?.description && (
             <p className="text-[#E8E2D6]/70 text-xl leading-relaxed max-w-[62ch] mb-7">
-              {meta.description}
+              <HighlightedText>{meta.description}</HighlightedText>
             </p>
           )}
 
@@ -469,10 +472,12 @@ const RelatedCard: React.FC<{ post: Post }> = ({ post }) => {
           // {cat || 'newsy'}
         </span>
         <h3 className="font-rajdhani font-bold text-[20px] leading-[1.15] uppercase tracking-tight mb-2 group-hover:text-[#FF9A42] transition-colors">
-          {title}
+          <HighlightedText>{title}</HighlightedText>
         </h3>
         {meta?.description && (
-          <p className="text-[#E8E2D6]/60 text-[14px] line-clamp-2 flex-1">{meta.description}</p>
+          <p className="text-[#E8E2D6]/60 text-[14px] line-clamp-2 flex-1">
+            <HighlightedText>{meta.description}</HighlightedText>
+          </p>
         )}
         <div className="mt-4 flex justify-between font-mono text-[11px] tracking-widest uppercase text-[#E8E2D6]/40">
           <span>{fmtDate(publishedAt)}</span>

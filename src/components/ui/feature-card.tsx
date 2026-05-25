@@ -3,6 +3,7 @@ import { cva, type VariantProps } from "class-variance-authority"
 import { cn } from "@/utilities/ui"
 import * as LucideIcons from 'lucide-react'
 import Link from 'next/link'
+import { HighlightedText } from '@/components/HighlightedText'
 
 const featureCardVariants = cva(
   "relative group p-8 rounded-3xl border transition-all duration-500 hover:-translate-y-2 flex flex-col overflow-hidden",
@@ -81,18 +82,18 @@ const FeatureCard = React.forwardRef<HTMLDivElement, FeatureCardProps>(
         </div>
 
         <h3 className="text-3xl font-bold uppercase mb-4 tracking-tight font-rajdhani leading-none relative z-10">
-          {title}
+          <HighlightedText>{title}</HighlightedText>
         </h3>
         
         <div className="text-zinc-400 text-[22px] leading-tight mb-12 flex-1 relative z-10">
-          {children}
+          {typeof children === 'string' ? <HighlightedText>{children}</HighlightedText> : children}
         </div>
 
         <div className="mt-auto pt-6 border-t border-white/5 flex justify-between items-center text-[10px] font-mono uppercase tracking-widest opacity-60 relative z-10">
-          <span>{footerLeft}</span>
+          <span><HighlightedText>{footerLeft}</HighlightedText></span>
           {(footerRight || href) && (
             <div className="flex items-center gap-2 group-hover:text-white transition-colors cursor-pointer">
-              <span>{footerRight}</span>
+              <span><HighlightedText>{footerRight}</HighlightedText></span>
               {href && (
                 <svg 
                   width="8" 

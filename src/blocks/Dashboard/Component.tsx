@@ -3,6 +3,7 @@
 import React from 'react'
 import type { DashboardBlock as DashboardBlockProps, Media } from '@/payload-types'
 import { SectionHeader } from '@/components/SectionHeader'
+import { HighlightedText } from '@/components/HighlightedText'
 import { cn } from '@/utilities/ui'
 import * as LucideIcons from 'lucide-react'
 import { ArrowUpRight, MapPin } from 'lucide-react'
@@ -60,10 +61,10 @@ export const DashboardBlockComponent: React.FC<DashboardBlockProps> = (props) =>
       >
         <div>
           <p className="text-[10px] font-mono uppercase tracking-[0.25em] font-black opacity-60 mb-2">
-            {sTitle}
+            <HighlightedText>{sTitle}</HighlightedText>
           </p>
           <h4 className="text-4xl font-black uppercase tracking-tight font-rajdhani leading-none">
-            {value}
+            <HighlightedText>{value}</HighlightedText>
           </h4>
         </div>
       </div>
@@ -113,7 +114,7 @@ export const DashboardBlockComponent: React.FC<DashboardBlockProps> = (props) =>
           {mainMedia?.title && (
             <div className="absolute top-8 right-8 px-5 py-3 bg-black/60 backdrop-blur-md rounded-2xl border border-white/10 transform translate-y-[-10px] opacity-0 group-hover:translate-y-0 group-hover:opacity-100 transition-all duration-300 pointer-events-none">
               <span className="text-[11px] font-mono font-bold uppercase tracking-widest text-white">
-                {mainMedia.title}
+                <HighlightedText>{mainMedia.title}</HighlightedText>
               </span>
             </div>
           )}
@@ -130,12 +131,12 @@ export const DashboardBlockComponent: React.FC<DashboardBlockProps> = (props) =>
         {/* Middle Row Right: Info Card */}
         <div className="md:col-span-4 md:row-span-1 rounded-[40px] p-8 bg-zinc-900/40 border border-white/10 backdrop-blur-sm flex flex-col justify-center hover:bg-zinc-900/60 transition-colors duration-300">
           <h4 className="text-2xl font-black uppercase tracking-tight font-rajdhani mb-4 text-white leading-none">
-            {infoCard?.title}
+            <HighlightedText>{infoCard?.title}</HighlightedText>
           </h4>
           <div className="space-y-1">
             {infoCard?.content?.split('\n').map((line, i) => (
               <p key={i} className="text-zinc-400 font-mono text-[12px] uppercase tracking-wide">
-                {line}
+                <HighlightedText>{line}</HighlightedText>
               </p>
             ))}
           </div>
@@ -145,7 +146,7 @@ export const DashboardBlockComponent: React.FC<DashboardBlockProps> = (props) =>
         <div className="md:col-span-4 md:row-span-1 flex flex-col gap-4">
           {featuresTagline && (
             <p className="font-mono text-[10px] uppercase tracking-[0.3em] text-zinc-500 px-2">
-              {featuresTagline}
+              <HighlightedText>{featuresTagline}</HighlightedText>
             </p>
           )}
           <div className="grid grid-cols-3 gap-4 flex-1">
@@ -158,7 +159,7 @@ export const DashboardBlockComponent: React.FC<DashboardBlockProps> = (props) =>
                   {renderIcon(feature.icon, 20)}
                 </div>
                 <h5 className="text-[9px] font-black uppercase tracking-widest text-white leading-tight">
-                  {feature.title}
+                  <HighlightedText>{feature.title}</HighlightedText>
                 </h5>
               </div>
             ))}

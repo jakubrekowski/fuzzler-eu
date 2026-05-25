@@ -3,6 +3,7 @@
 import React, { useState, useEffect } from 'react'
 import type { CountdownBlock as CountdownBlockProps } from '@/payload-types'
 import { ActionButton } from '@/components/ActionButton'
+import { HighlightedText } from '@/components/HighlightedText'
 import { cn } from '@/utilities/ui'
 
 export const CountdownBlockComponent: React.FC<CountdownBlockProps> = (props) => {
@@ -111,7 +112,7 @@ export const CountdownBlockComponent: React.FC<CountdownBlockProps> = (props) =>
                 isBig ? 'text-sm sm:text-lg md:text-xl' : 'text-xs sm:text-sm',
               )}
             >
-              // {title}
+              // <HighlightedText>{title}</HighlightedText>
             </p>
             <div
               className={cn(
@@ -145,7 +146,7 @@ export const CountdownBlockComponent: React.FC<CountdownBlockProps> = (props) =>
                     isBig ? 'text-sm sm:text-lg md:text-xl' : 'text-xs sm:text-sm',
                   )}
                 >
-                  // {limitText}
+                  // <HighlightedText>{limitText}</HighlightedText>
                 </p>
               )}
               {showNotifyButton && notifyButton && (
