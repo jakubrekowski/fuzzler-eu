@@ -1,5 +1,6 @@
 import React from 'react'
 
+import { AnchorScroll } from '@/components/AnchorScroll'
 import { HeaderThemeProvider } from './HeaderTheme'
 import { ThemeProvider } from './Theme'
 
@@ -8,7 +9,10 @@ export const Providers: React.FC<{
 }> = ({ children }) => {
   return (
     <ThemeProvider>
-      <HeaderThemeProvider>{children}</HeaderThemeProvider>
+      <HeaderThemeProvider>
+        <AnchorScroll />
+        {children}
+      </HeaderThemeProvider>
     </ThemeProvider>
   )
 }

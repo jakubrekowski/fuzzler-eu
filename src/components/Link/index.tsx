@@ -43,28 +43,43 @@ export const CMSLink: React.FC<CMSLinkType> = (props) => {
 
   if (!href && appearance !== 'disabled') return null
 
+  const rawHref = href || url || ''
+  // Hash-only anchors (e.g. #cennik) target the home page; use /#cennik for cross-route navigation.
+  const resolvedHref =
+    rawHref.startsWith('#') && rawHref.length > 1 ? `/${rawHref}` : rawHref
+  const hasInPageHash = resolvedHref.includes('#')
   const size = appearance === 'link' ? 'clear' : sizeFromProps
   const newTabProps = newTab ? { rel: 'noopener noreferrer', target: '_blank' } : {}
+
+  const linkContent = (
+    <>
+      {label && <HighlightedText>{label}</HighlightedText>}
+      {children && children}
+    </>
+  )
+
+  const linkProps = {
+    href: resolvedHref,
+    ...(hasInPageHash ? { scroll: false as const } : {}),
+    ...newTabProps,
+  }
 
   /* Ensure we don't break any styles set by richText */
   if (appearance === 'inline') {
     return (
-      <Link className={cn(className)} href={href || url || ''} {...newTabProps}>
-        {label && <HighlightedText>{label}</HighlightedText>}
-        {children && children}
+      <Link className={cn(className)} {...linkProps}>
+        {linkContent}
       </Link>
     )
   }
 
   return (
     <Button asChild className={className} size={size} variant={appearance}>
-      <Link 
-        className={cn(className, appearance === 'disabled' && 'pointer-events-none')} 
-        href={href || url || ''} 
-        {...newTabProps}
+      <Link
+        className={cn(className, appearance === 'disabled' && 'pointer-events-none')}
+        {...linkProps}
       >
-        {label && <HighlightedText>{label}</HighlightedText>}
-        {children && children}
+        {linkContent}
       </Link>
     </Button>
   )

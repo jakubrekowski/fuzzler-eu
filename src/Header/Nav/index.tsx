@@ -32,9 +32,9 @@ export const HeaderNav: React.FC<{ data: HeaderType }> = ({ data }) => {
         <SearchIcon className="h-4 w-4" />
       </Link>
       <Button asChild className="ml-2">
-        <a href="#zapis">
+        <Link href="/#zapis" scroll={false}>
           Zapisz się <ButtonArrow />
-        </a>
+        </Link>
       </Button>
     </nav>
   )

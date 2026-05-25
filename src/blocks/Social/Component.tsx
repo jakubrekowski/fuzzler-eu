@@ -42,7 +42,7 @@ export const SocialBlockComponent: React.FC<SocialBlockProps> = (props) => {
         )}
       </div>
 
-      <div className="flex flex-wrap justify-center gap-4 max-w-6xl mx-auto">
+      <div className="flex flex-wrap justify-center gap-2 md:gap-3 max-w-6xl mx-auto">
         {links?.map((link, index) => {
           const colorKey = (link.color as keyof typeof colorVariants) || 'graphite'
           const iconColor = iconColors[colorKey].replace('#', '')
@@ -54,11 +54,11 @@ export const SocialBlockComponent: React.FC<SocialBlockProps> = (props) => {
               target="_blank"
               rel="noopener noreferrer"
               className={cn(
-                'flex items-center gap-5 p-5 md:px-8 md:py-6 rounded-[32px] border transition-all duration-300 hover:-translate-y-1 hover:shadow-2xl hover:shadow-orange/5',
+                'flex items-center gap-3 px-3 py-2.5 md:px-4 md:py-3 rounded-2xl border transition-all duration-300 hover:-translate-y-1 hover:shadow-2xl hover:shadow-orange/5',
                 colorVariants[colorKey]
               )}
             >
-              <div className="w-12 h-12 md:w-14 md:h-14 rounded-2xl bg-black/40 border border-white/5 flex items-center justify-center p-3 shrink-0">
+              <div className="w-8 h-8 md:w-9 md:h-9 rounded-xl bg-black/40 border border-white/5 flex items-center justify-center p-1.5 shrink-0">
                 <img
                   src={`https://cdn.simpleicons.org/${link.icon}/${iconColor}`}
                   alt={link.label}
@@ -66,11 +66,11 @@ export const SocialBlockComponent: React.FC<SocialBlockProps> = (props) => {
                 />
               </div>
               <div className="text-left">
-                <div className="font-bold text-xl md:text-2xl uppercase tracking-wider text-white leading-tight">
+                <div className="font-bold text-sm md:text-base uppercase tracking-wider text-white leading-tight">
                   <HighlightedText>{link.label}</HighlightedText>
                 </div>
                 {link.subtext && (
-                  <div className="font-mono text-[10px] md:text-[12px] uppercase tracking-[0.15em] text-zinc-500 mt-1 font-bold">
+                  <div className="font-mono text-[9px] md:text-[10px] uppercase tracking-[0.15em] text-zinc-500 mt-0.5 font-bold">
                     <HighlightedText>{link.subtext}</HighlightedText>
                   </div>
                 )}

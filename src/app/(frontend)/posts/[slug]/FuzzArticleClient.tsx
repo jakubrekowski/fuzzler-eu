@@ -427,7 +427,7 @@ const MetaSidebar: React.FC<{ post: Post }> = ({ post }) => {
           Limit miejsc 120. Rejestracja trwa.
         </p>
         <Button asChild size="sm" className="w-full">
-          <Link href="/#zapis">
+          <Link href="/#zapis" scroll={false}>
             Zapisz się <ButtonArrow />
           </Link>
         </Button>
