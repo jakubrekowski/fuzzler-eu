@@ -392,6 +392,10 @@ export interface Post {
   title: string;
   heroImage?: (number | null) | Media;
   /**
+   * Credit wyświetlany na zdjęciu hero na stronie artykułu (np. autor, źródło).
+   */
+  creditNote?: string | null;
+  /**
    * Krótki opis na karty i listy wpisów. Oddzielny od leadu i opisu SEO.
    */
   description?: string | null;
@@ -1833,6 +1837,7 @@ export interface PostsArchiveBlockSelect<T extends boolean = true> {
 export interface PostsSelect<T extends boolean = true> {
   title?: T;
   heroImage?: T;
+  creditNote?: T;
   description?: T;
   lead?: T;
   content?: T;

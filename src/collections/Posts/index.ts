@@ -84,6 +84,15 @@ export const Posts: CollectionConfig<'posts'> = {
               relationTo: 'media',
             },
             {
+              name: 'creditNote',
+              type: 'text',
+              label: 'Podpis zdjęcia (hero)',
+              admin: {
+                description:
+                  'Credit wyświetlany na zdjęciu hero na stronie artykułu (np. autor, źródło).',
+              },
+            },
+            {
               name: 'description',
               type: 'textarea',
               label: 'Opis (karty)',

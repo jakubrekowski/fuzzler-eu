@@ -4,6 +4,7 @@ import * as migration_20260510_165125_init from './20260510_165125_init';
 import * as migration_20260510_182919_image from './20260510_182919_image';
 import * as migration_20260525_post_excerpts from './20260525_post_excerpts';
 import * as migration_20260525_category_badge_color from './20260525_category_badge_color';
+import * as migration_20260525_post_credit_note from './20260525_post_credit_note';
 
 export const migrations = [
   {
@@ -35,5 +36,10 @@ export const migrations = [
     up: migration_20260525_category_badge_color.up,
     down: migration_20260525_category_badge_color.down,
     name: '20260525_category_badge_color',
+  },
+  {
+    up: migration_20260525_post_credit_note.up,
+    down: migration_20260525_post_credit_note.down,
+    name: '20260525_post_credit_note',
   },
 ];

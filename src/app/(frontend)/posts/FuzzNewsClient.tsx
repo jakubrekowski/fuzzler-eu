@@ -18,12 +18,12 @@ import {
 /* ─────────────────────────────────────────── helpers ── */
 
 const GRADIENTS = [
-  'from-[#4B0082] to-[#F84949]',   // v1 purple → red
-  'from-[#FF9A42] to-[#F84949]',   // v2 orange → red
-  'from-[#79E69C] to-[#4B0082]',   // v3 green  → purple
-  'from-[#2A0049] to-[#FF9A42]',   // v4 deep   → orange
-  'from-[#F84949] to-[#2A0049]',   // v5 red    → deep
-  'from-[#FF9A42] to-[#79E69C]',   // v6 orange → green
+  'from-[#4B0082] to-[#F84949]', // v1 purple → red
+  'from-[#FF9A42] to-[#F84949]', // v2 orange → red
+  'from-[#79E69C] to-[#4B0082]', // v3 green  → purple
+  'from-[#2A0049] to-[#FF9A42]', // v4 deep   → orange
+  'from-[#F84949] to-[#2A0049]', // v5 red    → deep
+  'from-[#FF9A42] to-[#79E69C]', // v6 orange → green
 ]
 
 function pickGradient(seed: string | number): string {
@@ -84,9 +84,7 @@ export const FuzzNewsClient: React.FC<FuzzNewsClientProps> = ({
 
     if (activeCategory) {
       posts = posts.filter((p) =>
-        p.categories?.some(
-          (c) => typeof c === 'object' && c.title === activeCategory,
-        ),
+        p.categories?.some((c) => typeof c === 'object' && c.title === activeCategory),
       )
     }
 
@@ -137,16 +135,19 @@ export const FuzzNewsClient: React.FC<FuzzNewsClientProps> = ({
           {/* title + meta row */}
           <div className="grid grid-cols-1 md:grid-cols-[1.4fr_1fr] gap-8 items-end">
             <div>
-              <h1 className="font-rajdhani font-bold uppercase leading-[0.86] tracking-tight"
-                style={{ fontSize: 'clamp(72px, 11vw, 148px)' }}>
-                Fuzz<br />
+              <h1
+                className="font-rajdhani font-bold uppercase leading-[0.86] tracking-tight"
+                style={{ fontSize: 'clamp(72px, 11vw, 148px)' }}
+              >
+                Fuzz
+                <br />
                 <em className="not-italic text-[#FF9A42]">News</em>
               </h1>
             </div>
             <div>
               <p className="text-[#E8E2D6]/70 text-lg leading-relaxed max-w-[42ch]">
-                Co u nas piszczy. Aktualizacje programu, nowi prowadzący,
-                kulisy organizacji i fotorelacje z poprzednich edycji.
+                Co u nas piszczy. Aktualizacje programu, nowi prowadzący, kulisy organizacji i
+                fotorelacje z poprzednich edycji.
               </p>
               <div className="mt-5 flex gap-4 flex-wrap font-mono text-[11px] uppercase tracking-[0.18em] text-[#E8E2D6]/50">
                 <span className="inline-flex items-center gap-2">
@@ -182,11 +183,7 @@ export const FuzzNewsClient: React.FC<FuzzNewsClientProps> = ({
                 key={cat.id}
                 label={cat.title}
                 active={activeCategory === cat.title}
-                onClick={() =>
-                  setActiveCategory(
-                    activeCategory === cat.title ? null : cat.title,
-                  )
-                }
+                onClick={() => setActiveCategory(activeCategory === cat.title ? null : cat.title)}
               />
             ))}
           </div>
@@ -208,10 +205,9 @@ export const FuzzNewsClient: React.FC<FuzzNewsClientProps> = ({
 
       {/* ── MAIN CONTENT ───────────────────────────────────────── */}
       <main className="container py-12 md:py-16 pb-24">
-
         {/* ── FEATURED ───────────────────────────────────────── */}
         {featuredPosts.length > 0 && !activeCategory && !search && (
-          <section className="grid grid-cols-1 lg:grid-cols-[1.3fr_1fr] gap-4 mb-14">
+          <section className="grid grid-cols-1 lg:grid-cols-[1.3fr_1fr] gap-4 mb-14 items-start">
             {/* Primary hero card */}
             {hero && <FeatHeroCard post={hero} />}
 
@@ -273,9 +269,7 @@ export const FuzzNewsClient: React.FC<FuzzNewsClientProps> = ({
         ) : (
           <div className="flex flex-col items-center justify-center py-24 text-[#E8E2D6]/30">
             <div className="font-mono text-[40px] mb-4">🔍</div>
-            <p className="font-mono text-[13px] uppercase tracking-widest">
-              Brak wyników
-            </p>
+            <p className="font-mono text-[13px] uppercase tracking-widest">Brak wyników</p>
           </div>
         )}
 
@@ -284,12 +278,9 @@ export const FuzzNewsClient: React.FC<FuzzNewsClientProps> = ({
           <FuzzPagination
             currentPage={currentPage}
             totalPages={totalPages}
-            onNavigate={(p) =>
-              router.push(p === 1 ? '/posts' : `/posts/page/${p}`)
-            }
+            onNavigate={(p) => router.push(p === 1 ? '/posts' : `/posts/page/${p}`)}
           />
         )}
-
       </main>
     </>
   )
@@ -337,15 +328,11 @@ const FeatHeroCard: React.FC<{ post: Post }> = ({ post }) => {
   return (
     <Link
       href={`/posts/${slug}`}
-      className="group relative flex flex-col rounded-3xl overflow-hidden border border-white/[0.08] bg-[#2D2D2A] min-h-[420px] transition-all duration-300 hover:-translate-y-1 hover:border-[#FF9A42]/40"
+      className="group relative flex flex-col rounded-3xl overflow-hidden border border-white/[0.08] bg-[#2D2D2A] transition-all duration-300 hover:-translate-y-1 hover:border-[#FF9A42]/40"
     >
-      <PostHeroImage heroImage={heroImage} gradient={gradient} size="60vw">
-        <span className="absolute top-3.5 left-3.5 z-10 bg-white text-[#2D2D2A] font-bold text-[11px] uppercase tracking-[0.16em] px-3 py-1.5 rounded-md">
-          ★ Featured
-        </span>
-      </PostHeroImage>
+      <PostHeroImage heroImage={heroImage} gradient={gradient} size="60vw" />
 
-      <div className="flex flex-col flex-1 p-7">
+      <div className="flex flex-col p-7">
         <span className="font-mono text-[12px] tracking-[0.2em] text-[#FF9A42] uppercase mb-2.5">
           // {cat || 'newsy'} · {fmtDate(publishedAt)}
         </span>
@@ -353,11 +340,11 @@ const FeatHeroCard: React.FC<{ post: Post }> = ({ post }) => {
           <HighlightedText>{title}</HighlightedText>
         </h2>
         {excerpt && (
-          <p className="text-[#E8E2D6]/60 text-base flex-1 line-clamp-3 max-w-[54ch]">
+          <p className="text-[#E8E2D6]/60 text-base line-clamp-3 max-w-[54ch]">
             <HighlightedText>{excerpt}</HighlightedText>
           </p>
         )}
-        <div className="mt-5 flex justify-between items-center font-mono text-[11px] tracking-[0.16em] text-[#E8E2D6]/40 uppercase">
+        <div className="mt-5 flex justify-between items-center gap-3 font-mono text-[11px] tracking-[0.16em] text-[#E8E2D6]/40 uppercase">
           <span>
             {author ? `${author} · ` : ''}
             {formatReadingTimePl(readingMinutes)}
@@ -384,7 +371,7 @@ const FeatSideCard: React.FC<{ post: Post }> = ({ post }) => {
   return (
     <Link
       href={`/posts/${slug}`}
-      className="group flex flex-col flex-1 rounded-3xl overflow-hidden border border-white/[0.08] bg-[#2D2D2A] transition-all duration-300 hover:-translate-y-1 hover:border-[#FF9A42]/40"
+      className="group flex flex-col rounded-3xl overflow-hidden border border-white/[0.08] bg-[#2D2D2A] transition-all duration-300 hover:-translate-y-1 hover:border-[#FF9A42]/40"
     >
       <PostHeroImage heroImage={heroImage} gradient={gradient} size="40vw">
         {category && (
@@ -395,7 +382,7 @@ const FeatSideCard: React.FC<{ post: Post }> = ({ post }) => {
         )}
       </PostHeroImage>
 
-      <div className="flex flex-col flex-1 px-5 py-4">
+      <div className="flex flex-col px-5 py-4">
         <span className="font-mono text-[11px] tracking-[0.2em] text-[#FF9A42] uppercase mb-2">
           // {cat || 'newsy'} · {fmtDate(publishedAt)}
         </span>
@@ -403,7 +390,7 @@ const FeatSideCard: React.FC<{ post: Post }> = ({ post }) => {
           <HighlightedText>{title}</HighlightedText>
         </h3>
         {excerpt && (
-          <p className="text-[#E8E2D6]/55 text-[14px] line-clamp-2 flex-1">
+          <p className="text-[#E8E2D6]/55 text-[14px] line-clamp-2">
             <HighlightedText>{excerpt}</HighlightedText>
           </p>
         )}
@@ -457,7 +444,10 @@ const NewsCard: React.FC<{ post: Post }> = ({ post }) => {
         )}
         <div className="mt-4 flex justify-between items-center font-mono text-[11px] tracking-[0.14em] text-[#E8E2D6]/40 uppercase">
           <span>{fmtDate(publishedAt)}</span>
-          <Link href={`/posts/${slug}`} className="text-[#FF9A42] hover:underline decoration-[#FF9A42]/30">
+          <Link
+            href={`/posts/${slug}`}
+            className="text-[#FF9A42] hover:underline decoration-[#FF9A42]/30"
+          >
             ↗ czytaj
           </Link>
         </div>
@@ -480,10 +470,7 @@ const FuzzPagination: React.FC<{
   const hasNext = currentPage < totalPages
 
   return (
-    <nav
-      className="flex items-center justify-center gap-2.5 mt-14"
-      aria-label="Paginacja"
-    >
+    <nav className="flex items-center justify-center gap-2.5 mt-14" aria-label="Paginacja">
       <button
         disabled={!hasPrev}
         onClick={() => hasPrev && onNavigate(currentPage - 1)}

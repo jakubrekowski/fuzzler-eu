@@ -3,7 +3,7 @@
 import React, { useState, useEffect, useRef } from 'react'
 import Link from 'next/link'
 import { Button, ButtonArrow } from '@/components/ui/button'
-import type { Category, Post } from '@/payload-types'
+import type { Post } from '@/payload-types'
 import { PostHeroImage } from '@/components/PostHeroImage'
 import RichText from '@/components/RichText'
 import { CategoryBadge } from '@/components/CategoryBadge'
@@ -34,7 +34,11 @@ function pickGradient(seed: string | number) {
 
 function fmtDate(iso?: string | null) {
   if (!iso) return ''
-  return new Date(iso).toLocaleDateString('pl-PL', { day: '2-digit', month: '2-digit', year: 'numeric' })
+  return new Date(iso).toLocaleDateString('pl-PL', {
+    day: '2-digit',
+    month: '2-digit',
+    year: 'numeric',
+  })
 }
 
 function authorInitial(name?: string | null) {
@@ -44,22 +48,23 @@ function authorInitial(name?: string | null) {
 /* ─── share icons ─── */
 const IconTelegram = () => (
   <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
-    <path d="M9.99 15.27l-.4 4.21c.57 0 .82-.24 1.12-.54l2.7-2.58 5.6 4.1c1.03.57 1.76.27 2.04-.95l3.7-17.32c.33-1.52-.55-2.12-1.55-1.74L1.36 9.86c-1.5.57-1.48 1.4-.26 1.78l5.34 1.66 12.4-7.83c.58-.36 1.12-.16.68.2"/>
+    <path d="M9.99 15.27l-.4 4.21c.57 0 .82-.24 1.12-.54l2.7-2.58 5.6 4.1c1.03.57 1.76.27 2.04-.95l3.7-17.32c.33-1.52-.55-2.12-1.55-1.74L1.36 9.86c-1.5.57-1.48 1.4-.26 1.78l5.34 1.66 12.4-7.83c.58-.36 1.12-.16.68.2" />
   </svg>
 )
 const IconX = () => (
   <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
-    <path d="M18 2h3l-7 8 8 12h-6l-5-7-6 7H2l8-9L2 2h6l4 6z"/>
+    <path d="M18 2h3l-7 8 8 12h-6l-5-7-6 7H2l8-9L2 2h6l4 6z" />
   </svg>
 )
 const IconEmail = () => (
   <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-    <rect x="3" y="5" width="18" height="14" rx="2"/><path d="M3 7l9 6 9-6"/>
+    <rect x="3" y="5" width="18" height="14" rx="2" />
+    <path d="M3 7l9 6 9-6" />
   </svg>
 )
 const IconLink = () => (
   <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-    <path d="M10 14a5 5 0 007 0l3-3a5 5 0 00-7-7l-1 1M14 10a5 5 0 00-7 0l-3 3a5 5 0 007 7l1-1"/>
+    <path d="M10 14a5 5 0 007 0l3-3a5 5 0 00-7-7l-1 1M14 10a5 5 0 00-7 0l-3 3a5 5 0 007 7l1-1" />
   </svg>
 )
 
@@ -72,9 +77,11 @@ interface Props {
 
 export const FuzzArticleClient: React.FC<Props> = ({ post, relatedPosts }) => {
   const { setHeaderTheme } = useHeaderTheme()
-  useEffect(() => { setHeaderTheme('dark') }, [setHeaderTheme])
+  useEffect(() => {
+    setHeaderTheme('dark')
+  }, [setHeaderTheme])
 
-  const { title, heroImage, populatedAuthors, publishedAt, lead } = post
+  const { title, heroImage, creditNote, populatedAuthors, publishedAt, lead } = post
   const category = getPrimaryCategory(post)
   const cat = category?.title ?? ''
   const gradient = pickGradient(post.id)
@@ -102,9 +109,13 @@ export const FuzzArticleClient: React.FC<Props> = ({ post, relatedPosts }) => {
         <div className="max-w-[980px] mx-auto px-6 md:px-8">
           {/* breadcrumbs */}
           <nav className="flex items-center gap-2 font-mono text-[11px] uppercase tracking-[0.18em] text-[#E8E2D6]/50 mb-6">
-            <Link href="/" className="hover:text-[#FF9A42] transition-colors">Fuzzler</Link>
+            <Link href="/" className="hover:text-[#FF9A42] transition-colors">
+              Fuzzler
+            </Link>
             <span className="text-[#FF9A42]">/</span>
-            <Link href="/posts" className="hover:text-[#FF9A42] transition-colors">FuzzNews</Link>
+            <Link href="/posts" className="hover:text-[#FF9A42] transition-colors">
+              FuzzNews
+            </Link>
             <span className="text-[#FF9A42]">/</span>
             <span className="text-[#E8E2D6]/70 truncate max-w-[20ch]">
               <HighlightedText>{title}</HighlightedText>
@@ -158,9 +169,21 @@ export const FuzzArticleClient: React.FC<Props> = ({ post, relatedPosts }) => {
             {/* share */}
             <div className="flex gap-2">
               {[
-                { label: 'Telegram', icon: <IconTelegram />, href: `https://t.me/share/url?url=${encodeURIComponent(typeof window !== 'undefined' ? window.location.href : '')}` },
-                { label: 'X', icon: <IconX />, href: `https://x.com/intent/tweet?url=${encodeURIComponent(typeof window !== 'undefined' ? window.location.href : '')}` },
-                { label: 'Email', icon: <IconEmail />, href: `mailto:?subject=${encodeURIComponent(title)}&body=${encodeURIComponent(typeof window !== 'undefined' ? window.location.href : '')}` },
+                {
+                  label: 'Telegram',
+                  icon: <IconTelegram />,
+                  href: `https://t.me/share/url?url=${encodeURIComponent(typeof window !== 'undefined' ? window.location.href : '')}`,
+                },
+                {
+                  label: 'X',
+                  icon: <IconX />,
+                  href: `https://x.com/intent/tweet?url=${encodeURIComponent(typeof window !== 'undefined' ? window.location.href : '')}`,
+                },
+                {
+                  label: 'Email',
+                  icon: <IconEmail />,
+                  href: `mailto:?subject=${encodeURIComponent(title)}&body=${encodeURIComponent(typeof window !== 'undefined' ? window.location.href : '')}`,
+                },
               ].map(({ label, icon, href }) => (
                 <a
                   key={label}
@@ -190,22 +213,21 @@ export const FuzzArticleClient: React.FC<Props> = ({ post, relatedPosts }) => {
             size="100vw"
             className="rounded-t-3xl"
           >
-            <span className="absolute top-4 left-4 z-10 bg-white text-[#2D2D2A] font-bold text-[11px] uppercase tracking-[0.16em] px-3 py-1.5 rounded-md">
-              ★ Featured
-            </span>
-            <span className="absolute bottom-4 left-4 z-10 font-mono text-[11px] tracking-[0.16em] text-white/70 uppercase">
-              // {fmtDate(publishedAt)} · Fuzzler
-            </span>
+            {creditNote?.trim() && (
+              <span className="absolute bottom-4 left-4 z-10 font-mono text-[11px] tracking-[0.16em] text-white/70 uppercase max-w-[min(90%,48ch)]">
+                // <HighlightedText>{creditNote.trim()}</HighlightedText>
+              </span>
+            )}
           </PostHeroImage>
         </div>
       </section>
 
       {/* ── 3-COLUMN LAYOUT ──────────────────────────────────── */}
       <div
-        className="fuzz-layout-grid max-w-[1180px] mx-auto px-6 md:px-8 py-12"
+        className="fuzz-layout-grid max-w-[1180px] mx-auto px-6 md:px-8 py-12 min-w-0"
         style={{
           display: 'grid',
-          gridTemplateColumns: '240px 1fr 240px',
+          gridTemplateColumns: 'minmax(0, 240px) minmax(0, 1fr) minmax(0, 240px)',
           gap: '32px',
         }}
       >
@@ -229,9 +251,12 @@ export const FuzzArticleClient: React.FC<Props> = ({ post, relatedPosts }) => {
           <div className="max-w-[1180px] mx-auto">
             <div className="flex items-end justify-between gap-4 mb-7">
               <h2 className="font-rajdhani font-bold text-4xl uppercase leading-none">
-                Powiązane z <em className="not-italic text-[#FF9A42]">FuzzNews</em>
+                Powiązane z tym postem
               </h2>
-              <Link href="/posts" className="font-mono text-[12px] tracking-[0.18em] uppercase text-[#FF9A42] hover:underline shrink-0">
+              <Link
+                href="/posts"
+                className="font-mono text-[12px] tracking-[0.18em] uppercase text-[#FF9A42] hover:underline shrink-0"
+              >
                 Wszystkie FuzzNews ↗
               </Link>
             </div>
@@ -295,7 +320,11 @@ const TocSidebar: React.FC<{ post: Post }> = ({ post }) => {
       document.querySelectorAll<HTMLElement>('.fuzz-article-body h2'),
     ).map((el) => {
       if (!el.id) {
-        el.id = el.textContent?.toLowerCase().replace(/\s+/g, '-').replace(/[^a-z0-9-]/g, '') ?? ''
+        el.id =
+          el.textContent
+            ?.toLowerCase()
+            .replace(/\s+/g, '-')
+            .replace(/[^a-z0-9-]/g, '') ?? ''
       }
       return { id: el.id, text: el.textContent ?? '' }
     })
@@ -304,9 +333,17 @@ const TocSidebar: React.FC<{ post: Post }> = ({ post }) => {
   return (
     <aside
       className="hidden lg:block"
-      style={{ position: 'sticky', top: '96px', alignSelf: 'start', fontFamily: "'JetBrains Mono',monospace", fontSize: '12px' }}
+      style={{
+        position: 'sticky',
+        top: '96px',
+        alignSelf: 'start',
+        fontFamily: "'JetBrains Mono',monospace",
+        fontSize: '12px',
+      }}
     >
-      <div className="text-[11px] tracking-[0.2em] text-[#E8E2D6]/50 uppercase mb-3">// w tym wpisie</div>
+      <div className="text-[11px] tracking-[0.2em] text-[#E8E2D6]/50 uppercase mb-3">
+        // w tym wpisie
+      </div>
       <TocList activeId={activeId} />
 
       {/* Back link */}
@@ -331,7 +368,11 @@ const TocList: React.FC<{ activeId: string }> = ({ activeId }) => {
     setItems(
       els.map((el) => {
         if (!el.id) {
-          el.id = el.textContent?.toLowerCase().replace(/\s+/g, '-').replace(/[^a-z0-9-]/g, '') ?? ''
+          el.id =
+            el.textContent
+              ?.toLowerCase()
+              .replace(/\s+/g, '-')
+              .replace(/[^a-z0-9-]/g, '') ?? ''
         }
         return { id: el.id, text: el.textContent ?? '' }
       }),
@@ -371,57 +412,52 @@ const TocList: React.FC<{ activeId: string }> = ({ activeId }) => {
 /* ═══════════════════════════════════ META SIDEBAR ═══════════════════════════ */
 
 const MetaSidebar: React.FC<{ post: Post }> = ({ post }) => {
-  const { publishedAt, populatedAuthors, categories } = post
+  const { publishedAt, populatedAuthors } = post
   const category = getPrimaryCategory(post)
   const cat = category?.title ?? ''
   const authorName = populatedAuthors?.[0]?.name ?? 'Redakcja'
   const readingMinutes = getReadingTimeMinutes(post.content)
 
+  const facts: { label: string; value: string }[] = [
+    { label: 'Data', value: fmtDate(publishedAt) || '—' },
+    { label: 'Autor', value: authorName },
+    { label: 'Czas', value: formatReadingTimeShortPl(readingMinutes) },
+    { label: 'Kategoria', value: cat || '—' },
+  ]
+
   return (
     <aside
-      className="hidden lg:flex flex-col gap-4"
+      className="hidden lg:flex w-full min-w-0 max-w-full flex-col gap-4"
       style={{ position: 'sticky', top: '96px', alignSelf: 'start' }}
     >
       {/* Facts card */}
-      <div className="bg-[#2D2D2A] border border-white/[0.1] rounded-2xl p-5">
-        <div className="font-mono text-[11px] tracking-[0.2em] uppercase text-[#E8E2D6]/50 mb-3">// fakty</div>
-        {[
-          ['Data', fmtDate(publishedAt)],
-          ['Autor', authorName],
-          ['Czas', formatReadingTimeShortPl(readingMinutes)],
-          ['Kategoria', cat || '—'],
-        ].map(([k, v]) => (
-          <div key={k} className="flex justify-between py-2 border-b border-dashed border-white/[0.08] last:border-0 text-sm">
-            <span className="font-mono text-[12px] tracking-[0.14em] uppercase text-[#E8E2D6]/50">{k}</span>
-            <span className="font-bold uppercase tracking-[0.04em] text-white">{v}</span>
-          </div>
-        ))}
-      </div>
-
-      {/* Tags card */}
-      {categories && categories.length > 0 && (
-        <div className="bg-[#2D2D2A] border border-white/[0.1] rounded-2xl p-5">
-          <div className="font-mono text-[11px] tracking-[0.2em] uppercase text-[#E8E2D6]/50 mb-3">// tagi</div>
-          <div className="flex flex-wrap gap-1.5">
-            {(categories as Category[]).map((c, i) => {
-              if (typeof c !== 'object') return null
-              return (
-                <Link
-                  key={i}
-                  href={`/posts?category=${c.slug}`}
-                  className="transition-opacity hover:opacity-80"
-                >
-                  <CategoryBadge category={c} variant="outline" />
-                </Link>
-              )
-            })}
-          </div>
+      <div className="w-full min-w-0 max-w-full bg-[#2D2D2A] border border-white/[0.1] rounded-2xl p-5">
+        <div className="font-mono text-[11px] tracking-[0.2em] uppercase text-[#E8E2D6]/50 mb-3">
+          // fakty
         </div>
-      )}
+        <dl className="flex flex-col">
+          {facts.map(({ label, value }, index) => (
+            <div
+              key={label}
+              className={[
+                'grid grid-cols-[minmax(4.5rem,auto)_minmax(0,1fr)] gap-x-3 gap-y-0.5 py-2.5 text-sm',
+                index < facts.length - 1 ? 'border-b border-dashed border-white/[0.08]' : '',
+              ].join(' ')}
+            >
+              <dt className="font-mono text-[12px] tracking-[0.14em] uppercase text-[#E8E2D6]/50 shrink-0">
+                {label}
+              </dt>
+              <dd className="min-w-0 font-bold uppercase tracking-[0.04em] text-white text-right leading-snug break-words">
+                {value}
+              </dd>
+            </div>
+          ))}
+        </dl>
+      </div>
 
       {/* CTA card */}
       <div
-        className="rounded-2xl p-5 border"
+        className="w-full min-w-0 max-w-full rounded-2xl p-5 border"
         style={{
           background: 'linear-gradient(180deg,rgba(255,154,66,.18),rgba(255,154,66,.04))',
           borderColor: 'rgba(255,154,66,.4)',
@@ -431,7 +467,7 @@ const MetaSidebar: React.FC<{ post: Post }> = ({ post }) => {
           // chcesz przyjechać?
         </div>
         <p className="text-[14px] text-[#E8E2D6]/60 mb-4 leading-snug">
-          Limit miejsc 120. Rejestracja trwa.
+          Nie zwlekaj! Rejestracja trwa.
         </p>
         <Button asChild size="sm" className="w-full">
           <Link href="/#zapis" scroll={false}>
@@ -454,7 +490,7 @@ const RelatedCard: React.FC<{ post: Post }> = ({ post }) => {
   return (
     <Link
       href={`/posts/${slug}`}
-      className="group flex flex-col rounded-[20px] overflow-hidden border border-white/[0.08] bg-[#2D2D2A] transition-all duration-300 hover:-translate-y-1 hover:border-[#FF9A42]/40"
+      className="group flex w-full flex-col rounded-[20px] overflow-hidden border border-white/[0.08] bg-[#2D2D2A] transition-all duration-300 hover:-translate-y-1 hover:border-[#FF9A42]/40"
     >
       <PostHeroImage heroImage={heroImage} gradient={gradient} size="33vw">
         {category && (
@@ -465,17 +501,19 @@ const RelatedCard: React.FC<{ post: Post }> = ({ post }) => {
         )}
       </PostHeroImage>
 
-      <div className="flex flex-col flex-1 p-5">
+      <div className="flex w-full min-w-0 flex-col flex-1 p-5">
         <span className="font-mono text-[11px] tracking-[0.18em] text-[#FF9A42] uppercase mb-2">
           {'// '}
           {category?.title || 'newsy'}
         </span>
-        <h3 className="font-rajdhani font-bold text-[20px] leading-[1.15] uppercase tracking-tight mb-2 group-hover:text-[#FF9A42] transition-colors">
+        <h3 className="font-rajdhani font-bold text-[20px] leading-[1.15] uppercase tracking-tight mb-2 group-hover:text-[#FF9A42] transition-colors w-full">
           <HighlightedText>{title}</HighlightedText>
         </h3>
         {excerpt && (
-          <p className="text-[#E8E2D6]/60 text-[14px] line-clamp-2 flex-1">
-            <HighlightedText>{excerpt}</HighlightedText>
+          <p className="w-full min-w-0 text-[#E8E2D6]/60 text-[14px] line-clamp-2 flex-1">
+            <HighlightedText as="span" className="block w-full">
+              {excerpt}
+            </HighlightedText>
           </p>
         )}
         <div className="mt-4 flex justify-between font-mono text-[11px] tracking-widest uppercase text-[#E8E2D6]/40">
