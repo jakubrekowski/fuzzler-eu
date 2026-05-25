@@ -183,14 +183,22 @@
   * {
     @apply border-border outline-ring/50;
   }
-  html, body {
+  html {
     background: #1b1b19;
     color: #fdf9f3;
     font-family: var(--font-rajdhani, 'Rajdhani'), sans-serif;
     font-size: 17px;
     line-height: 1.5;
     -webkit-font-smoothing: antialiased;
-    overflow-x: hidden;
+    overflow-x: clip;
+  }
+  body {
+    background: #1b1b19;
+    color: #fdf9f3;
+    font-family: var(--font-rajdhani, 'Rajdhani'), sans-serif;
+    font-size: 17px;
+    line-height: 1.5;
+    -webkit-font-smoothing: antialiased;
   }
   @media (prefers-reduced-motion: no-preference) {
     html {
@@ -223,10 +231,261 @@
   --tw-prose-links: #ff9a42;
   --tw-prose-bold: #fdf9f3;
   --tw-prose-bullets: #ff9a42;
+  --tw-prose-counters: #ff9a42;
   --tw-prose-quotes: #e8e2d6;
   --tw-prose-code: #ff9a42;
   --tw-prose-pre-bg: #2d2d2a;
   font-family: var(--font-rajdhani, 'Rajdhani'), sans-serif;
+}
+
+/* Tailwind preflight sets list-style: none — restore markers in rich text */
+.prose :is(ul, ol),
+.fuzz-article-body :is(ul, ol) {
+  list-style-position: outside;
+  padding-left: 1.5em;
+  margin: 0 0 1.25rem;
+}
+
+.prose ul,
+.fuzz-article-body ul,
+.fuzz-article-body ul.list-bullet {
+  list-style-type: disc;
+}
+
+.prose ol,
+.fuzz-article-body ol,
+.fuzz-article-body ol.list-number {
+  list-style-type: decimal;
+}
+
+.prose :is(ul, ol) :is(ul, ol),
+.fuzz-article-body :is(ul, ol) :is(ul, ol) {
+  margin-top: 0.5rem;
+  margin-bottom: 0.5rem;
+}
+
+.prose li,
+.fuzz-article-body li {
+  margin-bottom: 0.5rem;
+}
+
+.prose ul > li::marker,
+.fuzz-article-body ul > li::marker {
+  color: #ff9a42;
+}
+
+.prose ol > li::marker,
+.fuzz-article-body ol > li::marker {
+  color: #ff9a42;
+  font-weight: 700;
+}
+
+.fuzz-article-body li.nestedListItem {
+  list-style-type: none;
+  padding-left: 0;
+}
+
+/* Pull quote / blockquote (FuzzNews article + page prose) */
+.prose blockquote,
+.fuzz-article-body blockquote {
+  position: relative;
+  margin: 2rem 0;
+  padding: 1.5rem 1.75rem 1.5rem 2rem;
+  background: #2d2d2a;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-inline-start: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 14px;
+  font-size: 1.125rem;
+  line-height: 1.6;
+  color: #e8e2d6;
+  font-style: normal;
+}
+
+.prose blockquote::before,
+.fuzz-article-body blockquote::before {
+  content: '';
+  position: absolute;
+  left: 14px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 3px;
+  height: 58%;
+  min-height: 2.5rem;
+  max-height: calc(100% - 2rem);
+  background: #ff9a42;
+  border-radius: 2px;
+}
+
+.prose blockquote p,
+.fuzz-article-body blockquote p {
+  margin: 0;
+  color: inherit;
+}
+
+.prose blockquote p + p,
+.fuzz-article-body blockquote p + p {
+  margin-top: 0.875rem;
+}
+
+.prose blockquote p:not(:only-child):last-child,
+.fuzz-article-body blockquote p:not(:only-child):last-child {
+  font-family: var(--font-jetbrains, 'JetBrains Mono'), monospace;
+  font-size: 0.75rem;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: rgba(232, 226, 214, 0.85);
+}
+
+.prose blockquote cite,
+.fuzz-article-body blockquote cite {
+  display: block;
+  margin-top: 0.875rem;
+  font-style: normal;
+  font-family: var(--font-jetbrains, 'JetBrains Mono'), monospace;
+  font-size: 0.75rem;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: rgba(232, 226, 214, 0.85);
+}
+
+/* FuzzNews article body */
+.fuzz-article-body {
+  font-family: var(--font-rajdhani, 'Rajdhani'), sans-serif;
+  font-size: 18px;
+  line-height: 1.6;
+  color: #fdf9f3;
+}
+
+.fuzz-article-body h1 {
+  font-weight: 700;
+  font-size: clamp(2rem, 4vw, 2.75rem);
+  text-transform: uppercase;
+  letter-spacing: 0.01em;
+  line-height: 1.05;
+  margin: 2.5rem 0 1rem;
+  scroll-margin-top: 100px;
+}
+
+.fuzz-article-body h2 {
+  font-weight: 700;
+  font-size: 36px;
+  text-transform: uppercase;
+  letter-spacing: 0.01em;
+  line-height: 1.05;
+  margin: 3rem 0 1rem;
+  scroll-margin-top: 100px;
+}
+
+.fuzz-article-body h2 em {
+  font-style: normal;
+  color: #ff9a42;
+}
+
+.fuzz-article-body h3 {
+  font-weight: 700;
+  font-size: 22px;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  margin: 2rem 0 0.625rem;
+}
+
+.fuzz-article-body h4 {
+  font-weight: 700;
+  font-size: 18px;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  margin: 1.5rem 0 0.5rem;
+  color: #e8e2d6;
+}
+
+.fuzz-article-body p {
+  margin-bottom: 18px;
+  color: #fdf9f3;
+  font-size: 18px;
+}
+
+.fuzz-article-body p strong,
+.fuzz-article-body strong {
+  color: #fdf9f3;
+  font-weight: 700;
+}
+
+.fuzz-article-body em {
+  color: #ff9a42;
+  font-style: italic;
+}
+
+.fuzz-article-body a {
+  color: #ff9a42;
+  border-bottom: 1px dashed #ff9a42;
+  text-decoration: none;
+}
+
+.fuzz-article-body a:hover {
+  color: #fdf9f3;
+  border-bottom-color: #fdf9f3;
+}
+
+.fuzz-article-body :is(ul, ol) {
+  font-size: 18px;
+  color: #fdf9f3;
+}
+
+.fuzz-article-body li {
+  margin-bottom: 8px;
+}
+
+.fuzz-article-body hr {
+  margin: 2.5rem 0;
+  border: none;
+  border-top: 1px dashed rgba(253, 249, 243, 0.2);
+}
+
+.fuzz-article-body code {
+  font-family: var(--font-jetbrains, 'JetBrains Mono'), monospace;
+  font-size: 0.9em;
+  color: #ff9a42;
+  background: rgba(255, 154, 66, 0.1);
+  padding: 0.1em 0.35em;
+  border-radius: 4px;
+}
+
+.fuzz-article-body pre {
+  margin: 1.5rem 0;
+  padding: 1.25rem;
+  background: #2d2d2a;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 12px;
+  overflow-x: auto;
+}
+
+.fuzz-article-body pre code {
+  background: none;
+  padding: 0;
+}
+
+.fuzz-article-body figure {
+  margin: 32px 0;
+}
+
+.fuzz-article-body figcaption {
+  margin-top: 10px;
+  font-family: var(--font-jetbrains, 'JetBrains Mono'), monospace;
+  font-size: 12px;
+  letter-spacing: 0.16em;
+  color: #e8e2d6;
+  text-transform: uppercase;
+  text-align: center;
+}
+
+.fuzz-article-body img {
+  border-radius: 12px;
+}
+
+@media (max-width: 1100px) {
+  .fuzz-layout-grid {
+    grid-template-columns: 1fr !important;
+  }
 }
 
 /* ------------------------------------------------------------------ */

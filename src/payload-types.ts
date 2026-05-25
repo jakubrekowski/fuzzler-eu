@@ -232,6 +232,8 @@ export interface Page {
   };
   layout: (
     | CallToActionBlock
+    | EventBannerBlock
+    | CrewListBlock
     | ContentBlock
     | MediaBlock
     | ArchiveBlock
@@ -546,6 +548,98 @@ export interface CallToActionBlock {
   id?: string | null;
   blockName?: string | null;
   blockType: 'cta';
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "EventBannerBlock".
+ */
+export interface EventBannerBlock {
+  /**
+   * Displayed after the // prefix, e.g. dates and venue.
+   */
+  metaLine?: string | null;
+  /**
+   * Use [[text]] for the purple highlighted part.
+   */
+  heading: string;
+  showCapacity?: boolean | null;
+  capacityLimit?: number | null;
+  spotsRemaining?: number | null;
+  showCheckIcon?: boolean | null;
+  button: {
+    type?: ('reference' | 'custom') | null;
+    newTab?: boolean | null;
+    reference?:
+      | ({
+          relationTo: 'pages';
+          value: number | Page;
+        } | null)
+      | ({
+          relationTo: 'posts';
+          value: number | Post;
+        } | null);
+    url?: string | null;
+    label: string;
+    /**
+     * Choose how the link should be rendered.
+     */
+    appearance?: ('default' | 'outline' | 'disabled') | null;
+  };
+  id?: string | null;
+  blockName?: string | null;
+  blockType: 'eventBanner';
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "CrewListBlock".
+ */
+export interface CrewListBlock {
+  /**
+   * Enables smooth scrolling to this section (e.g. "crew").
+   */
+  anchor?: string | null;
+  tagline?: string | null;
+  /**
+   * Use [[text]] for the orange highlighted part.
+   */
+  title: string;
+  /**
+   * Shown on the right side of the header (desktop).
+   */
+  description?: string | null;
+  members?:
+    | {
+        photo?: (number | null) | Media;
+        name: string;
+        role: string;
+        accentColor: 'orange' | 'green' | 'white';
+        description: string;
+        note?: string | null;
+        button: {
+          type?: ('reference' | 'custom') | null;
+          newTab?: boolean | null;
+          reference?:
+            | ({
+                relationTo: 'pages';
+                value: number | Page;
+              } | null)
+            | ({
+                relationTo: 'posts';
+                value: number | Post;
+              } | null);
+          url?: string | null;
+          label: string;
+          /**
+           * Choose how the link should be rendered.
+           */
+          appearance?: ('default' | 'outline') | null;
+        };
+        id?: string | null;
+      }[]
+    | null;
+  id?: string | null;
+  blockName?: string | null;
+  blockType: 'crewList';
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
@@ -1465,6 +1559,8 @@ export interface PagesSelect<T extends boolean = true> {
     | T
     | {
         cta?: T | CallToActionBlockSelect<T>;
+        eventBanner?: T | EventBannerBlockSelect<T>;
+        crewList?: T | CrewListBlockSelect<T>;
         content?: T | ContentBlockSelect<T>;
         mediaBlock?: T | MediaBlockSelect<T>;
         archive?: T | ArchiveBlockSelect<T>;
@@ -1503,6 +1599,63 @@ export interface CallToActionBlockSelect<T extends boolean = true> {
     | T
     | {
         link?:
+          | T
+          | {
+              type?: T;
+              newTab?: T;
+              reference?: T;
+              url?: T;
+              label?: T;
+              appearance?: T;
+            };
+        id?: T;
+      };
+  id?: T;
+  blockName?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "EventBannerBlock_select".
+ */
+export interface EventBannerBlockSelect<T extends boolean = true> {
+  metaLine?: T;
+  heading?: T;
+  showCapacity?: T;
+  capacityLimit?: T;
+  spotsRemaining?: T;
+  showCheckIcon?: T;
+  button?:
+    | T
+    | {
+        type?: T;
+        newTab?: T;
+        reference?: T;
+        url?: T;
+        label?: T;
+        appearance?: T;
+      };
+  id?: T;
+  blockName?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "CrewListBlock_select".
+ */
+export interface CrewListBlockSelect<T extends boolean = true> {
+  anchor?: T;
+  tagline?: T;
+  title?: T;
+  description?: T;
+  members?:
+    | T
+    | {
+        photo?: T;
+        name?: T;
+        role?: T;
+        accentColor?: T;
+        description?: T;
+        note?: T;
+        button?:
           | T
           | {
               type?: T;

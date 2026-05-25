@@ -4,6 +4,7 @@ import { cn } from '@/utilities/ui'
 import {
   getCategoryBadgeStyles,
   hexToRgba,
+  isDarkBadgeColor,
   resolveCategoryBadgeColor,
 } from '@/utilities/categoryBadge'
 
@@ -29,6 +30,8 @@ export const CategoryBadge: React.FC<CategoryBadgeProps> = ({
   const { background, foreground } = getCategoryBadgeStyles(color)
 
   if (variant === 'pill') {
+    const pillTextColor = isDarkBadgeColor(background) ? foreground : background
+
     return (
       <span
         className={cn(
@@ -37,7 +40,7 @@ export const CategoryBadge: React.FC<CategoryBadgeProps> = ({
         )}
         style={{
           backgroundColor: hexToRgba(background, 0.15),
-          color: background,
+          color: pillTextColor,
         }}
       >
         {title}

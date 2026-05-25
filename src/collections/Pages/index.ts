@@ -16,6 +16,8 @@ import { Dashboard } from '../../blocks/Dashboard/config'
 import { FAQ } from '../../blocks/FAQ/config'
 import { SocialBlock } from '../../blocks/Social/config'
 import { PostsArchiveBlock } from '../../blocks/PostsArchive/config'
+import { EventBanner } from '../../blocks/EventBanner/config'
+import { CrewList } from '../../blocks/CrewList/config'
 import { hero } from '@/heros/config'
 import { slugField } from 'payload'
 import { populatePublishedAt } from '../../hooks/populatePublishedAt'
@@ -81,7 +83,7 @@ export const Pages: CollectionConfig<'pages'> = {
             {
               name: 'layout',
               type: 'blocks',
-              blocks: [CallToAction, Content, MediaBlock, Archive, FormBlock, MarqueeBlock, FeaturesBlock, PricingBlock, Schedule, Countdown, Dashboard, FAQ, SocialBlock, PostsArchiveBlock],
+              blocks: [CallToAction, EventBanner, CrewList, Content, MediaBlock, Archive, FormBlock, MarqueeBlock, FeaturesBlock, PricingBlock, Schedule, Countdown, Dashboard, FAQ, SocialBlock, PostsArchiveBlock],
               required: true,
               admin: {
                 initCollapsed: true,

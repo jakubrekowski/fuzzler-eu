@@ -28,7 +28,7 @@ export const SectionHeader: React.FC<SectionHeaderProps> = ({
             <HighlightedText>{tagline}</HighlightedText>
           </p>
         )}
-        <h2 className="text-5xl md:text-7xl font-bold uppercase tracking-tight font-rajdhani leading-[0.9]">
+        <h2 className="text-5xl md:text-7xl font-bold uppercase tracking-tight font-rajdhani leading-[0.9] text-cream">
           <HighlightedText>{title}</HighlightedText>
         </h2>
       </div>

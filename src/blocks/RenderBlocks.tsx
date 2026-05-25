@@ -16,11 +16,15 @@ import { DashboardBlockComponent } from '@/blocks/Dashboard/Component'
 import { FAQBlockComponent } from '@/blocks/FAQ/Component'
 import { SocialBlockComponent } from '@/blocks/Social/Component'
 import { PostsArchiveBlockComponent } from '@/blocks/PostsArchive/Component'
+import { EventBannerBlockComponent } from '@/blocks/EventBanner/Component'
+import { CrewListBlockComponent } from '@/blocks/CrewList/Component'
 
 const blockComponents = {
   archive: ArchiveBlock,
   content: ContentBlock,
   cta: CallToActionBlock,
+  eventBanner: EventBannerBlockComponent,
+  crewList: CrewListBlockComponent,
   formBlock: FormBlock,
   mediaBlock: MediaBlock,
   marquee: MarqueeBlockComponent,

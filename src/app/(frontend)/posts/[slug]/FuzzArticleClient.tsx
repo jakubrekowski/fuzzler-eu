@@ -16,6 +16,14 @@ import {
   getReadingTimeMinutes,
 } from '@/utilities/readingTime'
 
+/* ─── layout ─── */
+
+/** Fixed header (~96px) + gap below header when sidebars stick */
+const ARTICLE_STICKY_TOP = '7.75rem'
+
+const articleSidebarClass =
+  'lg:sticky lg:z-10 lg:self-start lg:max-h-[calc(100dvh-var(--article-sticky-top)-2rem)] lg:overflow-y-auto lg:overscroll-y-contain'
+
 /* ─── helpers ─── */
 
 const GRADIENTS = [
@@ -224,21 +232,19 @@ export const FuzzArticleClient: React.FC<Props> = ({ post, relatedPosts }) => {
 
       {/* ── 3-COLUMN LAYOUT ──────────────────────────────────── */}
       <div
-        className="fuzz-layout-grid max-w-[1180px] mx-auto px-6 md:px-8 py-12 min-w-0"
+        className="fuzz-layout-grid max-w-[1180px] mx-auto px-6 md:px-8 py-12 min-w-0 items-start"
         style={{
           display: 'grid',
           gridTemplateColumns: 'minmax(0, 240px) minmax(0, 1fr) minmax(0, 240px)',
           gap: '32px',
+          ['--article-sticky-top' as string]: ARTICLE_STICKY_TOP,
         }}
       >
         {/* TOC — hidden on mobile, sticky on desktop */}
         <TocSidebar post={post} />
 
-        {/* Article body */}
-        <article className="min-w-0">
-          <div className="fuzz-article-body">
-            <RichText data={post.content} enableGutter={false} enableProse={false} />
-          </div>
+        <article className="fuzz-article-body min-w-0">
+          <RichText data={post.content} enableGutter={false} enableProse={false} />
         </article>
 
         {/* Meta sidebar */}
@@ -269,24 +275,6 @@ export const FuzzArticleClient: React.FC<Props> = ({ post, relatedPosts }) => {
         </section>
       )}
 
-      {/* ── ARTICLE BODY STYLES ──────────────────────────────── */}
-      <style>{`
-        .fuzz-article-body { font-family: 'Rajdhani', sans-serif; font-size: 18px; line-height: 1.6; color: #FDF9F3; }
-        .fuzz-article-body h2 { font-weight: 700; font-size: 36px; text-transform: uppercase; letter-spacing: .01em; line-height: 1.05; margin: 48px 0 16px; scroll-margin-top: 100px; }
-        .fuzz-article-body h2 em { font-style: normal; color: #FF9A42; }
-        .fuzz-article-body h3 { font-weight: 700; font-size: 22px; text-transform: uppercase; letter-spacing: .04em; margin: 32px 0 10px; }
-        .fuzz-article-body p { margin-bottom: 18px; color: #FDF9F3; font-size: 18px; }
-        .fuzz-article-body p strong { color: #FDF9F3; font-weight: 700; }
-        .fuzz-article-body a { color: #FF9A42; border-bottom: 1px dashed #FF9A42; }
-        .fuzz-article-body ul, .fuzz-article-body ol { margin: 0 0 22px 22px; color: #FDF9F3; font-size: 18px; }
-        .fuzz-article-body li { margin-bottom: 8px; }
-        .fuzz-article-body ul li::marker { color: #FF9A42; }
-        .fuzz-article-body blockquote { margin: 32px 0; padding: 24px 28px; border-left: 4px solid #FF9A42; background: rgba(255,154,66,.06); border-radius: 0 16px 16px 0; font-size: 22px; line-height: 1.5; }
-        .fuzz-article-body blockquote cite { display: block; margin-top: 10px; font-style: normal; font-family: 'JetBrains Mono', monospace; font-size: 12px; letter-spacing: .18em; text-transform: uppercase; color: #E8E2D6; }
-        .fuzz-article-body figure { margin: 32px 0; }
-        .fuzz-article-body figcaption { margin-top: 10px; font-family: 'JetBrains Mono', monospace; font-size: 12px; letter-spacing: .16em; color: #E8E2D6; text-transform: uppercase; text-align: center; }
-        @media (max-width: 1100px) { .fuzz-layout-grid { grid-template-columns: 1fr !important; } }
-      `}</style>
     </>
   )
 }
@@ -305,7 +293,7 @@ const TocSidebar: React.FC<{ post: Post }> = ({ post }) => {
         const visible = entries.filter((e) => e.isIntersecting)
         if (visible.length) setActiveId(visible[0]!.target.id)
       },
-      { rootMargin: '-80px 0px -60% 0px' },
+      { rootMargin: '-124px 0px -55% 0px' },
     )
     headings.forEach((h) => observer.observe(h))
     return () => observer.disconnect()
@@ -332,11 +320,10 @@ const TocSidebar: React.FC<{ post: Post }> = ({ post }) => {
 
   return (
     <aside
-      className="hidden lg:block"
+      className={['hidden lg:block', articleSidebarClass, 'top-[var(--article-sticky-top)]'].join(
+        ' ',
+      )}
       style={{
-        position: 'sticky',
-        top: '96px',
-        alignSelf: 'start',
         fontFamily: "'JetBrains Mono',monospace",
         fontSize: '12px',
       }}
@@ -427,8 +414,11 @@ const MetaSidebar: React.FC<{ post: Post }> = ({ post }) => {
 
   return (
     <aside
-      className="hidden lg:flex w-full min-w-0 max-w-full flex-col gap-4"
-      style={{ position: 'sticky', top: '96px', alignSelf: 'start' }}
+      className={[
+        'hidden lg:flex w-full min-w-0 max-w-full flex-col gap-4',
+        articleSidebarClass,
+        'top-[var(--article-sticky-top)]',
+      ].join(' ')}
     >
       {/* Facts card */}
       <div className="w-full min-w-0 max-w-full bg-[#2D2D2A] border border-white/[0.1] rounded-2xl p-5">
