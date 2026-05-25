@@ -25,8 +25,16 @@ export const PricingBlockComponent: React.FC<PricingBlockProps> = (props) => {
   const gridTemplateColumns = `1.5fr repeat(${numPlans}, minmax(0, 1fr))`
 
   return (
-    <div className="container py-24" id={anchor || undefined}>
-      <SectionHeader tagline={tagline} title={title} description={description} />
+    <section
+      id={anchor || undefined}
+      className="relative overflow-hidden"
+      style={{
+        background:
+          'radial-gradient(80% 60% at 25% 15%, rgba(75,0,130,.55) 0%, transparent 60%), radial-gradient(55% 50% at 90% 75%, rgba(42,0,73,.5) 0%, transparent 55%), linear-gradient(180deg, #1f0d35 0%, #1b1b19 85%)',
+      }}
+    >
+      <div className="container relative py-24">
+        <SectionHeader tagline={tagline} title={title} description={description} />
 
       {/* Pricing Table */}
       <div className="bg-[#1a1a1a]/50 border border-white/10 rounded-[32px] overflow-hidden mb-12 shadow-2xl backdrop-blur-sm">
@@ -200,6 +208,7 @@ export const PricingBlockComponent: React.FC<PricingBlockProps> = (props) => {
           )}
         </div>
       </div>
-    </div>
+      </div>
+    </section>
   )
 }

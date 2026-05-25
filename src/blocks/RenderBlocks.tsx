@@ -35,7 +35,7 @@ const blockComponents = {
 }
 
 /** Block types that should render full-bleed (no vertical margin wrapper). */
-const FULL_BLEED_BLOCKS = new Set(['marquee'])
+const FULL_BLEED_BLOCKS = new Set(['marquee', 'pricing'])
 
 export const RenderBlocks: React.FC<{
   blocks: Page['layout'][0][]
