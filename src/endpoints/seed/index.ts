@@ -22,7 +22,14 @@ const collections: CollectionSlug[] = [
 
 const globals: GlobalSlug[] = ['header', 'footer']
 
-const categories = ['Technology', 'News', 'Finance', 'Design', 'Software', 'Engineering']
+const categories: { title: string; badgeColor: 'orange' | 'red' | 'purple' | 'green' | 'white' | 'cream' }[] = [
+  { title: 'Technology', badgeColor: 'purple' },
+  { title: 'News', badgeColor: 'red' },
+  { title: 'Finance', badgeColor: 'green' },
+  { title: 'Design', badgeColor: 'cream' },
+  { title: 'Software', badgeColor: 'orange' },
+  { title: 'Engineering', badgeColor: 'white' },
+]
 
 // Next.js revalidation errors are normal when seeding the database without a server running
 // i.e. running `yarn seed` locally instead of using the admin UI within an active app
@@ -129,8 +136,9 @@ export const seed = async ({
       payload.create({
         collection: 'categories',
         data: {
-          title: category,
-          slug: category,
+          title: category.title,
+          slug: category.title,
+          badgeColor: category.badgeColor,
         },
       }),
     ),

@@ -391,6 +391,14 @@ export interface Post {
   id: number;
   title: string;
   heroImage?: (number | null) | Media;
+  /**
+   * Krótki opis na karty i listy wpisów. Oddzielny od leadu i opisu SEO.
+   */
+  description?: string | null;
+  /**
+   * Wstęp wyświetlany pod tytułem na stronie pojedynczego wpisu.
+   */
+  lead?: string | null;
   content: {
     root: {
       type: string;
@@ -440,6 +448,10 @@ export interface Post {
 export interface Category {
   id: number;
   title: string;
+  /**
+   * Kolor etykiety kategorii na kartach i stronach wpisów.
+   */
+  badgeColor: 'orange' | 'red' | 'purple' | 'green' | 'white' | 'cream';
   /**
    * When enabled, the slug will auto-generate from the title field on save and autosave.
    */
@@ -1821,6 +1833,8 @@ export interface PostsArchiveBlockSelect<T extends boolean = true> {
 export interface PostsSelect<T extends boolean = true> {
   title?: T;
   heroImage?: T;
+  description?: T;
+  lead?: T;
   content?: T;
   relatedPosts?: T;
   categories?: T;
@@ -1945,6 +1959,7 @@ export interface MediaSelect<T extends boolean = true> {
  */
 export interface CategoriesSelect<T extends boolean = true> {
   title?: T;
+  badgeColor?: T;
   generateSlug?: T;
   slug?: T;
   parent?: T;

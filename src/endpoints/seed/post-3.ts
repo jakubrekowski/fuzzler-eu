@@ -257,6 +257,8 @@ export const post3: (args: PostArgs) => RequiredDataFromCollectionSlug<'posts'> 
       },
     },
     heroImage: heroImage.id,
+    description: 'Finanse i strategia — krótki opis na listy i karty.',
+    lead: `Pieniądz to nie tylko waluta — to język. Zanurz się w jego niuanse, gdzie strategia spotyka intuicję na morzu finansów.`,
     meta: {
       description: `Money isn't just currency; it's a language. Dive deep into its nuances, where strategy meets intuition in the vast sea of finance.`,
       image: heroImage.id,

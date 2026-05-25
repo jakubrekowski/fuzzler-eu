@@ -220,6 +220,8 @@ export const post2: (args: PostArgs) => RequiredDataFromCollectionSlug<'posts'> 
       },
     },
     heroImage: heroImage.id,
+    description: 'Historie spoza nagłówków — opis na karty wpisów.',
+    lead: 'Odkryj to, co niewypowiedziane i pomijane. Powiększone spojrzenie w zakamarki świata, gdzie każda historia zasługuje na światło reflektorów.',
     meta: {
       description:
         'Explore the untold and overlooked. A magnified view into the corners of the world, where every story deserves its spotlight.',

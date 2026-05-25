@@ -29,6 +29,8 @@ export default async function Page() {
         title: true,
         slug: true,
         categories: true,
+        description: true,
+        content: true,
         meta: true,
         publishedAt: true,
         heroImage: true,
@@ -49,7 +51,8 @@ export default async function Page() {
         title: true,
         slug: true,
         categories: true,
-        meta: true,
+        description: true,
+        content: true,
         publishedAt: true,
         heroImage: true,
       },
@@ -84,7 +87,7 @@ export default async function Page() {
 
 export function generateMetadata(): Metadata {
   return {
-    title: 'Furr Wieści — Fuzzler',
+    title: 'FuzzNews — Fuzzler',
     description:
       'Co u nas piszczy. Aktualizacje programu, nowi prowadzący, kulisy organizacji i fotorelacje z poprzednich edycji.',
   }

@@ -3,11 +3,18 @@
 import React, { useState, useEffect, useRef } from 'react'
 import Link from 'next/link'
 import { Button, ButtonArrow } from '@/components/ui/button'
-import type { Post } from '@/payload-types'
-import { Media } from '@/components/Media'
+import type { Category, Post } from '@/payload-types'
+import { PostHeroImage } from '@/components/PostHeroImage'
 import RichText from '@/components/RichText'
+import { CategoryBadge } from '@/components/CategoryBadge'
 import { HighlightedText } from '@/components/HighlightedText'
+import { getPrimaryCategory } from '@/utilities/categoryBadge'
 import { useHeaderTheme } from '@/providers/HeaderTheme'
+import {
+  formatReadingTimePl,
+  formatReadingTimeShortPl,
+  getReadingTimeMinutes,
+} from '@/utilities/readingTime'
 
 /* ─── helpers ─── */
 
@@ -25,16 +32,9 @@ function pickGradient(seed: string | number) {
   return GRADIENTS[Math.abs(h) % GRADIENTS.length]!
 }
 
-const HATCH = 'repeating-linear-gradient(-45deg,transparent 0 12px,rgba(0,0,0,.18) 12px 13px)'
-
 function fmtDate(iso?: string | null) {
   if (!iso) return ''
   return new Date(iso).toLocaleDateString('pl-PL', { day: '2-digit', month: '2-digit', year: 'numeric' })
-}
-
-function categoryLabel(post: Post) {
-  const c = post.categories?.[0]
-  return typeof c === 'object' ? c.title : ''
 }
 
 function authorInitial(name?: string | null) {
@@ -74,11 +74,14 @@ export const FuzzArticleClient: React.FC<Props> = ({ post, relatedPosts }) => {
   const { setHeaderTheme } = useHeaderTheme()
   useEffect(() => { setHeaderTheme('dark') }, [setHeaderTheme])
 
-  const { title, categories, heroImage, populatedAuthors, publishedAt, meta } = post
-  const cat = categoryLabel(post)
+  const { title, heroImage, populatedAuthors, publishedAt, lead } = post
+  const category = getPrimaryCategory(post)
+  const cat = category?.title ?? ''
   const gradient = pickGradient(post.id)
   const author = populatedAuthors?.[0]
   const authorName = author?.name ?? 'Redakcja'
+  const readingMinutes = getReadingTimeMinutes(post.content)
+  const displayLead = lead || post.description || null
 
   function handleCopyLink() {
     navigator.clipboard.writeText(window.location.href).catch(() => {})
@@ -101,7 +104,7 @@ export const FuzzArticleClient: React.FC<Props> = ({ post, relatedPosts }) => {
           <nav className="flex items-center gap-2 font-mono text-[11px] uppercase tracking-[0.18em] text-[#E8E2D6]/50 mb-6">
             <Link href="/" className="hover:text-[#FF9A42] transition-colors">Fuzzler</Link>
             <span className="text-[#FF9A42]">/</span>
-            <Link href="/posts" className="hover:text-[#FF9A42] transition-colors">Wieści</Link>
+            <Link href="/posts" className="hover:text-[#FF9A42] transition-colors">FuzzNews</Link>
             <span className="text-[#FF9A42]">/</span>
             <span className="text-[#E8E2D6]/70 truncate max-w-[20ch]">
               <HighlightedText>{title}</HighlightedText>
@@ -109,8 +112,17 @@ export const FuzzArticleClient: React.FC<Props> = ({ post, relatedPosts }) => {
           </nav>
 
           {/* category badge */}
-          <span className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-[#FF9A42]/15 text-[#FF9A42] font-mono text-[12px] tracking-[0.2em] uppercase mb-5">
-            // {cat || 'newsy'} · {fmtDate(publishedAt)} · 6 min czytania
+          <span className="inline-flex items-center gap-2 mb-5 flex-wrap">
+            {category ? (
+              <CategoryBadge category={category} variant="pill" />
+            ) : (
+              <span className="inline-flex items-center px-4 py-1.5 rounded-full bg-[#FF9A42]/15 text-[#FF9A42] font-mono text-[12px] tracking-[0.2em] uppercase">
+                // newsy
+              </span>
+            )}
+            <span className="font-mono text-[12px] tracking-[0.2em] text-[#E8E2D6]/50 uppercase">
+              · {fmtDate(publishedAt)} · {formatReadingTimePl(readingMinutes)}
+            </span>
           </span>
 
           {/* title */}
@@ -122,9 +134,9 @@ export const FuzzArticleClient: React.FC<Props> = ({ post, relatedPosts }) => {
           </h1>
 
           {/* lede */}
-          {meta?.description && (
+          {displayLead && (
             <p className="text-[#E8E2D6]/70 text-xl leading-relaxed max-w-[62ch] mb-7">
-              <HighlightedText>{meta.description}</HighlightedText>
+              <HighlightedText>{displayLead}</HighlightedText>
             </p>
           )}
 
@@ -171,26 +183,20 @@ export const FuzzArticleClient: React.FC<Props> = ({ post, relatedPosts }) => {
             </div>
           </div>
 
-          {/* hero image */}
-          <div
-            className={`relative overflow-hidden rounded-t-3xl bg-gradient-to-br ${gradient}`}
-            style={{ aspectRatio: '21/9' }}
+          <PostHeroImage
+            heroImage={heroImage}
+            gradient={gradient}
+            priority
+            size="100vw"
+            className="rounded-t-3xl"
           >
-            <div className="absolute inset-0" style={{ backgroundImage: HATCH }} />
-            {heroImage && typeof heroImage === 'object' && (
-              <Media
-                resource={heroImage}
-                priority
-                className="absolute inset-0 w-full h-full object-cover"
-              />
-            )}
             <span className="absolute top-4 left-4 z-10 bg-white text-[#2D2D2A] font-bold text-[11px] uppercase tracking-[0.16em] px-3 py-1.5 rounded-md">
               ★ Featured
             </span>
             <span className="absolute bottom-4 left-4 z-10 font-mono text-[11px] tracking-[0.16em] text-white/70 uppercase">
               // {fmtDate(publishedAt)} · Fuzzler
             </span>
-          </div>
+          </PostHeroImage>
         </div>
       </section>
 
@@ -223,10 +229,10 @@ export const FuzzArticleClient: React.FC<Props> = ({ post, relatedPosts }) => {
           <div className="max-w-[1180px] mx-auto">
             <div className="flex items-end justify-between gap-4 mb-7">
               <h2 className="font-rajdhani font-bold text-4xl uppercase leading-none">
-                Powiązane <em className="not-italic text-[#FF9A42]">wieści</em>
+                Powiązane z <em className="not-italic text-[#FF9A42]">FuzzNews</em>
               </h2>
               <Link href="/posts" className="font-mono text-[12px] tracking-[0.18em] uppercase text-[#FF9A42] hover:underline shrink-0">
-                Wszystkie wieści ↗
+                Wszystkie FuzzNews ↗
               </Link>
             </div>
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
@@ -309,7 +315,7 @@ const TocSidebar: React.FC<{ post: Post }> = ({ post }) => {
           href="/posts"
           className="font-mono text-[11px] tracking-[0.16em] uppercase text-[#E8E2D6]/40 hover:text-[#FF9A42] transition-colors flex items-center gap-2"
         >
-          ← Wszystkie wieści
+          ← Wszystkie FuzzNews
         </Link>
       </div>
     </aside>
@@ -366,8 +372,10 @@ const TocList: React.FC<{ activeId: string }> = ({ activeId }) => {
 
 const MetaSidebar: React.FC<{ post: Post }> = ({ post }) => {
   const { publishedAt, populatedAuthors, categories } = post
-  const cat = categoryLabel(post)
+  const category = getPrimaryCategory(post)
+  const cat = category?.title ?? ''
   const authorName = populatedAuthors?.[0]?.name ?? 'Redakcja'
+  const readingMinutes = getReadingTimeMinutes(post.content)
 
   return (
     <aside
@@ -380,7 +388,7 @@ const MetaSidebar: React.FC<{ post: Post }> = ({ post }) => {
         {[
           ['Data', fmtDate(publishedAt)],
           ['Autor', authorName],
-          ['Czas', '6 min'],
+          ['Czas', formatReadingTimeShortPl(readingMinutes)],
           ['Kategoria', cat || '—'],
         ].map(([k, v]) => (
           <div key={k} className="flex justify-between py-2 border-b border-dashed border-white/[0.08] last:border-0 text-sm">
@@ -395,16 +403,15 @@ const MetaSidebar: React.FC<{ post: Post }> = ({ post }) => {
         <div className="bg-[#2D2D2A] border border-white/[0.1] rounded-2xl p-5">
           <div className="font-mono text-[11px] tracking-[0.2em] uppercase text-[#E8E2D6]/50 mb-3">// tagi</div>
           <div className="flex flex-wrap gap-1.5">
-            {(categories as any[]).map((c, i) => {
-              const label = typeof c === 'object' ? c.title : ''
-              const catSlug = typeof c === 'object' ? c.slug : ''
+            {(categories as Category[]).map((c, i) => {
+              if (typeof c !== 'object') return null
               return (
                 <Link
                   key={i}
-                  href={`/posts?category=${catSlug}`}
-                  className="px-2.5 py-1.5 border border-white/[0.1] rounded-full font-mono text-[11px] tracking-[0.14em] uppercase text-[#E8E2D6]/50 hover:text-[#FF9A42] hover:border-[#FF9A42] transition-all"
+                  href={`/posts?category=${c.slug}`}
+                  className="transition-opacity hover:opacity-80"
                 >
-                  #{label}
+                  <CategoryBadge category={c} variant="outline" />
                 </Link>
               )
             })}
@@ -439,44 +446,36 @@ const MetaSidebar: React.FC<{ post: Post }> = ({ post }) => {
 /* ═══════════════════════════════════ RELATED CARD ═══════════════════════════ */
 
 const RelatedCard: React.FC<{ post: Post }> = ({ post }) => {
-  const { slug, title, meta, publishedAt } = post
-  const cat = categoryLabel(post)
+  const { slug, title, publishedAt, heroImage } = post
+  const category = getPrimaryCategory(post)
   const gradient = pickGradient(post.id)
+  const excerpt = post.description || post.meta?.description || null
 
   return (
     <Link
       href={`/posts/${slug}`}
       className="group flex flex-col rounded-[20px] overflow-hidden border border-white/[0.08] bg-[#2D2D2A] transition-all duration-300 hover:-translate-y-1 hover:border-[#FF9A42]/40"
     >
-      <div
-        className={`relative overflow-hidden bg-gradient-to-br ${gradient}`}
-        style={{ aspectRatio: '4/3' }}
-      >
-        <div className="absolute inset-0" style={{ backgroundImage: 'repeating-linear-gradient(-45deg,transparent 0 10px,rgba(0,0,0,.18) 10px 11px)' }} />
-        {post.heroImage && typeof post.heroImage === 'object' && (
-          <Media
-            resource={post.heroImage}
-            size="33vw"
-            className="absolute inset-0 w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+      <PostHeroImage heroImage={heroImage} gradient={gradient} size="33vw">
+        {category && (
+          <CategoryBadge
+            category={category}
+            className="absolute top-3 left-3 text-[10px] px-2.5 py-1 rounded-md"
           />
         )}
-        {cat && (
-          <span className="absolute top-3 left-3 z-10 bg-white text-[#2D2D2A] font-bold text-[10px] uppercase tracking-[0.14em] px-2.5 py-1 rounded-md">
-            {cat}
-          </span>
-        )}
-      </div>
+      </PostHeroImage>
 
       <div className="flex flex-col flex-1 p-5">
         <span className="font-mono text-[11px] tracking-[0.18em] text-[#FF9A42] uppercase mb-2">
-          // {cat || 'newsy'}
+          {'// '}
+          {category?.title || 'newsy'}
         </span>
         <h3 className="font-rajdhani font-bold text-[20px] leading-[1.15] uppercase tracking-tight mb-2 group-hover:text-[#FF9A42] transition-colors">
           <HighlightedText>{title}</HighlightedText>
         </h3>
-        {meta?.description && (
+        {excerpt && (
           <p className="text-[#E8E2D6]/60 text-[14px] line-clamp-2 flex-1">
-            <HighlightedText>{meta.description}</HighlightedText>
+            <HighlightedText>{excerpt}</HighlightedText>
           </p>
         )}
         <div className="mt-4 flex justify-between font-mono text-[11px] tracking-widest uppercase text-[#E8E2D6]/40">

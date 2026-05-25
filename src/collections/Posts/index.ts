@@ -42,6 +42,8 @@ export const Posts: CollectionConfig<'posts'> = {
     title: true,
     slug: true,
     categories: true,
+    description: true,
+    lead: true,
     meta: {
       image: true,
       description: true,
@@ -80,6 +82,23 @@ export const Posts: CollectionConfig<'posts'> = {
               name: 'heroImage',
               type: 'upload',
               relationTo: 'media',
+            },
+            {
+              name: 'description',
+              type: 'textarea',
+              label: 'Opis (karty)',
+              admin: {
+                description:
+                  'Krótki opis na karty i listy wpisów. Oddzielny od leadu i opisu SEO.',
+              },
+            },
+            {
+              name: 'lead',
+              type: 'textarea',
+              label: 'Lead (strona artykułu)',
+              admin: {
+                description: 'Wstęp wyświetlany pod tytułem na stronie pojedynczego wpisu.',
+              },
             },
             {
               name: 'content',
@@ -148,7 +167,11 @@ export const Posts: CollectionConfig<'posts'> = {
               relationTo: 'media',
             }),
 
-            MetaDescriptionField({}),
+            MetaDescriptionField({
+              admin: {
+                description: 'Opis dla wyszukiwarek i podglądu linków (Open Graph).',
+              },
+            }),
             PreviewField({
               // if the `generateUrl` function is configured
               hasGenerateFn: true,

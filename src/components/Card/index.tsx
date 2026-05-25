@@ -6,9 +6,12 @@ import React, { Fragment } from 'react'
 
 import type { Post } from '@/payload-types'
 
-import { Media } from '@/components/Media'
+import { PostHeroImage } from '@/components/PostHeroImage'
 
-export type CardPostData = Pick<Post, 'slug' | 'categories' | 'meta' | 'title'>
+export type CardPostData = Pick<
+  Post,
+  'slug' | 'categories' | 'meta' | 'title' | 'description' | 'heroImage'
+>
 
 export const Card: React.FC<{
   alignItems?: 'center'
@@ -21,12 +24,12 @@ export const Card: React.FC<{
   const { card, link } = useClickableCard({})
   const { className, doc, relationTo, showCategories, title: titleFromProps } = props
 
-  const { slug, categories, meta, title } = doc || {}
-  const { description, image: metaImage } = meta || {}
+  const { slug, categories, meta, title, description: postDescription, heroImage } = doc || {}
+  const excerpt = postDescription || meta?.description
 
   const hasCategories = categories && Array.isArray(categories) && categories.length > 0
   const titleToUse = titleFromProps || title
-  const sanitizedDescription = description?.replace(/\s/g, ' ') // replace non-breaking space with white space
+  const sanitizedDescription = excerpt?.replace(/\s/g, ' ')
   const href = `/${relationTo}/${slug}`
 
   return (
@@ -37,21 +40,12 @@ export const Card: React.FC<{
       )}
       ref={card.ref}
     >
-      {/* Thumb */}
-      <div className="relative w-full aspect-[4/3] bg-gradient-to-br from-indigo to-red overflow-hidden">
-        {!metaImage && (
-          <div
-            className="absolute inset-0"
-            style={{
-              backgroundImage:
-                'repeating-linear-gradient(-45deg, rgba(0,0,0,0) 0 10px, rgba(0,0,0,0.18) 10px 11px)',
-            }}
-          />
-        )}
-        {metaImage && typeof metaImage !== 'string' && (
-          <Media resource={metaImage} mediaSize="medium" size="33vw" imgClassName="object-cover w-full h-full" />
-        )}
-      </div>
+      <PostHeroImage
+        heroImage={heroImage}
+        gradient="from-indigo to-red"
+        size="33vw"
+        className="w-full"
+      />
 
       {/* Body */}
       <div className="p-[18px] flex flex-col flex-1">
@@ -80,7 +74,7 @@ export const Card: React.FC<{
             </Link>
           </h3>
         )}
-        {description && (
+        {excerpt && (
           <p className="text-cream-dim text-[15px] flex-1">{sanitizedDescription}</p>
         )}
       </div>

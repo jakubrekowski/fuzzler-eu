@@ -303,6 +303,9 @@ export const post1: (args: PostArgs) => RequiredDataFromCollectionSlug<'posts'> 
       },
     },
     heroImage: heroImage.id,
+    description:
+      'Nowe trendy w innowacjach i technologii — skrót dla kart i list wpisów.',
+    lead: 'Zanurz się w cuda nowoczesnej innowacji, gdzie jedyną stałą jest zmiana. Podróż, w której piksele i dane tworzą przyszłość.',
     meta: {
       description:
         'Dive into the marvels of modern innovation, where the only constant is change. A journey where pixels and data converge to craft the future.',

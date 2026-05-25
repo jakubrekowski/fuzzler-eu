@@ -4,10 +4,16 @@ import React, { useState, useMemo, useEffect } from 'react'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 import type { Post, Category } from '@/payload-types'
-import { Media } from '@/components/Media'
-import { Button, ButtonArrow } from '@/components/ui/button'
+import { PostHeroImage } from '@/components/PostHeroImage'
 import { useHeaderTheme } from '@/providers/HeaderTheme'
+import { CategoryBadge } from '@/components/CategoryBadge'
 import { HighlightedText } from '@/components/HighlightedText'
+import { getPrimaryCategory } from '@/utilities/categoryBadge'
+import {
+  formatReadingTimePl,
+  formatReadingTimeShortPl,
+  getReadingTimeMinutes,
+} from '@/utilities/readingTime'
 
 /* ─────────────────────────────────────────── helpers ── */
 
@@ -26,9 +32,6 @@ function pickGradient(seed: string | number): string {
   return GRADIENTS[Math.abs(hash) % GRADIENTS.length]!
 }
 
-const HATCH =
-  'repeating-linear-gradient(-45deg, transparent 0 10px, rgba(0,0,0,.18) 10px 11px)'
-
 function fmtDate(iso?: string | null) {
   if (!iso) return ''
   return new Date(iso).toLocaleDateString('pl-PL', {
@@ -38,9 +41,8 @@ function fmtDate(iso?: string | null) {
   })
 }
 
-function categoryLabel(post: Post): string {
-  const cat = post.categories?.[0]
-  return typeof cat === 'object' ? cat.title : ''
+function cardDescription(post: Post): string | null | undefined {
+  return post.description || post.meta?.description || null
 }
 
 /* ─────────────────────────────────────────── types ── */
@@ -93,6 +95,7 @@ export const FuzzNewsClient: React.FC<FuzzNewsClientProps> = ({
       posts = posts.filter(
         (p) =>
           p.title.toLowerCase().includes(q) ||
+          p.description?.toLowerCase().includes(q) ||
           p.meta?.description?.toLowerCase().includes(q),
       )
     }
@@ -128,7 +131,7 @@ export const FuzzNewsClient: React.FC<FuzzNewsClientProps> = ({
               Fuzzler
             </Link>
             <span className="text-[#FF9A42]">/</span>
-            <span className="text-[#E8E2D6]/80">Wieści</span>
+            <span className="text-[#E8E2D6]/80">FuzzNews</span>
           </nav>
 
           {/* title + meta row */}
@@ -136,8 +139,8 @@ export const FuzzNewsClient: React.FC<FuzzNewsClientProps> = ({
             <div>
               <h1 className="font-rajdhani font-bold uppercase leading-[0.86] tracking-tight"
                 style={{ fontSize: 'clamp(72px, 11vw, 148px)' }}>
-                Furr<br />
-                Wieś<em className="not-italic text-[#FF9A42]">ci</em>
+                Fuzz<br />
+                <em className="not-italic text-[#FF9A42]">News</em>
               </h1>
             </div>
             <div>
@@ -153,10 +156,6 @@ export const FuzzNewsClient: React.FC<FuzzNewsClientProps> = ({
                 <span className="inline-flex items-center gap-2">
                   <span className="w-1.5 h-1.5 bg-[#FF9A42] rotate-45 shrink-0" />
                   Aktualizacja: {new Date().toLocaleDateString('pl-PL')}
-                </span>
-                <span className="inline-flex items-center gap-2">
-                  <span className="w-1.5 h-1.5 bg-[#FF9A42] rotate-45 shrink-0" />
-                  RSS dostępny
                 </span>
               </div>
             </div>
@@ -197,7 +196,7 @@ export const FuzzNewsClient: React.FC<FuzzNewsClientProps> = ({
             <span>⌕</span>
             <input
               type="search"
-              placeholder="Szukaj w wieściach…"
+              placeholder="Szukaj w FuzzNews…"
               value={search}
               onChange={(e) => setSearch(e.target.value)}
               className="bg-transparent border-0 outline-none text-white placeholder:text-[#E8E2D6]/40 w-48 font-mono text-[13px]"
@@ -234,7 +233,7 @@ export const FuzzNewsClient: React.FC<FuzzNewsClientProps> = ({
               // 02 — wszystkie wpisy
             </div>
             <h2 className="font-rajdhani font-bold text-4xl md:text-5xl uppercase leading-none tracking-tight">
-              Najnowsze <em className="not-italic text-[#FF9A42]">wieści</em>
+              Najnowsze <em className="not-italic text-[#FF9A42]">FuzzNews</em>
             </h2>
           </div>
 
@@ -291,8 +290,6 @@ export const FuzzNewsClient: React.FC<FuzzNewsClientProps> = ({
           />
         )}
 
-        {/* ── NEWSLETTER ─────────────────────────────────────── */}
-        <NewsletterStrip />
       </main>
     </>
   )
@@ -329,35 +326,25 @@ const FilterChip: React.FC<{
 ══════════════════════════════════════════════════════════════════════════ */
 
 const FeatHeroCard: React.FC<{ post: Post }> = ({ post }) => {
-  const { slug, title, meta, publishedAt, categories, heroImage, populatedAuthors } = post
-  const cat = categoryLabel(post)
+  const { slug, title, publishedAt, heroImage, populatedAuthors } = post
+  const category = getPrimaryCategory(post)
+  const cat = category?.title ?? ''
   const gradient = pickGradient(post.id)
   const author = populatedAuthors?.[0]?.name
+  const excerpt = cardDescription(post)
+  const readingMinutes = getReadingTimeMinutes(post.content)
 
   return (
     <Link
       href={`/posts/${slug}`}
       className="group relative flex flex-col rounded-3xl overflow-hidden border border-white/[0.08] bg-[#2D2D2A] min-h-[420px] transition-all duration-300 hover:-translate-y-1 hover:border-[#FF9A42]/40"
     >
-      {/* thumb */}
-      <div
-        className={`relative overflow-hidden bg-gradient-to-br ${gradient}`}
-        style={{ aspectRatio: '16/9' }}
-      >
-        <div className="absolute inset-0" style={{ backgroundImage: HATCH, opacity: 0.8 }} />
-        {heroImage && typeof heroImage === 'object' && (
-          <Media
-            resource={heroImage}
-            size="60vw"
-            className="absolute inset-0 w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
-          />
-        )}
+      <PostHeroImage heroImage={heroImage} gradient={gradient} size="60vw">
         <span className="absolute top-3.5 left-3.5 z-10 bg-white text-[#2D2D2A] font-bold text-[11px] uppercase tracking-[0.16em] px-3 py-1.5 rounded-md">
           ★ Featured
         </span>
-      </div>
+      </PostHeroImage>
 
-      {/* body */}
       <div className="flex flex-col flex-1 p-7">
         <span className="font-mono text-[12px] tracking-[0.2em] text-[#FF9A42] uppercase mb-2.5">
           // {cat || 'newsy'} · {fmtDate(publishedAt)}
@@ -365,13 +352,16 @@ const FeatHeroCard: React.FC<{ post: Post }> = ({ post }) => {
         <h2 className="font-rajdhani font-bold text-[34px] leading-[1.05] uppercase tracking-tight mb-3 group-hover:text-[#FF9A42] transition-colors">
           <HighlightedText>{title}</HighlightedText>
         </h2>
-        {meta?.description && (
+        {excerpt && (
           <p className="text-[#E8E2D6]/60 text-base flex-1 line-clamp-3 max-w-[54ch]">
-            <HighlightedText>{meta.description}</HighlightedText>
+            <HighlightedText>{excerpt}</HighlightedText>
           </p>
         )}
         <div className="mt-5 flex justify-between items-center font-mono text-[11px] tracking-[0.16em] text-[#E8E2D6]/40 uppercase">
-          <span>{author ? `${author} · ` : ''}6 min czytania</span>
+          <span>
+            {author ? `${author} · ` : ''}
+            {formatReadingTimePl(readingMinutes)}
+          </span>
           <span className="text-[#FF9A42] font-bold">Czytaj ↗</span>
         </div>
       </div>
@@ -384,31 +374,26 @@ const FeatHeroCard: React.FC<{ post: Post }> = ({ post }) => {
 ══════════════════════════════════════════════════════════════════════════ */
 
 const FeatSideCard: React.FC<{ post: Post }> = ({ post }) => {
-  const { slug, title, meta, publishedAt, heroImage } = post
-  const cat = categoryLabel(post)
+  const { slug, title, publishedAt, heroImage } = post
+  const category = getPrimaryCategory(post)
+  const cat = category?.title ?? ''
   const gradient = pickGradient(post.id)
+  const excerpt = cardDescription(post)
+  const readingMinutes = getReadingTimeMinutes(post.content)
 
   return (
     <Link
       href={`/posts/${slug}`}
       className="group flex flex-col flex-1 rounded-3xl overflow-hidden border border-white/[0.08] bg-[#2D2D2A] transition-all duration-300 hover:-translate-y-1 hover:border-[#FF9A42]/40"
     >
-      <div
-        className={`relative overflow-hidden bg-gradient-to-br ${gradient}`}
-        style={{ aspectRatio: '21/9' }}
-      >
-        <div className="absolute inset-0" style={{ backgroundImage: HATCH, opacity: 0.8 }} />
-        {heroImage && typeof heroImage === 'object' && (
-          <Media
-            resource={heroImage}
-            size="40vw"
-            className="absolute inset-0 w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+      <PostHeroImage heroImage={heroImage} gradient={gradient} size="40vw">
+        {category && (
+          <CategoryBadge
+            category={category}
+            className="absolute top-3 left-3 text-[10px] px-2.5 py-1 rounded-md"
           />
         )}
-        <span className="absolute top-3 left-3 z-10 bg-[#FF9A42] text-[#2D2D2A] font-bold text-[10px] uppercase tracking-[0.14em] px-2.5 py-1 rounded-md">
-          {cat || 'Newsy'}
-        </span>
-      </div>
+      </PostHeroImage>
 
       <div className="flex flex-col flex-1 px-5 py-4">
         <span className="font-mono text-[11px] tracking-[0.2em] text-[#FF9A42] uppercase mb-2">
@@ -417,13 +402,13 @@ const FeatSideCard: React.FC<{ post: Post }> = ({ post }) => {
         <h3 className="font-rajdhani font-bold text-[22px] leading-[1.1] uppercase tracking-tight mb-1.5 group-hover:text-[#FF9A42] transition-colors">
           <HighlightedText>{title}</HighlightedText>
         </h3>
-        {meta?.description && (
+        {excerpt && (
           <p className="text-[#E8E2D6]/55 text-[14px] line-clamp-2 flex-1">
-            <HighlightedText>{meta.description}</HighlightedText>
+            <HighlightedText>{excerpt}</HighlightedText>
           </p>
         )}
         <div className="mt-3 flex justify-between font-mono text-[11px] text-[#E8E2D6]/40 uppercase tracking-widest">
-          <span>3 min</span>
+          <span>{formatReadingTimeShortPl(readingMinutes)}</span>
           <span className="text-[#FF9A42]">↗</span>
         </div>
       </div>
@@ -436,42 +421,38 @@ const FeatSideCard: React.FC<{ post: Post }> = ({ post }) => {
 ══════════════════════════════════════════════════════════════════════════ */
 
 const NewsCard: React.FC<{ post: Post }> = ({ post }) => {
-  const { slug, title, meta, publishedAt, heroImage } = post
-  const cat = categoryLabel(post)
+  const { slug, title, publishedAt, heroImage } = post
+  const category = getPrimaryCategory(post)
+  const cat = category?.title ?? ''
   const gradient = pickGradient(post.id)
+  const excerpt = cardDescription(post)
+  const readingMinutes = getReadingTimeMinutes(post.content)
 
   return (
     <article className="group flex flex-col rounded-[20px] overflow-hidden border border-white/[0.08] bg-[#2D2D2A] transition-all duration-300 hover:-translate-y-1 hover:border-[#FF9A42]/40">
-      <Link href={`/posts/${slug}`} className="relative block overflow-hidden" style={{ aspectRatio: '4/3' }}>
-        <div className={`absolute inset-0 bg-gradient-to-br ${gradient}`}>
-          <div className="absolute inset-0" style={{ backgroundImage: HATCH }} />
-        </div>
-        {heroImage && typeof heroImage === 'object' && (
-          <Media
-            resource={heroImage}
-            size="33vw"
-            className="absolute inset-0 w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
-          />
-        )}
-        {cat && (
-          <span className="absolute top-3 left-3 z-10 bg-white text-[#2D2D2A] font-bold text-[10px] uppercase tracking-[0.14em] px-2.5 py-1 rounded-md">
-            {cat}
-          </span>
-        )}
+      <Link href={`/posts/${slug}`} className="block">
+        <PostHeroImage heroImage={heroImage} gradient={gradient} size="33vw">
+          {category && (
+            <CategoryBadge
+              category={category}
+              className="absolute top-3 left-3 text-[10px] px-2.5 py-1 rounded-md"
+            />
+          )}
+        </PostHeroImage>
       </Link>
 
       <div className="flex flex-col flex-1 p-5">
         <span className="font-mono text-[11px] tracking-[0.18em] text-[#FF9A42] uppercase mb-2">
-          // {cat || 'newsy'}
+          // {cat || 'newsy'} · {formatReadingTimeShortPl(readingMinutes)}
         </span>
         <h3 className="font-rajdhani font-bold text-[20px] leading-[1.15] uppercase tracking-tight mb-2 group-hover:text-[#FF9A42] transition-colors">
           <Link href={`/posts/${slug}`}>
             <HighlightedText>{title}</HighlightedText>
           </Link>
         </h3>
-        {meta?.description && (
+        {excerpt && (
           <p className="text-[#E8E2D6]/60 text-[14px] line-clamp-2 flex-1">
-            <HighlightedText>{meta.description}</HighlightedText>
+            <HighlightedText>{excerpt}</HighlightedText>
           </p>
         )}
         <div className="mt-4 flex justify-between items-center font-mono text-[11px] tracking-[0.14em] text-[#E8E2D6]/40 uppercase">
@@ -544,60 +525,5 @@ const FuzzPagination: React.FC<{
         Nast. →
       </button>
     </nav>
-  )
-}
-
-/* ═══════════════════════════════════════════════════════════════════════════
-   NEWSLETTER STRIP
-══════════════════════════════════════════════════════════════════════════ */
-
-const NewsletterStrip: React.FC = () => {
-  const [email, setEmail] = useState('')
-  const [sent, setSent] = useState(false)
-
-  function handleSubmit(e: React.FormEvent) {
-    e.preventDefault()
-    setEmail('')
-    setSent(true)
-    setTimeout(() => setSent(false), 4000)
-  }
-
-  return (
-    <div
-      className="mt-16 rounded-3xl overflow-hidden border p-8 md:p-10 flex flex-col md:flex-row items-start md:items-center justify-between gap-6 flex-wrap"
-      style={{
-        background:
-          'linear-gradient(180deg, rgba(75,0,130,.4), rgba(75,0,130,.1))',
-        borderColor: 'rgba(126,60,196,.4)',
-      }}
-    >
-      <div>
-        <h3 className="font-rajdhani font-bold text-3xl uppercase tracking-tight leading-none">
-          Bądź na bieżąco
-        </h3>
-        <p className="text-[#E8E2D6]/60 text-[15px] mt-1.5 max-w-[42ch]">
-          Mailowy digest raz na 2 tygodnie. Nowe wieści, zmiany w programie,
-          ogłoszenia.
-        </p>
-      </div>
-
-      <form onSubmit={handleSubmit} className="flex gap-2 flex-wrap">
-        <input
-          type="email"
-          required
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-          placeholder="twoj@email.pl"
-          className="px-5 py-3.5 rounded-full border border-white/[0.1] bg-black/30 text-white placeholder:text-[#E8E2D6]/40 outline-none font-rajdhani text-[15px] min-w-[240px] focus:border-[#FF9A42]/50 transition-colors"
-        />
-        <Button type="submit" size="lg" disabled={sent}>
-          {sent ? '✓ Zapisano!' : (
-            <>
-              Zapisz <ButtonArrow />
-            </>
-          )}
-        </Button>
-      </form>
-    </div>
   )
 }
