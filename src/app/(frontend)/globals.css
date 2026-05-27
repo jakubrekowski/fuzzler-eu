@@ -98,6 +98,15 @@
   --success: #79e69c;
   --warning: #ff9a42;
   --error: #f84949;
+
+  /* Fixed header height — updated at runtime by FixedHeaderHeight */
+  --header-h: 4rem;
+}
+
+@media (width >= theme(--breakpoint-md)) {
+  :root {
+    --header-h: 5.25rem;
+  }
 }
 
 [data-theme='dark'] {
@@ -207,7 +216,7 @@
     }
   }
   .container[id] {
-    scroll-margin-top: 5.5rem;
+    scroll-margin-top: var(--header-h);
   }
   body {
     @apply min-h-[100vh] flex flex-col;

@@ -280,15 +280,15 @@ export const ScheduleBlockComponent: React.FC<ScheduleBlockProps> = (props) => {
           'md:rounded-[32px]',
         )}
       >
-        {/* Sticky: day picker + room headers — below fixed site header (set --header-h on layout if needed) */}
+        {/* Sticky: day picker + room headers — flush under fixed site header (--header-h) */}
         <div
           className={cn(
             'sticky z-[35] bg-[#1a1a1a]/95 backdrop-blur-md border-b border-white/10',
-            'top-[var(--header-h,4.25rem)] md:top-[var(--header-h,5.75rem)]',
+            'top-[var(--header-h)]',
             'rounded-t-none md:rounded-t-[32px]',
           )}
         >
-          <div className="px-3 pt-3 pb-2 md:px-6 md:pt-4 md:pb-3">
+          <div className="px-3 pt-3 pb-2 md:px-6 md:pt-3 md:pb-2">
             {/* Mobile: horizontal day chips */}
             <div className="md:hidden">
               <div
@@ -323,14 +323,14 @@ export const ScheduleBlockComponent: React.FC<ScheduleBlockProps> = (props) => {
 
             {/* Desktop: pill tabs */}
             <div className="hidden md:flex justify-center">
-              <div className="flex flex-wrap justify-center gap-3 p-2 bg-white/[0.03] border border-white/10 rounded-[40px]">
+              <div className="flex flex-wrap justify-center gap-2 p-1.5 bg-white/[0.03] border border-white/10 rounded-[40px]">
                 {data.days.map((day) => (
                   <button
                     key={day.id}
                     type="button"
                     onClick={() => handleDayChange(day.id)}
                     className={cn(
-                      'px-8 py-3 rounded-[32px] text-[13px] font-bold uppercase tracking-widest transition-all duration-300',
+                      'px-6 py-2 rounded-[32px] text-[13px] font-bold uppercase tracking-widest transition-all duration-300',
                       activeDayId === day.id
                         ? 'bg-orange text-graphite shadow-[0_8px_24px_-8px_rgba(255,144,0,0.5)]'
                         : 'text-zinc-400 hover:text-white hover:bg-white/5',

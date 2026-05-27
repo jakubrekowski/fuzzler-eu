@@ -18,6 +18,7 @@ const jetbrainsMono = JetBrains_Mono({
 })
 
 import { AdminBar } from '@/components/AdminBar'
+import { FixedHeaderHeight } from '@/components/FixedHeaderHeight'
 import { Footer } from '@/Footer/Component'
 import { Header } from '@/Header/Component'
 import { Providers } from '@/providers'
@@ -53,14 +54,14 @@ export default async function RootLayout({ children }: { children: React.ReactNo
       <body>
         <Providers>
           <div className="fixed top-0 left-0 right-0 z-[100] w-full max-w-full overflow-x-hidden pointer-events-none">
-            <div className="pointer-events-auto flex min-w-0 w-full max-w-full flex-col overflow-x-hidden">
+            <FixedHeaderHeight className="pointer-events-auto flex min-w-0 w-full max-w-full flex-col overflow-x-hidden">
               <AdminBar
                 adminBarProps={{
                   preview: isEnabled,
                 }}
               />
               <Header />
-            </div>
+            </FixedHeaderHeight>
           </div>
 
           <main>
