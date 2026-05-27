@@ -1,5 +1,6 @@
 import type { CollectionConfig } from 'payload'
 
+import { adminGroups } from '@/admin/groups'
 import { authenticated } from '../../access/authenticated'
 
 export const Users: CollectionConfig = {
@@ -12,6 +13,7 @@ export const Users: CollectionConfig = {
     update: authenticated,
   },
   admin: {
+    group: adminGroups.settings,
     defaultColumns: ['name', 'email'],
     useAsTitle: 'name',
   },

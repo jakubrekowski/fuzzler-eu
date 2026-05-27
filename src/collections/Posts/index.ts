@@ -1,5 +1,6 @@
 import type { CollectionConfig } from 'payload'
 
+import { adminGroups } from '@/admin/groups'
 import {
   BlockquoteFeature,
   BlocksFeature,
@@ -53,6 +54,7 @@ export const Posts: CollectionConfig<'posts'> = {
     },
   },
   admin: {
+    group: adminGroups.content,
     defaultColumns: ['title', 'slug', 'updatedAt'],
     livePreview: {
       url: ({ data, req }) =>

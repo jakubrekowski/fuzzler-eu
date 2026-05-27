@@ -4,11 +4,10 @@ import React from 'react'
 
 import type { Header as HeaderType } from '@/payload-types'
 
-import { AnchorLink } from '@/components/Link/AnchorLink'
 import { CMSLink } from '@/components/Link'
 import Link from 'next/link'
 import { Menu, SearchIcon, X } from 'lucide-react'
-import { Button, ButtonArrow } from '@/components/ui/button'
+import { ButtonArrow } from '@/components/ui/button'
 import { cn } from '@/utilities/ui'
 
 type HeaderNavProps = {
@@ -17,8 +16,16 @@ type HeaderNavProps = {
   onMobileOpenChange: (open: boolean) => void
 }
 
+const defaultHeaderCtaLink = {
+  type: 'custom' as const,
+  url: '#zapis',
+  label: 'Zapisz się',
+}
+
 export const HeaderNav: React.FC<HeaderNavProps> = ({ data, mobileOpen, onMobileOpenChange }) => {
   const navItems = data?.navItems || []
+  const cta = data?.cta
+  const showCta = cta?.enabled !== false
 
   return (
     <>
@@ -43,11 +50,15 @@ export const HeaderNav: React.FC<HeaderNavProps> = ({ data, mobileOpen, onMobile
           <span className="sr-only">Search</span>
           <SearchIcon className="h-4 w-4" />
         </Link>
-        <Button asChild className="ml-2">
-          <AnchorLink href="#zapis">
-            Zapisz się <ButtonArrow />
-          </AnchorLink>
-        </Button>
+        {showCta && (
+          <CMSLink
+            {...(cta?.link ?? defaultHeaderCtaLink)}
+            appearance="default"
+            className="ml-2"
+          >
+            <ButtonArrow />
+          </CMSLink>
+        )}
       </nav>
 
       <button

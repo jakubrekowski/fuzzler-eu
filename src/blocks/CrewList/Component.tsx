@@ -12,16 +12,24 @@ import {
 } from '@/utilities/categoryBadge'
 import { cn } from '@/utilities/ui'
 
-const accentButtonClasses: Record<CategoryBadgeColor, string> = {
-  orange: 'border-orange text-orange',
-  green: 'border-green text-green',
-  white: 'border-cream text-cream',
-  red: 'border-red text-red',
-  purple: 'border-indigo text-indigo',
-  cream: 'border-cream-dim text-cream-dim',
+type CrewAccentColor = 'orange' | 'green' | 'white'
+
+const accentFilledButtonClasses: Record<CrewAccentColor, string> = {
+  orange:
+    'bg-orange text-graphite border-orange shadow-[0_4px_0_0_#B5641F] hover:translate-y-0.5 hover:shadow-[0_2px_0_0_#B5641F]',
+  green:
+    'bg-green text-graphite border-green shadow-[0_4px_0_0_#4A9E65] hover:translate-y-0.5 hover:shadow-[0_2px_0_0_#4A9E65]',
+  white:
+    'bg-cream text-graphite border-cream shadow-[0_4px_0_0_#C9C3B8] hover:translate-y-0.5 hover:shadow-[0_2px_0_0_#C9C3B8]',
 }
 
-function resolveAccentColor(color?: string | null): CategoryBadgeColor {
+const accentOutlineButtonClasses: Record<CrewAccentColor, string> = {
+  orange: 'bg-transparent border-orange text-orange shadow-none hover:translate-y-0',
+  green: 'bg-transparent border-green text-green shadow-none hover:translate-y-0',
+  white: 'bg-transparent border-cream text-cream shadow-none hover:translate-y-0',
+}
+
+function resolveAccentColor(color?: string | null): CrewAccentColor {
   if (color === 'green' || color === 'white') return color
   return 'orange'
 }
@@ -90,17 +98,18 @@ const CrewMemberCard: React.FC<{ member: CrewMember }> = ({ member }) => {
           <div className={cn('flex shrink-0', !note && 'ml-auto')}>
             {(() => {
               const { label, appearance, ...linkProps } = button
-              const resolvedAppearance =
-                appearance === 'outline' ? 'outline' : 'default'
+              const isOutline = appearance === 'outline'
 
               return (
                 <CMSLink
                   {...linkProps}
-                  appearance={resolvedAppearance}
+                  appearance="inline"
                   label={label}
                   className={cn(
-                    'inline-flex items-center px-4 py-2 rounded-xl border bg-transparent font-mono text-[11px] uppercase tracking-[0.14em] font-bold transition-colors hover:opacity-90',
-                    accentButtonClasses[color],
+                    'inline-flex items-center px-4 py-2 rounded-xl border font-mono text-[11px] uppercase tracking-[0.14em] font-bold transition-all duration-150',
+                    isOutline
+                      ? accentOutlineButtonClasses[color]
+                      : accentFilledButtonClasses[color],
                   )}
                 />
               )

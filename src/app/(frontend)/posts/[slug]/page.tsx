@@ -7,6 +7,7 @@ import { draftMode } from 'next/headers'
 import React, { cache } from 'react'
 import type { Post } from '@/payload-types'
 import { generateMeta } from '@/utilities/generateMeta'
+import { getCachedGlobal } from '@/utilities/getGlobals'
 import { LivePreviewListener } from '@/components/LivePreviewListener'
 import PageClient from './page.client'
 import { FuzzArticleClient } from './FuzzArticleClient'
@@ -62,6 +63,8 @@ export default async function Page({ params: paramsPromise }: Args) {
     }
   }
 
+  const siteSettings = await getCachedGlobal('site-settings', 1)()
+
   return (
     <>
       <PageClient />
@@ -70,6 +73,7 @@ export default async function Page({ params: paramsPromise }: Args) {
       <FuzzArticleClient
         post={post}
         relatedPosts={relatedPostObjects.length > 0 ? relatedPostObjects : recentPosts}
+        postSidebarCta={siteSettings.postSidebarCta}
       />
     </>
   )

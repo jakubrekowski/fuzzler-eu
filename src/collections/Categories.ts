@@ -1,5 +1,6 @@
 import type { CollectionConfig, SelectFieldSingleValidation } from 'payload'
 
+import { adminGroups } from '@/admin/groups'
 import { anyone } from '../access/anyone'
 import { authenticated } from '../access/authenticated'
 import { slugField } from 'payload'
@@ -15,6 +16,7 @@ export const Categories: CollectionConfig = {
     update: authenticated,
   },
   admin: {
+    group: adminGroups.content,
     useAsTitle: 'title',
   },
   fields: [

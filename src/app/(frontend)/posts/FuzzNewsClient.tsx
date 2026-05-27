@@ -166,10 +166,7 @@ export const FuzzNewsClient: React.FC<FuzzNewsClientProps> = ({
 
       {/* ── FILTER BAR ─────────────────────────────────────────── */}
       <div className="border-b border-white/[0.08] bg-[#1B1B19]/90 sticky top-[var(--header-h,64px)] z-20 backdrop-blur-sm">
-        <div
-          className="container flex flex-wrap items-center justify-between gap-4"
-          style={{ padding: '20px 0' }}
-        >
+        <div className="container flex flex-wrap items-center justify-between gap-4 py-5">
           {/* chips */}
           <div className="flex flex-wrap gap-2">
             <FilterChip
@@ -330,7 +327,14 @@ const FeatHeroCard: React.FC<{ post: Post }> = ({ post }) => {
       href={`/posts/${slug}`}
       className="group relative flex flex-col rounded-3xl overflow-hidden border border-white/[0.08] bg-[#2D2D2A] transition-all duration-300 hover:-translate-y-1 hover:border-[#FF9A42]/40"
     >
-      <PostHeroImage heroImage={heroImage} gradient={gradient} size="60vw" />
+      <PostHeroImage heroImage={heroImage} gradient={gradient} size="60vw">
+        {category && (
+          <CategoryBadge
+            category={category}
+            className="absolute top-3 left-3 text-[10px] px-2.5 py-1 rounded-md"
+          />
+        )}
+      </PostHeroImage>
 
       <div className="flex flex-col p-7">
         <span className="font-mono text-[12px] tracking-[0.2em] text-[#FF9A42] uppercase mb-2.5">

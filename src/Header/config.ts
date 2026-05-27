@@ -1,5 +1,6 @@
 import type { GlobalConfig } from 'payload'
 
+import { adminGroups } from '@/admin/groups'
 import { link } from '@/fields/link'
 import { revalidateHeader } from './hooks/revalidateHeader'
 
@@ -7,6 +8,9 @@ export const Header: GlobalConfig = {
   slug: 'header',
   access: {
     read: () => true,
+  },
+  admin: {
+    group: adminGroups.layout,
   },
   fields: [
     {
@@ -48,6 +52,30 @@ export const Header: GlobalConfig = {
           RowLabel: '@/Header/RowLabel#RowLabel',
         },
       },
+    },
+    {
+      name: 'cta',
+      type: 'group',
+      label: 'Przycisk CTA',
+      admin: {
+        description: 'Pomarańczowy przycisk w menu (desktop i mobile), np. „Zapisz się”.',
+      },
+      fields: [
+        {
+          name: 'enabled',
+          type: 'checkbox',
+          label: 'Pokaż przycisk',
+          defaultValue: true,
+        },
+        link({
+          appearances: false,
+          overrides: {
+            admin: {
+              description: 'Link docelowy (np. kotwica #zapis na stronie głównej).',
+            },
+          },
+        }),
+      ],
     },
   ],
   hooks: {

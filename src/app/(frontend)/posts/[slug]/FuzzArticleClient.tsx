@@ -2,8 +2,9 @@
 
 import React, { useState, useEffect, useRef } from 'react'
 import Link from 'next/link'
-import { Button, ButtonArrow } from '@/components/ui/button'
-import type { Post } from '@/payload-types'
+import { ButtonArrow } from '@/components/ui/button'
+import type { Post, SiteSetting } from '@/payload-types'
+import { CMSLink } from '@/components/Link'
 import { PostHeroImage } from '@/components/PostHeroImage'
 import RichText from '@/components/RichText'
 import { CategoryBadge } from '@/components/CategoryBadge'
@@ -53,37 +54,15 @@ function authorInitial(name?: string | null) {
   return (name ?? 'A').charAt(0).toUpperCase()
 }
 
-/* ─── share icons ─── */
-const IconTelegram = () => (
-  <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
-    <path d="M9.99 15.27l-.4 4.21c.57 0 .82-.24 1.12-.54l2.7-2.58 5.6 4.1c1.03.57 1.76.27 2.04-.95l3.7-17.32c.33-1.52-.55-2.12-1.55-1.74L1.36 9.86c-1.5.57-1.48 1.4-.26 1.78l5.34 1.66 12.4-7.83c.58-.36 1.12-.16.68.2" />
-  </svg>
-)
-const IconX = () => (
-  <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
-    <path d="M18 2h3l-7 8 8 12h-6l-5-7-6 7H2l8-9L2 2h6l4 6z" />
-  </svg>
-)
-const IconEmail = () => (
-  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-    <rect x="3" y="5" width="18" height="14" rx="2" />
-    <path d="M3 7l9 6 9-6" />
-  </svg>
-)
-const IconLink = () => (
-  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-    <path d="M10 14a5 5 0 007 0l3-3a5 5 0 00-7-7l-1 1M14 10a5 5 0 00-7 0l-3 3a5 5 0 007 7l1-1" />
-  </svg>
-)
-
 /* ═══════════════════════════════════ ROOT ═══════════════════════════════════ */
 
 interface Props {
   post: Post
   relatedPosts: Post[]
+  postSidebarCta?: SiteSetting['postSidebarCta']
 }
 
-export const FuzzArticleClient: React.FC<Props> = ({ post, relatedPosts }) => {
+export const FuzzArticleClient: React.FC<Props> = ({ post, relatedPosts, postSidebarCta }) => {
   const { setHeaderTheme } = useHeaderTheme()
   useEffect(() => {
     setHeaderTheme('dark')
@@ -97,10 +76,6 @@ export const FuzzArticleClient: React.FC<Props> = ({ post, relatedPosts }) => {
   const authorName = author?.name ?? 'Redakcja'
   const readingMinutes = getReadingTimeMinutes(post.content)
   const displayLead = lead || post.description || null
-
-  function handleCopyLink() {
-    navigator.clipboard.writeText(window.location.href).catch(() => {})
-  }
 
   return (
     <>
@@ -160,7 +135,7 @@ export const FuzzArticleClient: React.FC<Props> = ({ post, relatedPosts }) => {
           )}
 
           {/* byline */}
-          <div className="flex flex-wrap justify-between items-center gap-4 py-5 border-t border-b border-white/[0.08] mb-8">
+          <div className="flex flex-wrap items-center gap-4 py-5 border-t border-b border-white/[0.08] mb-8">
             <div className="flex items-center gap-3.5">
               {/* avatar */}
               <div className="w-11 h-11 rounded-full bg-gradient-to-br from-[#FF9A42] to-[#F84949] grid place-items-center font-bold text-[#2D2D2A] text-lg shrink-0">
@@ -172,45 +147,6 @@ export const FuzzArticleClient: React.FC<Props> = ({ post, relatedPosts }) => {
                   Redakcja · {fmtDate(publishedAt)}
                 </div>
               </div>
-            </div>
-
-            {/* share */}
-            <div className="flex gap-2">
-              {[
-                {
-                  label: 'Telegram',
-                  icon: <IconTelegram />,
-                  href: `https://t.me/share/url?url=${encodeURIComponent(typeof window !== 'undefined' ? window.location.href : '')}`,
-                },
-                {
-                  label: 'X',
-                  icon: <IconX />,
-                  href: `https://x.com/intent/tweet?url=${encodeURIComponent(typeof window !== 'undefined' ? window.location.href : '')}`,
-                },
-                {
-                  label: 'Email',
-                  icon: <IconEmail />,
-                  href: `mailto:?subject=${encodeURIComponent(title)}&body=${encodeURIComponent(typeof window !== 'undefined' ? window.location.href : '')}`,
-                },
-              ].map(({ label, icon, href }) => (
-                <a
-                  key={label}
-                  href={href}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  aria-label={label}
-                  className="w-9 h-9 rounded-xl border border-white/[0.1] grid place-items-center text-white hover:bg-[#FF9A42] hover:text-[#2D2D2A] hover:border-[#FF9A42] transition-all duration-200"
-                >
-                  {icon}
-                </a>
-              ))}
-              <button
-                aria-label="Kopiuj link"
-                onClick={handleCopyLink}
-                className="w-9 h-9 rounded-xl border border-white/[0.1] grid place-items-center text-white hover:bg-[#FF9A42] hover:text-[#2D2D2A] hover:border-[#FF9A42] transition-all duration-200"
-              >
-                <IconLink />
-              </button>
             </div>
           </div>
 
@@ -248,7 +184,7 @@ export const FuzzArticleClient: React.FC<Props> = ({ post, relatedPosts }) => {
         </article>
 
         {/* Meta sidebar */}
-        <MetaSidebar post={post} />
+        <MetaSidebar post={post} postSidebarCta={postSidebarCta} />
       </div>
 
       {/* ── RELATED POSTS ────────────────────────────────────── */}
@@ -396,9 +332,48 @@ const TocList: React.FC<{ activeId: string }> = ({ activeId }) => {
   )
 }
 
+/* ═══════════════════════════════════ POST SIDEBAR CTA ═══════════════════════ */
+
+const defaultPostSidebarCtaLink = {
+  type: 'custom' as const,
+  url: '/#zapis',
+  label: 'Zapisz się',
+}
+
+const PostSidebarCtaCard: React.FC<{
+  cta?: SiteSetting['postSidebarCta']
+}> = ({ cta }) => {
+  const eyebrow = cta?.eyebrow?.trim() || '// chcesz przyjechać?'
+  const description = cta?.description?.trim() || 'Nie zwlekaj! Rejestracja trwa.'
+  const link = cta?.link ?? defaultPostSidebarCtaLink
+
+  return (
+    <div
+      className="w-full min-w-0 max-w-full rounded-2xl p-5 border"
+      style={{
+        background: 'linear-gradient(180deg,rgba(255,154,66,.18),rgba(255,154,66,.04))',
+        borderColor: 'rgba(255,154,66,.4)',
+      }}
+    >
+      <div className="font-mono text-[11px] tracking-[0.2em] uppercase text-[#FF9A42] mb-2">
+        {eyebrow}
+      </div>
+      {description && (
+        <p className="text-[14px] text-[#E8E2D6]/60 mb-4 leading-snug">{description}</p>
+      )}
+      <CMSLink {...link} appearance="default" size="sm" className="w-full">
+        <ButtonArrow />
+      </CMSLink>
+    </div>
+  )
+}
+
 /* ═══════════════════════════════════ META SIDEBAR ═══════════════════════════ */
 
-const MetaSidebar: React.FC<{ post: Post }> = ({ post }) => {
+const MetaSidebar: React.FC<{
+  post: Post
+  postSidebarCta?: SiteSetting['postSidebarCta']
+}> = ({ post, postSidebarCta }) => {
   const { publishedAt, populatedAuthors } = post
   const category = getPrimaryCategory(post)
   const cat = category?.title ?? ''
@@ -445,26 +420,9 @@ const MetaSidebar: React.FC<{ post: Post }> = ({ post }) => {
         </dl>
       </div>
 
-      {/* CTA card */}
-      <div
-        className="w-full min-w-0 max-w-full rounded-2xl p-5 border"
-        style={{
-          background: 'linear-gradient(180deg,rgba(255,154,66,.18),rgba(255,154,66,.04))',
-          borderColor: 'rgba(255,154,66,.4)',
-        }}
-      >
-        <div className="font-mono text-[11px] tracking-[0.2em] uppercase text-[#FF9A42] mb-2">
-          // chcesz przyjechać?
-        </div>
-        <p className="text-[14px] text-[#E8E2D6]/60 mb-4 leading-snug">
-          Nie zwlekaj! Rejestracja trwa.
-        </p>
-        <Button asChild size="sm" className="w-full">
-          <Link href="/#zapis" scroll={false}>
-            Zapisz się <ButtonArrow />
-          </Link>
-        </Button>
-      </div>
+      {postSidebarCta?.enabled !== false && (
+        <PostSidebarCtaCard cta={postSidebarCta} />
+      )}
     </aside>
   )
 }

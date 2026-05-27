@@ -1,5 +1,7 @@
 import type { GlobalConfig } from 'payload'
 
+import { adminGroups } from '@/admin/groups'
+import { link } from '@/fields/link'
 import { revalidateSiteSettings } from './hooks/revalidateSiteSettings'
 
 export const SiteSettings: GlobalConfig = {
@@ -7,6 +9,9 @@ export const SiteSettings: GlobalConfig = {
   label: 'Ustawienia witryny',
   access: {
     read: () => true,
+  },
+  admin: {
+    group: adminGroups.layout,
   },
   fields: [
     {
@@ -43,15 +48,44 @@ export const SiteSettings: GlobalConfig = {
           ],
         },
         {
-          label: 'Ogólne',
+          label: 'Posts',
           fields: [
             {
-              name: 'general',
+              name: 'postSidebarCta',
               type: 'group',
+              label: 'Karta CTA w poście',
               admin: {
-                description: 'Miejsce na kolejne ustawienia witryny (np. analityka, integracje, SEO globalne).',
+                description:
+                  'Pomarańczowa karta w prawym panelu artykułu (np. „Zapisz się” na FuzzNews).',
               },
-              fields: [],
+              fields: [
+                {
+                  name: 'enabled',
+                  type: 'checkbox',
+                  label: 'Pokaż kartę',
+                  defaultValue: true,
+                },
+                {
+                  name: 'eyebrow',
+                  type: 'text',
+                  label: 'Nagłówek (mono)',
+                  defaultValue: '// chcesz przyjechać?',
+                },
+                {
+                  name: 'description',
+                  type: 'textarea',
+                  label: 'Opis',
+                  defaultValue: 'Nie zwlekaj! Rejestracja trwa.',
+                },
+                link({
+                  appearances: false,
+                  overrides: {
+                    admin: {
+                      description: 'Docelowy adres przycisku (np. sekcja zapisu na stronie głównej).',
+                    },
+                  },
+                }),
+              ],
             },
           ],
         },

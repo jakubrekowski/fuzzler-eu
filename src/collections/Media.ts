@@ -1,5 +1,6 @@
 import type { CollectionConfig } from 'payload'
 
+import { adminGroups } from '@/admin/groups'
 import {
   FixedToolbarFeature,
   InlineToolbarFeature,
@@ -17,6 +18,9 @@ const dirname = path.dirname(filename)
 export const Media: CollectionConfig = {
   slug: 'media',
   folders: true,
+  admin: {
+    group: adminGroups.media,
+  },
   access: {
     create: authenticated,
     delete: authenticated,

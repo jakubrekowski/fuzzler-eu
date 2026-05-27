@@ -4,19 +4,26 @@ import React from 'react'
 
 import type { Header as HeaderType } from '@/payload-types'
 
-import { AnchorLink } from '@/components/Link/AnchorLink'
 import { CMSLink } from '@/components/Link'
 import Link from 'next/link'
 import { SearchIcon } from 'lucide-react'
-import { Button, ButtonArrow } from '@/components/ui/button'
+import { ButtonArrow } from '@/components/ui/button'
 
 type HeaderMobileMenuProps = {
   data: HeaderType
   onNavigate?: () => void
 }
 
+const defaultHeaderCtaLink = {
+  type: 'custom' as const,
+  url: '#zapis',
+  label: 'Zapisz się',
+}
+
 export const HeaderMobileMenu: React.FC<HeaderMobileMenuProps> = ({ data, onNavigate }) => {
   const navItems = data?.navItems || []
+  const cta = data?.cta
+  const showCta = cta?.enabled !== false
 
   return (
     <nav
@@ -41,11 +48,16 @@ export const HeaderMobileMenu: React.FC<HeaderMobileMenuProps> = ({ data, onNavi
           <SearchIcon className="h-4 w-4 shrink-0" />
           Szukaj
         </Link>
-        <Button asChild className="w-full justify-center">
-          <AnchorLink href="#zapis" onClick={onNavigate}>
-            Zapisz się <ButtonArrow />
-          </AnchorLink>
-        </Button>
+        {showCta && (
+          <CMSLink
+            {...(cta?.link ?? defaultHeaderCtaLink)}
+            appearance="default"
+            className="w-full justify-center"
+            onClick={onNavigate}
+          >
+            <ButtonArrow />
+          </CMSLink>
+        )}
       </div>
     </nav>
   )
