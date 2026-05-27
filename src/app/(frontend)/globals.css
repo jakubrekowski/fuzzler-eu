@@ -69,6 +69,10 @@
     padding-inline: 1.75rem;
     max-width: 1320px;
   }
+
+  .pt-below-header {
+    padding-top: calc(var(--header-h) + var(--page-top-gap));
+  }
 }
 
 /* ------------------------------------------------------------------ */
@@ -101,6 +105,8 @@
 
   /* Fixed header height — updated at runtime by FixedHeaderHeight */
   --header-h: 4rem;
+  /* Extra space below the fixed header for page content / heroes */
+  --page-top-gap: clamp(2rem, 5vw, 4rem);
 }
 
 @media (width >= theme(--breakpoint-md)) {

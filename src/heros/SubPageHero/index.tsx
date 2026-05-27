@@ -8,7 +8,7 @@ import { Badge } from '@/components/ui/badge'
 
 export const SubPageHero: React.FC<Page['hero']> = ({ links, richText, eyebrow }) => {
   return (
-    <section className="relative bg-graphite-dark font-rajdhani text-cream overflow-hidden py-24 lg:py-40 border-b border-white/10">
+    <section className="relative bg-graphite-dark font-rajdhani text-cream overflow-hidden border-b border-white/10 pt-below-header pb-[clamp(2.5rem,4vw+1.25rem,4.5rem)]">
       {/* Background Gradients */}
       <div className="absolute inset-0 pointer-events-none">
         <div className="absolute top-0 left-[-10%] w-[50%] h-[50%] bg-indigo/10 blur-[120px] rounded-full" />
@@ -17,7 +17,7 @@ export const SubPageHero: React.FC<Page['hero']> = ({ links, richText, eyebrow }
 
       <div className="container relative z-10 flex flex-col items-center text-center">
         {eyebrow && (
-          <Badge dot variant="default" className="mb-8 animate-in fade-in slide-in-from-bottom-4 duration-700">
+          <Badge dot variant="default" className="mb-6 animate-in fade-in slide-in-from-bottom-4 duration-700">
             {eyebrow}
           </Badge>
         )}
@@ -25,7 +25,7 @@ export const SubPageHero: React.FC<Page['hero']> = ({ links, richText, eyebrow }
         <div className="max-w-[56rem]">
           {richText && (
             <RichText
-              className="mb-10 prose-h1:text-[clamp(48px,8vw,96px)] prose-h1:font-bold prose-h1:uppercase prose-h1:tracking-tight prose-h1:leading-[0.85] prose-p:text-xl prose-p:text-cream-dim prose-em:not-italic prose-em:text-orange"
+              className="mb-8 last:mb-0 prose-h1:text-[clamp(40px,7vw,88px)] prose-h1:font-bold prose-h1:uppercase prose-h1:tracking-tight prose-h1:leading-[0.85] prose-p:text-lg sm:prose-p:text-xl prose-p:text-cream-dim prose-em:not-italic prose-em:text-orange"
               data={richText}
               enableGutter={false}
             />
