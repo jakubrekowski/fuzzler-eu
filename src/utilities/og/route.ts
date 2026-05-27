@@ -4,12 +4,18 @@ import type { RenderOgImageOptions } from '@/utilities/og/render'
 const cacheControl = 'public, max-age=86400, stale-while-revalidate=604800'
 
 export async function ogImageResponse(data: RenderOgImageOptions): Promise<Response> {
-  const image = await renderOgImage(data)
+  try {
+    const image = await renderOgImage(data)
+    const buffer = await image.arrayBuffer()
 
-  return new Response(image.body, {
-    headers: {
-      'Content-Type': 'image/png',
-      'Cache-Control': cacheControl,
-    },
-  })
+    return new Response(buffer, {
+      headers: {
+        'Content-Type': 'image/png',
+        'Cache-Control': cacheControl,
+      },
+    })
+  } catch (error) {
+    console.error('Failed to generate OG image', error)
+    return new Response('Failed to generate image', { status: 500 })
+  }
 }

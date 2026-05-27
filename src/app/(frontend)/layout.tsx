@@ -23,12 +23,12 @@ import { Footer } from '@/Footer/Component'
 import { Header } from '@/Header/Component'
 import { Providers } from '@/providers'
 import { getThemeInitScript } from '@/providers/Theme/themeInitScript'
+import { getMetadataBase } from '@/utilities/getMetadataBase'
 import { mergeOpenGraph } from '@/utilities/mergeOpenGraph'
 import { getSiteOgImageUrl } from '@/utilities/og/url'
 import { draftMode } from 'next/headers'
 
 import './globals.css'
-import { getServerSideURL } from '@/utilities/getURL'
 
 export default async function RootLayout({ children }: { children: React.ReactNode }) {
   const { isEnabled } = await draftMode()
@@ -75,13 +75,15 @@ export default async function RootLayout({ children }: { children: React.ReactNo
   )
 }
 
-export const metadata: Metadata = {
-  metadataBase: new URL(getServerSideURL()),
-  openGraph: mergeOpenGraph({
-    images: [{ url: getSiteOgImageUrl() }],
-  }),
-  twitter: {
-    card: 'summary_large_image',
-    images: [getSiteOgImageUrl()],
-  },
+export async function generateMetadata(): Promise<Metadata> {
+  return {
+    metadataBase: await getMetadataBase(),
+    openGraph: mergeOpenGraph({
+      images: [{ url: getSiteOgImageUrl() }],
+    }),
+    twitter: {
+      card: 'summary_large_image',
+      images: [getSiteOgImageUrl()],
+    },
+  }
 }
