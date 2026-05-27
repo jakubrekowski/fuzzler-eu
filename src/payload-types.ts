@@ -112,10 +112,12 @@ export interface Config {
   globals: {
     header: Header;
     footer: Footer;
+    'site-settings': SiteSetting;
   };
   globalsSelect: {
     header: HeaderSelect<false> | HeaderSelect<true>;
     footer: FooterSelect<false> | FooterSelect<true>;
+    'site-settings': SiteSettingsSelect<false> | SiteSettingsSelect<true>;
   };
   locale: null;
   widgets: {
@@ -2537,6 +2539,29 @@ export interface Footer {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "site-settings".
+ */
+export interface SiteSetting {
+  id: number;
+  og?: {
+    /**
+     * Logo wyświetlane na generowanych grafikach udostępniania (np. PNG/SVG z przezroczystym tłem).
+     */
+    logo?: (number | null) | Media;
+    /**
+     * Ikona maskotki w lewym górnym rogu — bez tła, najlepiej PNG/SVG z przezroczystością.
+     */
+    icon?: (number | null) | Media;
+  };
+  /**
+   * Miejsce na kolejne ustawienia witryny (np. analityka, integracje, SEO globalne).
+   */
+  general?: {};
+  updatedAt?: string | null;
+  createdAt?: string | null;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "header_select".
  */
 export interface HeaderSelect<T extends boolean = true> {
@@ -2609,6 +2634,22 @@ export interface FooterSelect<T extends boolean = true> {
       };
   copyright?: T;
   creditNote?: T;
+  updatedAt?: T;
+  createdAt?: T;
+  globalType?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "site-settings_select".
+ */
+export interface SiteSettingsSelect<T extends boolean = true> {
+  og?:
+    | T
+    | {
+        logo?: T;
+        icon?: T;
+      };
+  general?: T | {};
   updatedAt?: T;
   createdAt?: T;
   globalType?: T;

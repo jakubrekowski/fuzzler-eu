@@ -2,46 +2,52 @@ import type { Metadata } from 'next'
 
 import type { Media, Page, Post, Config } from '../payload-types'
 
+import { getMediaUrl } from './og/getMediaUrl'
+import { getPageOgImageUrl, getPostOgImageUrl } from './og/url'
 import { mergeOpenGraph } from './mergeOpenGraph'
-import { getServerSideURL } from './getURL'
 
 const getImageURL = (image?: Media | Config['db']['defaultIDType'] | null) => {
-  const serverUrl = getServerSideURL()
-
-  let url = serverUrl + '/website-template-OG.webp'
-
-  if (image && typeof image === 'object' && 'url' in image) {
-    const ogUrl = image.sizes?.og?.url
-
-    url = ogUrl ? serverUrl + ogUrl : serverUrl + image.url
-  }
-
-  return url
+  if (!image || typeof image !== 'object') return null
+  return getMediaUrl(image)
 }
 
 export const generateMeta = async (args: {
   doc: Partial<Page> | Partial<Post> | null
+  collection: 'pages' | 'posts'
 }): Promise<Metadata> => {
-  const { doc } = args
+  const { doc, collection } = args
 
-  const ogImage = getImageURL(doc?.meta?.image)
+  const cmsImage = getImageURL(doc?.meta?.image)
+  const slug = typeof doc?.slug === 'string' ? doc.slug : null
+  const dynamicOgImage =
+    !cmsImage && slug
+      ? collection === 'posts'
+        ? getPostOgImageUrl(slug)
+        : getPageOgImageUrl(slug)
+      : null
+  const ogImage = cmsImage ?? dynamicOgImage
 
   const pageTitle = doc?.meta?.title || doc?.title
   const title = pageTitle ? `${pageTitle} | Fuzzler` : 'Fuzzler'
+
+  const path =
+    collection === 'posts' && slug ? `/posts/${slug}` : slug && slug !== 'home' ? `/${slug}` : '/'
 
   return {
     description: doc?.meta?.description,
     openGraph: mergeOpenGraph({
       description: doc?.meta?.description || '',
-      images: ogImage
-        ? [
-            {
-              url: ogImage,
-            },
-          ]
-        : undefined,
+      ...(ogImage
+        ? {
+            images: [
+              {
+                url: ogImage,
+              },
+            ],
+          }
+        : {}),
       title,
-      url: Array.isArray(doc?.slug) ? doc?.slug.join('/') : '/',
+      url: path,
     }),
     title,
   }

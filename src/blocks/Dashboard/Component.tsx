@@ -180,12 +180,12 @@ export const DashboardBlockComponent: React.FC<DashboardBlockProps> = (props) =>
                         {renderIcon(feature.icon, 18)}
                       </div>
                       {feature.title && (
-                        <h5 className="text-[10px] font-black uppercase tracking-wider text-white leading-tight">
+                        <h5 className="text-sm font-black uppercase tracking-wider text-white leading-tight">
                           <HighlightedText>{feature.title}</HighlightedText>
                         </h5>
                       )}
                       {feature.description && (
-                        <p className="text-[10px] text-zinc-400 leading-snug">
+                        <p className="text-xs text-zinc-400 leading-relaxed">
                           <HighlightedText>{feature.description}</HighlightedText>
                         </p>
                       )}

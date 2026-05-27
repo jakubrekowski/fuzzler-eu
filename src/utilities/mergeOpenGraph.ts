@@ -1,22 +1,19 @@
 import type { Metadata } from 'next'
-import { getServerSideURL } from './getURL'
 
 const defaultOpenGraph: Metadata['openGraph'] = {
   type: 'website',
-  description: 'An open-source website built with Payload and Next.js.',
-  images: [
-    {
-      url: `${getServerSideURL()}/website-template-OG.webp`,
-    },
-  ],
+  description:
+    'Fuzzler — wydarzenie, społeczność i aktualności ze świata fuzzingu i bezpieczeństwa.',
   siteName: 'Fuzzler',
   title: 'Fuzzler',
 }
 
 export const mergeOpenGraph = (og?: Metadata['openGraph']): Metadata['openGraph'] => {
+  const { images, ...rest } = og ?? {}
+
   return {
     ...defaultOpenGraph,
-    ...og,
-    images: og?.images ? og.images : defaultOpenGraph.images,
+    ...rest,
+    ...(images ? { images } : {}),
   }
 }

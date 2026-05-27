@@ -4,6 +4,8 @@ import configPromise from '@payload-config'
 import { getPayload } from 'payload'
 import React from 'react'
 import type { Post } from '@/payload-types'
+import { mergeOpenGraph } from '@/utilities/mergeOpenGraph'
+import { getPostsListOgImageUrl } from '@/utilities/og/url'
 import { FuzzNewsClient } from './FuzzNewsClient'
 
 export const dynamic = 'force-static'
@@ -86,9 +88,17 @@ export default async function Page() {
 }
 
 export function generateMetadata(): Metadata {
+  const description =
+    'Co u nas piszczy. Aktualizacje programu, nowi prowadzący, kulisy organizacji i fotorelacje z poprzednich edycji.'
+
   return {
     title: 'FuzzNews — Fuzzler',
-    description:
-      'Co u nas piszczy. Aktualizacje programu, nowi prowadzący, kulisy organizacji i fotorelacje z poprzednich edycji.',
+    description,
+    openGraph: mergeOpenGraph({
+      title: 'Fuzz News — Fuzzler',
+      description,
+      url: '/posts',
+      images: [{ url: getPostsListOgImageUrl() }],
+    }),
   }
 }

@@ -7,6 +7,7 @@ import * as migration_20260525_category_badge_color from './20260525_category_ba
 import * as migration_20260525_post_credit_note from './20260525_post_credit_note';
 import * as migration_20260525_event_banner_block from './20260525_event_banner_block';
 import * as migration_20260525_crew_list_block from './20260525_crew_list_block';
+import * as migration_20260527_site_settings_global from './20260527_site_settings_global';
 
 export const migrations = [
   {
@@ -53,5 +54,10 @@ export const migrations = [
     up: migration_20260525_crew_list_block.up,
     down: migration_20260525_crew_list_block.down,
     name: '20260525_crew_list_block',
+  },
+  {
+    up: migration_20260527_site_settings_global.up,
+    down: migration_20260527_site_settings_global.down,
+    name: '20260527_site_settings_global',
   },
 ];

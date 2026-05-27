@@ -24,6 +24,7 @@ import { Header } from '@/Header/Component'
 import { Providers } from '@/providers'
 import { getThemeInitScript } from '@/providers/Theme/themeInitScript'
 import { mergeOpenGraph } from '@/utilities/mergeOpenGraph'
+import { getSiteOgImageUrl } from '@/utilities/og/url'
 import { draftMode } from 'next/headers'
 
 import './globals.css'
@@ -76,9 +77,11 @@ export default async function RootLayout({ children }: { children: React.ReactNo
 
 export const metadata: Metadata = {
   metadataBase: new URL(getServerSideURL()),
-  openGraph: mergeOpenGraph(),
+  openGraph: mergeOpenGraph({
+    images: [{ url: getSiteOgImageUrl() }],
+  }),
   twitter: {
     card: 'summary_large_image',
-    creator: '@payloadcms',
+    images: [getSiteOgImageUrl()],
   },
 }

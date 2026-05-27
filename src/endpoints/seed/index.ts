@@ -20,7 +20,7 @@ const collections: CollectionSlug[] = [
   'search',
 ]
 
-const globals: GlobalSlug[] = ['header', 'footer']
+const globals: GlobalSlug[] = ['header', 'footer', 'site-settings']
 
 const categories: { title: string; badgeColor: 'orange' | 'red' | 'purple' | 'green' | 'white' | 'cream' }[] = [
   { title: 'Technology', badgeColor: 'purple' },
