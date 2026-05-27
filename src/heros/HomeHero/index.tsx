@@ -178,7 +178,7 @@ export const HomeHero: React.FC<Page['hero']> = (props) => {
                   key={i}
                   variant={(tag.color as any) || 'white'}
                   className={cn(
-                    'absolute z-20 max-w-[min(100vw-3rem,18rem)] rounded-lg shadow-[0_6px_0_0_rgba(0,0,0,0.25)] whitespace-normal px-3 py-1.5 text-center leading-tight sm:max-w-none sm:whitespace-nowrap lg:px-2.5 lg:py-0.5 lg:leading-none',
+                    'absolute z-20 max-w-[min(100vw-3rem,20rem)] justify-center rounded-lg px-3.5 py-2 text-center leading-snug shadow-[0_6px_0_0_rgba(0,0,0,0.25)] sm:max-w-none sm:px-4 sm:py-2.5',
                     cornerPosition,
                   )}
                   style={{ transform: `rotate(${tag.rotation}deg)` }}
