@@ -1,0 +1,417 @@
+{
+  "days": [
+    {
+      "id": "day_1",
+      "date": "04/09",
+      "label": "Piątek"
+    },
+    {
+      "id": "day_2",
+      "date": "05/09",
+      "label": "Sobota"
+    },
+    {
+      "id": "day_3",
+      "date": "06/09",
+      "label": "Niedziela"
+    }
+  ],
+  "rooms": [
+    {
+      "id": "room_1",
+      "name": "Kawiarnia"
+    },
+    {
+      "id": "room_2",
+      "name": "Warsztatowa "
+    },
+    {
+      "id": "room_3",
+      "name": "Ośrodek"
+    }
+  ],
+  "categories": [
+    {
+      "id": "cat_panel",
+      "name": "PANEL",
+      "color": "#ff9000"
+    },
+    {
+      "id": "cat_workshop",
+      "name": "WARSZTAT",
+      "color": "#a855f7"
+    },
+    {
+      "id": "cat_chill",
+      "name": "KONKURSY",
+      "color": "#4f46e5"
+    },
+    {
+      "id": "cat_food",
+      "name": "ORGANIZACYJNE",
+      "color": "#0eaf2e"
+    },
+    {
+      "id": "cat_1779827617771",
+      "name": "CHILL",
+      "color": "#ad1a68"
+    },
+    {
+      "id": "cat_1779827631946",
+      "name": "SZAMANKO",
+      "color": "#2593a2"
+    }
+  ],
+  "presenters": [
+    {
+      "id": "p1",
+      "name": "Kicek"
+    },
+    {
+      "id": "p2",
+      "name": "Saba"
+    },
+    {
+      "id": "p3",
+      "name": "Req"
+    },
+    {
+      "id": "p4",
+      "name": "Kinsou"
+    },
+    {
+      "id": "p5",
+      "name": "Meralon"
+    },
+    {
+      "id": "p1779827159089",
+      "name": "Amber"
+    },
+    {
+      "id": "p1779827168301",
+      "name": "Arlexa"
+    },
+    {
+      "id": "p1779827180656",
+      "name": "nimo Raccon"
+    },
+    {
+      "id": "p1779827190154",
+      "name": "Kamila Rolak"
+    }
+  ],
+  "events": [
+    {
+      "id": "evt_1779826978889",
+      "dayId": "day_1",
+      "roomId": "room_1",
+      "categoryId": "cat_food",
+      "startTime": "15:00",
+      "endTime": "18:00",
+      "title": "REJESTRACJA",
+      "presenterIds": [
+        "p1",
+        "p2",
+        "p3"
+      ],
+      "description": "Elo mordo, mamy rejestracje",
+      "location_detail": ""
+    },
+    {
+      "id": "evt_1779827400514",
+      "dayId": "day_1",
+      "roomId": "room_1",
+      "categoryId": "cat_food",
+      "startTime": "19:00",
+      "endTime": "20:00",
+      "title": "OTWARCIE",
+      "presenterIds": [
+        "p1",
+        "p2",
+        "p3"
+      ],
+      "description": "Kilka słów od matki i ojców prowadzących"
+    },
+    {
+      "id": "evt_1779827453782",
+      "dayId": "day_1",
+      "roomId": "room_1",
+      "categoryId": "cat_panel",
+      "startTime": "20:00",
+      "endTime": "21:00",
+      "title": "OPENMIC",
+      "presenterIds": [
+        "p2"
+      ],
+      "description": "Mikrofon nie gryzie, pogadajmy na luzaku"
+    },
+    {
+      "id": "evt_1779827718747",
+      "dayId": "day_1",
+      "roomId": "room_3",
+      "categoryId": "cat_1779827631946",
+      "startTime": "21:00",
+      "endTime": "23:00",
+      "title": "OGNISKO",
+      "description": "Jurek, kiełbasa i żurek... no Jurka chyba nie będzie :)",
+      "location_detail": "WIATA GRILLOWA"
+    },
+    {
+      "id": "evt_1779827774456",
+      "dayId": "day_1",
+      "roomId": "room_1",
+      "categoryId": "cat_1779827617771",
+      "startTime": "22:30",
+      "endTime": "23:30",
+      "title": "BUN IN THE HOUSE",
+      "presenterIds": [
+        "p1"
+      ]
+    },
+    {
+      "id": "evt_1779827828166",
+      "dayId": "day_1",
+      "roomId": "room_2",
+      "categoryId": "cat_1779827617771",
+      "startTime": "23:30",
+      "endTime": "02:00",
+      "title": "KARAOKE",
+      "presenterIds": [
+        "p4"
+      ]
+    },
+    {
+      "id": "evt_1779828166030",
+      "dayId": "day_2",
+      "roomId": "room_3",
+      "categoryId": "cat_1779827631946",
+      "startTime": "10:00",
+      "endTime": "11:00",
+      "title": "ŚNIADANIE",
+      "description": "Amciu, amciu",
+      "location_detail": "DUŻA JADALNIA"
+    },
+    {
+      "id": "evt_1779828207923",
+      "dayId": "day_2",
+      "roomId": "room_1",
+      "categoryId": "cat_food",
+      "startTime": "11:00",
+      "endTime": "11:30",
+      "title": "OTWARCIE DZIEŃ 2",
+      "presenterIds": [
+        "p1"
+      ],
+      "description": "Co tam u Was słychać w dzień drugi Skibidi Sigmy?"
+    },
+    {
+      "id": "evt_1779828290406",
+      "dayId": "day_2",
+      "roomId": "room_1",
+      "categoryId": "cat_chill",
+      "startTime": "11:30",
+      "endTime": "13:00",
+      "title": "CHECKBOX RACE",
+      "presenterIds": [
+        "p1",
+        "p3"
+      ],
+      "description": "Kilkaj bejba, klikaj!"
+    },
+    {
+      "id": "evt_1779828333225",
+      "dayId": "day_2",
+      "roomId": "room_2",
+      "categoryId": "cat_workshop",
+      "startTime": "11:30",
+      "endTime": "13:00",
+      "title": "WARSZTATY KRÓLICZEJ ŁAPY",
+      "presenterIds": [
+        "p2"
+      ],
+      "description": "Ukręć seee bryloczeeek"
+    },
+    {
+      "id": "evt_1779828462093",
+      "dayId": "day_2",
+      "roomId": "room_1",
+      "categoryId": "cat_panel",
+      "startTime": "13:00",
+      "endTime": "14:00",
+      "title": "MILIONERZY: BEHIND THE SCENES",
+      "presenterIds": [
+        "p1779827159089"
+      ],
+      "description": "Jak to jest siedzieć na przeciwko Huberta U."
+    },
+    {
+      "id": "evt_1779828488799",
+      "dayId": "day_2",
+      "roomId": "room_2",
+      "categoryId": "cat_panel",
+      "startTime": "13:00",
+      "endTime": "14:00",
+      "title": "ZOSTAĆ DAWCĄ KRWI? A KOMU TO POTRZEBNE?",
+      "presenterIds": [
+        "p1779827180656"
+      ]
+    },
+    {
+      "id": "evt_1779828529996",
+      "dayId": "day_2",
+      "roomId": "room_3",
+      "categoryId": "cat_1779827617771",
+      "startTime": "14:00",
+      "endTime": "15:00",
+      "title": "FURSUIT HOUR",
+      "description": "Pokaż swój koc ",
+      "location_detail": "CAŁY OŚRODEK"
+    },
+    {
+      "id": "evt_1779828757626",
+      "dayId": "day_2",
+      "roomId": "room_1",
+      "categoryId": "cat_food",
+      "startTime": "14:00",
+      "endTime": "14:30",
+      "title": "WSPÓLNA FOTA",
+      "description": "Machnium na pamiontkę",
+      "location_detail": "Pójdziemy w teren"
+    },
+    {
+      "id": "evt_1779828860613",
+      "dayId": "day_2",
+      "roomId": "room_1",
+      "categoryId": "cat_chill",
+      "startTime": "15:00",
+      "endTime": "17:00",
+      "title": "ONLY CONNECT",
+      "presenterIds": [
+        "p1779827180656",
+        "p1779827168301"
+      ]
+    },
+    {
+      "id": "evt_1779828886265",
+      "dayId": "day_2",
+      "roomId": "room_1",
+      "categoryId": "cat_chill",
+      "startTime": "17:00",
+      "endTime": "19:00",
+      "title": "OWO, CO TO ZA GRA?",
+      "presenterIds": [
+        "p1",
+        "p5"
+      ],
+      "description": "O nie, to znowu oni!"
+    },
+    {
+      "id": "evt_1779828919293",
+      "dayId": "day_2",
+      "roomId": "room_3",
+      "categoryId": "cat_1779827631946",
+      "startTime": "19:00",
+      "endTime": "20:00",
+      "title": "OBIADOKOLACJA",
+      "description": "Amamamamamamamam",
+      "location_detail": "DUŻA JADALNIA"
+    },
+    {
+      "id": "evt_1779828964352",
+      "dayId": "day_2",
+      "roomId": "room_1",
+      "categoryId": "cat_panel",
+      "startTime": "20:00",
+      "endTime": "21:30",
+      "title": "NAJBARDZIEJ \"CHORE\" MORDERSTWA",
+      "presenterIds": [
+        "p1779827190154"
+      ],
+      "description": "Gość specjalny przyjechał! OWO"
+    },
+    {
+      "id": "evt_1779829014729",
+      "dayId": "day_2",
+      "roomId": "room_1",
+      "categoryId": "cat_food",
+      "startTime": "22:00",
+      "endTime": "22:30",
+      "title": "ZAKOŃCZENIE FUZZLER",
+      "presenterIds": [
+        "p1",
+        "p2",
+        "p3"
+      ],
+      "description": "Ale to szybko zleciało"
+    },
+    {
+      "id": "evt_1779831248933",
+      "dayId": "day_2",
+      "roomId": "room_1",
+      "categoryId": "cat_1779827617771",
+      "startTime": "22:30",
+      "endTime": "02:00",
+      "title": "KARAOKE",
+      "presenterIds": [
+        "p4"
+      ],
+      "description": "Lubi ktoś śpiewać?"
+    },
+    {
+      "id": "evt_1779831347450",
+      "dayId": "day_2",
+      "roomId": "room_2",
+      "categoryId": "cat_1779827617771",
+      "startTime": "15:00",
+      "endTime": "16:00",
+      "title": "WALIMY MATCHĘ!",
+      "presenterIds": [
+        "p3"
+      ],
+      "description": "Siorp, siorp"
+    },
+    {
+      "id": "evt_1779831437614",
+      "dayId": "day_2",
+      "roomId": "room_2",
+      "categoryId": "cat_panel",
+      "startTime": "16:30",
+      "endTime": "17:30",
+      "title": "PRZYGODA KOCHANI, PRZYGODA, CZYLI ZRÓBMY TROCHĘ PARY",
+      "description": "Jak to Req jeździł parowozem i to nie jest żart! ",
+      "presenterIds": [
+        "p3"
+      ]
+    },
+    {
+      "id": "evt_1779831500748",
+      "dayId": "day_2",
+      "roomId": "room_2",
+      "categoryId": "cat_1779827617771",
+      "startTime": "22:30",
+      "endTime": "02:00",
+      "title": "MeetUp ZONE",
+      "description": "Przyjdź, pogadaj, ponarzekaj, odpocznij, spotkaj się"
+    },
+    {
+      "id": "evt_1779831597358",
+      "dayId": "day_3",
+      "roomId": "room_3",
+      "categoryId": "cat_1779827631946",
+      "startTime": "10:00",
+      "endTime": "11:00",
+      "title": "ŚNIADANIE",
+      "location_detail": "DUŻA JADALNIA"
+    },
+    {
+      "id": "evt_1779832103865",
+      "dayId": "day_3",
+      "roomId": "room_3",
+      "categoryId": "cat_food",
+      "startTime": "11:00",
+      "endTime": "13:00",
+      "title": "WYMELDOWANIE",
+      "description": ":("
+    }
+  ]
+}

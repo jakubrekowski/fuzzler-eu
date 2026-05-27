@@ -29,12 +29,28 @@ export const Schedule: Block = {
       label: 'Description',
     },
     {
+      name: 'scheduleFile',
+      type: 'upload',
+      relationTo: 'media',
+      label: 'Schedule JSON file',
+      required: false,
+      filterOptions: () => {
+        // Payload's Where type is strict; keep runtime filter but relax TS typing.
+        return {
+          or: [{ mimeType: { equals: 'application/json' } }, { filename: { like: '.json' } }],
+        } as any
+      },
+      admin: {
+        description: 'Upload/select a JSON file from Media.',
+      },
+    },
+    {
       name: 'scheduleUrl',
       type: 'text',
-      label: 'Schedule JSON URL',
-      required: true,
+      label: 'Schedule JSON URL (legacy)',
+      required: false,
       admin: {
-        description: 'URL to the JSON file containing the schedule data.',
+        description: 'Legacy fallback if no Media file is set. Example: /schedule.json',
       },
     },
   ],
