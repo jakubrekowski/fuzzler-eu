@@ -1,6 +1,15 @@
+'use client'
+
 import { Button, type ButtonProps } from '@/components/ui/button'
 import { cn } from '@/utilities/ui'
+import {
+  getScrollBehavior,
+  isSamePageAnchor,
+  navigateToAnchor,
+  normalizeAnchorHref,
+} from '@/utilities/anchorLink'
 import Link from 'next/link'
+import { usePathname } from 'next/navigation'
 import React from 'react'
 
 import type { Page, Post } from '@/payload-types'
@@ -10,6 +19,7 @@ type CMSLinkType = {
   appearance?: 'inline' | ButtonProps['variant']
   children?: React.ReactNode
   className?: string
+  onClick?: React.MouseEventHandler<HTMLAnchorElement>
   label?: string | null
   newTab?: boolean | null
   reference?: {
@@ -27,12 +37,15 @@ export const CMSLink: React.FC<CMSLinkType> = (props) => {
     appearance = 'inline',
     children,
     className,
+    onClick,
     label,
     newTab,
     reference,
     size: sizeFromProps,
     url,
   } = props
+
+  const pathname = usePathname()
 
   const href =
     type === 'reference' && typeof reference?.value === 'object' && reference.value.slug
@@ -44,10 +57,10 @@ export const CMSLink: React.FC<CMSLinkType> = (props) => {
   if (!href && appearance !== 'disabled') return null
 
   const rawHref = href || url || ''
-  // Hash-only anchors (e.g. #cennik) target the home page; use /#cennik for cross-route navigation.
-  const resolvedHref =
-    rawHref.startsWith('#') && rawHref.length > 1 ? `/${rawHref}` : rawHref
-  const hasInPageHash = resolvedHref.includes('#')
+  const normalized = normalizeAnchorHref(rawHref)
+  const { href: resolvedHref, hash } = normalized
+  const hasInPageHash = Boolean(hash)
+  const samePageAnchor = isSamePageAnchor(pathname, normalized)
   const size = appearance === 'link' ? 'clear' : sizeFromProps
   const newTabProps = newTab ? { rel: 'noopener noreferrer', target: '_blank' } : {}
 
@@ -58,10 +71,20 @@ export const CMSLink: React.FC<CMSLinkType> = (props) => {
     </>
   )
 
+  const handleClick = (event: React.MouseEvent<HTMLAnchorElement>) => {
+    if (samePageAnchor && !newTab) {
+      event.preventDefault()
+      navigateToAnchor(normalized, getScrollBehavior())
+    }
+
+    onClick?.(event)
+  }
+
   const linkProps = {
     href: resolvedHref,
     ...(hasInPageHash ? { scroll: false as const } : {}),
     ...newTabProps,
+    onClick: handleClick,
   }
 
   /* Ensure we don't break any styles set by richText */

@@ -23,12 +23,13 @@ export const PricingBlockComponent: React.FC<PricingBlockProps> = (props) => {
   } = props
 
   const numPlans = plans?.length || 0
-  const gridTemplateColumns = `1.5fr repeat(${numPlans}, minmax(0, 1fr))`
+  const gridTemplateColumns = `minmax(7.5rem, 1.35fr) repeat(${numPlans}, minmax(0, 1fr))`
+  const mdGridTemplateColumns = `1.5fr repeat(${numPlans}, minmax(0, 1fr))`
 
   return (
     <section
       id={anchor || undefined}
-      className="relative overflow-hidden"
+      className="relative"
       style={{
         background:
           'radial-gradient(80% 60% at 25% 15%, rgba(75,0,130,.55) 0%, transparent 60%), radial-gradient(55% 50% at 90% 75%, rgba(42,0,73,.5) 0%, transparent 55%), linear-gradient(180deg, #1f0d35 0%, #1b1b19 85%)',
@@ -38,21 +39,26 @@ export const PricingBlockComponent: React.FC<PricingBlockProps> = (props) => {
         <SectionHeader tagline={tagline} title={title} description={description} />
 
         {/* Pricing Table */}
-        <div className="bg-[#1a1a1a]/50 border border-white/10 rounded-[32px] overflow-hidden mb-12 shadow-2xl backdrop-blur-sm">
+        <div className="bg-[#1a1a1a]/50 border border-white/10 rounded-[32px] overflow-hidden mb-12 shadow-2xl backdrop-blur-sm min-w-0">
           {/* Table Header */}
           <div
-            className="grid border-b border-white/10 bg-white/[0.02]"
-            style={{ gridTemplateColumns }}
+            className="grid border-b border-white/10 bg-white/[0.02] [grid-template-columns:var(--pricing-cols)] md:[grid-template-columns:var(--pricing-md-cols)]"
+            style={
+              {
+                '--pricing-cols': gridTemplateColumns,
+                '--pricing-md-cols': mdGridTemplateColumns,
+              } as React.CSSProperties
+            }
           >
-            <div className="px-6 py-5 md:px-10 md:py-6 flex flex-col justify-center">
-              <p className="mt-3 text-zinc-400 text-xs font-mono uppercase tracking-[0.2em]">
+            <div className="min-w-0 px-3 py-4 md:px-10 md:py-6 flex flex-col justify-center">
+              <p className="mt-1 md:mt-3 text-zinc-400 text-[10px] md:text-xs font-mono uppercase tracking-[0.12em] md:tracking-[0.2em] leading-snug">
                 CO DOSTAJESZ W PAKIECIE
               </p>
             </div>
             {plans?.map((plan, i) => (
               <div
                 key={i}
-                className="px-6 py-5 md:px-10 md:py-6 border-l border-white/10 text-center flex flex-col items-center justify-center relative"
+                className="min-w-0 px-2 py-4 md:px-10 md:py-6 border-l border-white/10 text-center flex flex-col items-center justify-center relative"
               >
                 {plan.badge && (
                   <div className="absolute top-4 flex items-center gap-1.5 bg-zinc-800 text-white text-[9px] px-2 py-1 rounded uppercase font-bold tracking-widest border border-white/10">
@@ -62,16 +68,16 @@ export const PricingBlockComponent: React.FC<PricingBlockProps> = (props) => {
                 )}
                 <div
                   className={cn(
-                    'text-xs font-mono uppercase tracking-[0.2em]',
+                    'text-[10px] md:text-xs font-mono uppercase tracking-[0.12em] md:tracking-[0.2em]',
                     plan.badge ? 'mt-6' : 'mt-0',
                     i === 0 ? 'text-zinc-400' : 'text-orange-400',
                   )}
                 >
                   <HighlightedText>{plan.name}</HighlightedText>
                 </div>
-                <div className="text-4xl md:text-5xl font-bold font-rajdhani mt-2">
+                <div className="text-2xl md:text-5xl font-bold font-rajdhani mt-1 md:mt-2 leading-none">
                   {plan.price.split(' ')[0]}{' '}
-                  <span className="text-xl md:text-2xl text-zinc-500 font-normal">
+                  <span className="text-sm md:text-2xl text-zinc-500 font-normal">
                     {plan.price.split(' ')[1]}
                   </span>
                 </div>
@@ -84,11 +90,16 @@ export const PricingBlockComponent: React.FC<PricingBlockProps> = (props) => {
             {rows?.map((row, i) => (
               <div
                 key={i}
-                className="grid items-center hover:bg-white/[0.01] transition-colors"
-                style={{ gridTemplateColumns }}
+                className="grid items-center hover:bg-white/[0.01] transition-colors [grid-template-columns:var(--pricing-cols)] md:[grid-template-columns:var(--pricing-md-cols)]"
+                style={
+                  {
+                    '--pricing-cols': gridTemplateColumns,
+                    '--pricing-md-cols': mdGridTemplateColumns,
+                  } as React.CSSProperties
+                }
               >
-                <div className="px-6 py-3 md:px-12 md:py-3 text-zinc-300 flex items-center">
-                  <div className="text-sm font-bold uppercase tracking-widest font-rajdhani">
+                <div className="min-w-0 px-3 py-3 md:px-12 md:py-3 text-zinc-300">
+                  <div className="text-xs md:text-sm font-bold uppercase tracking-wide md:tracking-widest font-rajdhani leading-snug">
                     <HighlightedText>{row.name}</HighlightedText>
                   </div>
                   {row.description && (
@@ -102,21 +113,21 @@ export const PricingBlockComponent: React.FC<PricingBlockProps> = (props) => {
                   return (
                     <div
                       key={planIndex}
-                      className="px-6 py-3 md:py-3 border-l border-white/5 flex items-center justify-center"
+                      className="min-w-0 px-2 py-3 md:px-6 md:py-3 border-l border-white/5 flex items-center justify-center"
                     >
                       {isChecked ? (
                         <div
                           className={cn(
-                            'w-8 h-8 rounded-full flex items-center justify-center transition-transform hover:scale-110',
+                            'w-7 h-7 md:w-8 md:h-8 rounded-full flex items-center justify-center transition-transform hover:scale-110 shrink-0',
                             planIndex === 0
                               ? 'bg-orange-500/20 text-orange-400'
                               : 'bg-green-500/20 text-green-400',
                           )}
                         >
-                          <Check size={18} strokeWidth={3} />
+                          <Check className="size-4 md:size-[18px]" strokeWidth={3} />
                         </div>
                       ) : (
-                        <Minus size={18} className="text-zinc-800" />
+                        <Minus className="size-4 md:size-[18px] text-zinc-600" />
                       )}
                     </div>
                   )

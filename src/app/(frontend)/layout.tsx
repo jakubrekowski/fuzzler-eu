@@ -52,8 +52,8 @@ export default async function RootLayout({ children }: { children: React.ReactNo
       </head>
       <body>
         <Providers>
-          <div className="fixed top-0 left-0 right-0 z-[100] pointer-events-none">
-            <div className="pointer-events-auto flex flex-col">
+          <div className="fixed top-0 left-0 right-0 z-[100] w-full max-w-full overflow-x-hidden pointer-events-none">
+            <div className="pointer-events-auto flex min-w-0 w-full max-w-full flex-col overflow-x-hidden">
               <AdminBar
                 adminBarProps={{
                   preview: isEnabled,
