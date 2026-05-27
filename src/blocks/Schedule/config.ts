@@ -33,7 +33,7 @@ export const Schedule: Block = {
       type: 'upload',
       relationTo: 'media',
       label: 'Schedule JSON file',
-      required: false,
+      required: true,
       filterOptions: () => {
         // Payload's Where type is strict; keep runtime filter but relax TS typing.
         return {
@@ -42,15 +42,6 @@ export const Schedule: Block = {
       },
       admin: {
         description: 'Upload/select a JSON file from Media.',
-      },
-    },
-    {
-      name: 'scheduleUrl',
-      type: 'text',
-      label: 'Schedule JSON URL (legacy)',
-      required: false,
-      admin: {
-        description: 'Legacy fallback if no Media file is set. Example: /schedule.json',
       },
     },
   ],

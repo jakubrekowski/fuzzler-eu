@@ -3,7 +3,12 @@ export const SCHEDULE_DAY_START = 8 * 60
 export const SCHEDULE_DAY_END = (24 + 4) * 60
 export const SCHEDULE_DAY_SPAN = SCHEDULE_DAY_END - SCHEDULE_DAY_START
 export const HOUR_HEIGHT_PX = 140
+export const HOUR_HEIGHT_MOBILE_PX = 96
 export const COLLAPSED_VISIBLE_HOURS = 4
+export const SCHEDULE_TIME_COL_DESKTOP = 80
+export const SCHEDULE_TIME_COL_MOBILE = 52
+export const SCHEDULE_ROOMS_MIN_WIDTH_MOBILE = 680
+export const SCHEDULE_ROOMS_MIN_WIDTH_DESKTOP = 920
 
 export function parseTimeToMinutes(time: string): number {
   const [h, m] = time.split(':').map(Number)
@@ -40,6 +45,7 @@ export interface DayTimeRange {
 
 export function getDayTimeRange(
   events: { startTime: string; endTime: string }[],
+  hourHeightPx: number = HOUR_HEIGHT_PX,
 ): DayTimeRange {
   if (events.length === 0) {
     const hours = [0, 1, 2, 3]
@@ -47,7 +53,7 @@ export function getDayTimeRange(
       startOffset: 0,
       endOffset: 3 * 60,
       hours,
-      totalHeightPx: hours.length * HOUR_HEIGHT_PX,
+      totalHeightPx: hours.length * hourHeightPx,
     }
   }
 
@@ -72,7 +78,7 @@ export function getDayTimeRange(
     startOffset: startHourIdx * 60,
     endOffset: endHourIdx * 60,
     hours,
-    totalHeightPx: hours.length * HOUR_HEIGHT_PX,
+    totalHeightPx: hours.length * hourHeightPx,
   }
 }
 

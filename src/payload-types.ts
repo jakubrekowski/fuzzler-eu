@@ -1084,11 +1084,7 @@ export interface ScheduleBlock {
   /**
    * Upload/select a JSON file from Media.
    */
-  scheduleFile?: (number | null) | Media;
-  /**
-   * Legacy fallback if no Media file is set. Example: /schedule.json
-   */
-  scheduleUrl?: string | null;
+  scheduleFile: number | Media;
   id?: string | null;
   blockName?: string | null;
   blockType: 'schedule';
@@ -1858,7 +1854,6 @@ export interface ScheduleBlockSelect<T extends boolean = true> {
   title?: T;
   description?: T;
   scheduleFile?: T;
-  scheduleUrl?: T;
   id?: T;
   blockName?: T;
 }

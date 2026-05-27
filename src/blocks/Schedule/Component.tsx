@@ -4,24 +4,23 @@ import React, { useEffect, useMemo, useRef, useState } from 'react'
 import type { ScheduleBlock as ScheduleBlockProps } from '@/payload-types'
 import { SectionHeader } from '@/components/SectionHeader'
 import { HighlightedText } from '@/components/HighlightedText'
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from '@/components/ui/select'
+import type { Media } from '@/payload-types'
 import { cn } from '@/utilities/ui'
 import { X, Calendar, Clock, MapPin, User, ChevronDown, ChevronUp } from 'lucide-react'
 import {
   COLLAPSED_VISIBLE_HOURS,
-  HOUR_HEIGHT_PX,
   eventDurationMinutes,
   formatScheduleHour,
   getCategoryPastelStyles,
   getDayTimeRange,
   timeToOffset,
 } from './utils'
+import { useScheduleLayout } from './useScheduleLayout'
+
+function getScheduleFileUrl(scheduleFile: number | Media | null | undefined): string | null {
+  if (!scheduleFile || typeof scheduleFile === 'number') return null
+  return scheduleFile.url ?? null
+}
 
 interface Day {
   id: string
@@ -65,6 +64,7 @@ interface ScheduleData {
 interface ScheduleEventCardProps {
   event: Event
   rangeStartOffset: number
+  hourHeightPx: number
   category?: Category
   presenterNames: string
   onSelect: (event: Event) => void
@@ -73,14 +73,15 @@ interface ScheduleEventCardProps {
 function ScheduleEventCard({
   event,
   rangeStartOffset,
+  hourHeightPx,
   category,
   presenterNames,
   onSelect,
 }: ScheduleEventCardProps) {
   const startOffset = timeToOffset(event.startTime)
   const duration = eventDurationMinutes(event.startTime, event.endTime)
-  const topPx = ((startOffset - rangeStartOffset) / 60) * HOUR_HEIGHT_PX + 4
-  const heightPx = (duration / 60) * HOUR_HEIGHT_PX - 8
+  const topPx = ((startOffset - rangeStartOffset) / 60) * hourHeightPx + 4
+  const heightPx = (duration / 60) * hourHeightPx - 8
 
   const hex = category?.color || '#333'
   const { pastelColor, textColor, subtextColor, badgeBg } = getCategoryPastelStyles(hex)
@@ -92,8 +93,10 @@ function ScheduleEventCard({
     <div
       onClick={() => onSelect(event)}
       className={cn(
-        'absolute left-1 right-1 rounded-2xl border pointer-events-auto transition-all duration-500 hover:scale-[1.02] hover:shadow-2xl hover:z-10 group overflow-hidden cursor-pointer flex flex-col',
-        isShort ? 'p-2.5 px-3' : 'p-4',
+        'absolute left-0.5 right-0.5 sm:left-1 sm:right-1 rounded-xl sm:rounded-2xl border pointer-events-auto transition-all duration-300',
+        'touch-manipulation active:scale-[0.98] md:hover:scale-[1.02] md:hover:shadow-2xl md:hover:z-10',
+        'group overflow-hidden cursor-pointer flex flex-col',
+        isShort ? 'p-2 px-2.5 sm:p-2.5 sm:px-3' : 'p-3 sm:p-4',
       )}
       style={{
         top: `${topPx}px`,
@@ -169,9 +172,8 @@ function ScheduleEventCard({
 }
 
 export const ScheduleBlockComponent: React.FC<ScheduleBlockProps> = (props) => {
-  const scheduleUrl = (props as ScheduleBlockProps & { scheduleUrl?: string }).scheduleUrl
-  const scheduleFile = (props as ScheduleBlockProps & { scheduleFile?: any }).scheduleFile
-  const { tagline, title, description, anchor } = props
+  const { tagline, title, description, anchor, scheduleFile } = props
+  const { isMobile, hourHeightPx, timeColWidth, roomsMinWidth } = useScheduleLayout()
   const [data, setData] = useState<ScheduleData | null>(null)
   const [activeDayId, setActiveDayId] = useState<string | null>(null)
   const [selectedEvent, setSelectedEvent] = useState<Event | null>(null)
@@ -180,13 +182,12 @@ export const ScheduleBlockComponent: React.FC<ScheduleBlockProps> = (props) => {
   const [error, setError] = useState<string | null>(null)
 
   useEffect(() => {
-    const fileUrl =
-      typeof scheduleFile === 'string'
-        ? scheduleFile
-        : scheduleFile?.url || scheduleFile?.sizes?.original?.url
-
-    const source = fileUrl || scheduleUrl
-    if (!source) return
+    const source = getScheduleFileUrl(scheduleFile)
+    if (!source) {
+      setError('Nie wybrano pliku harmonogramu (JSON).')
+      setLoading(false)
+      return
+    }
 
     fetch(source)
       .then((res) => {
@@ -205,7 +206,7 @@ export const ScheduleBlockComponent: React.FC<ScheduleBlockProps> = (props) => {
         setError(err.message)
         setLoading(false)
       })
-  }, [scheduleUrl, scheduleFile])
+  }, [scheduleFile])
 
   const headerScrollRef = useRef<HTMLDivElement | null>(null)
   const bodyScrollRef = useRef<HTMLDivElement | null>(null)
@@ -236,16 +237,20 @@ export const ScheduleBlockComponent: React.FC<ScheduleBlockProps> = (props) => {
     setActiveDayId(dayId)
   }
 
-  if (loading) return <div className="container py-24 text-center">Loading schedule...</div>
-  if (error) return <div className="container py-24 text-center text-red-500">Error: {error}</div>
+  if (loading) return <div className="container py-12 md:py-24 text-center text-zinc-400">Ładowanie programu…</div>
+  if (error) return <div className="container py-12 md:py-24 text-center text-red-500 px-4">{error}</div>
   if (!data || !activeDayId) return null
 
   const activeDay = data.days.find((d) => d.id === activeDayId)
   const dayEvents = data.events.filter((e) => e.dayId === activeDayId)
-  const timeRange = getDayTimeRange(dayEvents)
-  const gridColumns = `80px repeat(${data.rooms.length}, 1fr)`
-  const collapsedMaxHeight = COLLAPSED_VISIBLE_HOURS * HOUR_HEIGHT_PX
+  const timeRange = getDayTimeRange(dayEvents, hourHeightPx)
+  const gridColumns = `${timeColWidth}px 1fr`
+  const collapsedMaxHeight = COLLAPSED_VISIBLE_HOURS * hourHeightPx
   const showExpand = timeRange.totalHeightPx > collapsedMaxHeight
+  const roomsGridStyle = {
+    gridTemplateColumns: `repeat(${data.rooms.length}, minmax(200px, 1fr))`,
+    minWidth: roomsMinWidth,
+  } as const
 
   const getPresenterNames = (ids?: string[]) => {
     if (!ids) return ''
@@ -259,8 +264,8 @@ export const ScheduleBlockComponent: React.FC<ScheduleBlockProps> = (props) => {
   const getRoomName = (id: string) => data.rooms.find((r) => r.id === id)?.name
 
   return (
-    <div className="container py-24" id={anchor || undefined}>
-      <div className="mb-12">
+    <div className="container py-12 md:py-24" id={anchor || undefined}>
+      <div className="mb-8 md:mb-12">
         <SectionHeader tagline={tagline} title={title} description={description} />
       </div>
 
@@ -268,111 +273,110 @@ export const ScheduleBlockComponent: React.FC<ScheduleBlockProps> = (props) => {
         overflow-hidden on this card breaks position:sticky (header would only stick inside the clipped box).
         Rounded corners: top on sticky strip, bottom on the body/footer block.
       */}
-      <div className="relative bg-[#1a1a1a]/50 border border-white/10 rounded-[32px] shadow-2xl">
+      <div
+        className={cn(
+          'relative bg-[#1a1a1a]/50 border border-white/10 shadow-2xl',
+          'max-md:-mx-[1.75rem] max-md:w-[calc(100%+3.5rem)] max-md:rounded-none max-md:border-x-0',
+          'md:rounded-[32px]',
+        )}
+      >
         {/* Sticky: day picker + room headers — below fixed site header (set --header-h on layout if needed) */}
         <div
           className={cn(
-            'sticky z-[35] rounded-t-[32px] bg-[#1a1a1a]/95 backdrop-blur-md border-b border-white/10',
-            'top-[var(--header-h,5.75rem)]',
+            'sticky z-[35] bg-[#1a1a1a]/95 backdrop-blur-md border-b border-white/10',
+            'top-[var(--header-h,4.25rem)] md:top-[var(--header-h,5.75rem)]',
+            'rounded-t-none md:rounded-t-[32px]',
           )}
         >
-          <div className="px-4 pt-4 pb-3 md:px-6">
-                {/* Mobile: custom select */}
-                <div className="md:hidden">
-                  <Select value={activeDayId} onValueChange={handleDayChange}>
-                    <SelectTrigger
-                      className={cn(
-                        'h-12 w-full rounded-[24px] border-white/15 bg-white/[0.05] px-5',
-                        'text-[13px] font-bold uppercase tracking-widest text-white',
-                        'focus-visible:ring-orange/30 focus-visible:border-orange/40',
-                        '[&_svg]:text-orange',
-                      )}
-                    >
-                      <SelectValue>
-                        {activeDay && (
-                          <>
-                            <span className="opacity-60 mr-2">{activeDay.date}</span>
-                            <HighlightedText>{activeDay.label}</HighlightedText>
-                          </>
-                        )}
-                      </SelectValue>
-                    </SelectTrigger>
-                    <SelectContent
-                      className={cn(
-                        'rounded-2xl border-white/15 bg-[#1f1f1f] text-white',
-                        'shadow-2xl backdrop-blur-md',
-                      )}
-                    >
-                      {data.days.map((day) => (
-                        <SelectItem
-                          key={day.id}
-                          value={day.id}
-                          className={cn(
-                            'rounded-xl py-3 text-[13px] font-bold uppercase tracking-widest',
-                            'focus:bg-orange/20 focus:text-white',
-                          )}
-                        >
-                          <span className="opacity-60 mr-2">{day.date}</span>
-                          {day.label}
-                        </SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
-                </div>
-
-                {/* Desktop: pill tabs */}
-                <div className="hidden md:flex justify-center">
-                  <div className="flex flex-wrap justify-center gap-3 p-2 bg-white/[0.03] border border-white/10 rounded-[40px]">
-                    {data.days.map((day) => (
-                      <button
-                        key={day.id}
-                        type="button"
-                        onClick={() => handleDayChange(day.id)}
-                        className={cn(
-                          'px-8 py-3 rounded-[32px] text-[13px] font-bold uppercase tracking-widest transition-all duration-300',
-                          activeDayId === day.id
-                            ? 'bg-orange text-graphite shadow-[0_8px_24px_-8px_rgba(255,144,0,0.5)]'
-                            : 'text-zinc-400 hover:text-white hover:bg-white/5',
-                        )}
-                      >
-                        <span className="opacity-60 mr-2">{day.date}</span>
-                        <HighlightedText>{day.label}</HighlightedText>
-                      </button>
-                    ))}
-                  </div>
-                </div>
+          <div className="px-3 pt-3 pb-2 md:px-6 md:pt-4 md:pb-3">
+            {/* Mobile: horizontal day chips */}
+            <div className="md:hidden">
+              <div
+                className={cn(
+                  'flex gap-2 overflow-x-auto pb-1 snap-x snap-mandatory',
+                  '[scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden',
+                )}
+              >
+                {data.days.map((day) => (
+                  <button
+                    key={day.id}
+                    type="button"
+                    onClick={() => handleDayChange(day.id)}
+                    className={cn(
+                      'snap-start shrink-0 flex flex-col items-center px-4 py-2.5 rounded-[18px] min-w-[5.5rem]',
+                      'text-[11px] font-bold uppercase tracking-wider transition-all duration-300',
+                      activeDayId === day.id
+                        ? 'bg-orange text-graphite shadow-[0_6px_20px_-6px_rgba(255,144,0,0.55)]'
+                        : 'bg-white/[0.06] border border-white/10 text-zinc-400',
+                    )}
+                  >
+                    <span className={cn('font-mono text-[10px]', activeDayId === day.id ? 'opacity-80' : 'opacity-50')}>
+                      {day.date}
+                    </span>
+                    <span className="mt-0.5 leading-tight">
+                      <HighlightedText>{day.label}</HighlightedText>
+                    </span>
+                  </button>
+                ))}
               </div>
+            </div>
 
-          <div className="border-t border-white/10 bg-white/[0.02]">
+            {/* Desktop: pill tabs */}
+            <div className="hidden md:flex justify-center">
+              <div className="flex flex-wrap justify-center gap-3 p-2 bg-white/[0.03] border border-white/10 rounded-[40px]">
+                {data.days.map((day) => (
+                  <button
+                    key={day.id}
+                    type="button"
+                    onClick={() => handleDayChange(day.id)}
+                    className={cn(
+                      'px-8 py-3 rounded-[32px] text-[13px] font-bold uppercase tracking-widest transition-all duration-300',
+                      activeDayId === day.id
+                        ? 'bg-orange text-graphite shadow-[0_8px_24px_-8px_rgba(255,144,0,0.5)]'
+                        : 'text-zinc-400 hover:text-white hover:bg-white/5',
+                    )}
+                  >
+                    <span className="opacity-60 mr-2">{day.date}</span>
+                    <HighlightedText>{day.label}</HighlightedText>
+                  </button>
+                ))}
+              </div>
+            </div>
+          </div>
+
+          <div className="border-t border-white/10 bg-white/[0.02] relative">
             <div className="grid" style={{ gridTemplateColumns: gridColumns }}>
-              <div className="p-4 text-[10px] font-mono text-zinc-500 uppercase tracking-widest flex items-center justify-center border-r border-white/10">
+              <div className="py-3 px-1 md:p-4 text-[9px] md:text-[10px] font-mono text-zinc-500 uppercase tracking-widest flex items-center justify-center border-r border-white/10">
                 Godz.
               </div>
               <div
                 ref={headerScrollRef}
                 onScroll={() => syncScroll('header')}
-                className={scrollerClass}
+                className={cn(scrollerClass, 'relative')}
               >
-                <div
-                  className="grid min-w-[920px]"
-                  style={{ gridTemplateColumns: `repeat(${data.rooms.length}, 1fr)` }}
-                >
+                <div className="grid" style={roomsGridStyle}>
                   {data.rooms.map((room) => (
                     <div
                       key={room.id}
-                      className="p-4 text-[11px] font-bold uppercase tracking-[0.2em] text-zinc-400 text-center"
+                      className="py-3 px-2 md:p-4 text-[10px] md:text-[11px] font-bold uppercase tracking-[0.15em] md:tracking-[0.2em] text-zinc-400 text-center leading-tight"
                     >
                       <HighlightedText>{room.name}</HighlightedText>
                     </div>
                   ))}
                 </div>
+                {isMobile && (
+                  <div
+                    className="pointer-events-none absolute right-0 top-0 bottom-0 w-8 bg-gradient-to-l from-[#1a1a1a] to-transparent"
+                    aria-hidden
+                  />
+                )}
               </div>
             </div>
           </div>
         </div>
 
         {/* Body: one horizontal scroller (no visible scrollbar) */}
-        <div className="relative overflow-hidden rounded-b-[32px]">
+        <div className="relative overflow-hidden rounded-b-none md:rounded-b-[32px]">
           <div
             className={cn(
               'relative transition-[max-height] duration-500 ease-out',
@@ -380,14 +384,14 @@ export const ScheduleBlockComponent: React.FC<ScheduleBlockProps> = (props) => {
             )}
             style={!expanded && showExpand ? { maxHeight: `${collapsedMaxHeight}px` } : undefined}
           >
-            <div className="grid" style={{ gridTemplateColumns: '80px 1fr' }}>
+            <div className="grid" style={{ gridTemplateColumns: `${timeColWidth}px 1fr` }}>
               {/* Time column */}
-              <div className="border-r border-white/10">
+              <div className="border-r border-white/10 shrink-0">
                 {timeRange.hours.map((hourIdx) => (
                   <div
                     key={hourIdx}
-                    className="border-b border-white/5 flex items-start justify-center pt-4 text-[13px] font-mono text-zinc-600"
-                    style={{ height: `${HOUR_HEIGHT_PX}px` }}
+                    className="border-b border-white/5 flex items-start justify-center pt-3 md:pt-4 text-[11px] md:text-[13px] font-mono text-zinc-600"
+                    style={{ height: `${hourHeightPx}px` }}
                   >
                     {formatScheduleHour(hourIdx)}
                   </div>
@@ -398,11 +402,11 @@ export const ScheduleBlockComponent: React.FC<ScheduleBlockProps> = (props) => {
               <div
                 ref={bodyScrollRef}
                 onScroll={() => syncScroll('body')}
-                className={scrollerClass}
+                className={cn(scrollerClass, 'relative')}
               >
                 <div
-                  className="relative min-w-[920px]"
-                  style={{ height: `${timeRange.totalHeightPx}px` }}
+                  className="relative"
+                  style={{ height: `${timeRange.totalHeightPx}px`, ...roomsGridStyle }}
                 >
                   {/* Background grid */}
                   <div className="absolute inset-0">
@@ -411,8 +415,8 @@ export const ScheduleBlockComponent: React.FC<ScheduleBlockProps> = (props) => {
                         key={hourIdx}
                         className="grid border-b border-white/5"
                         style={{
-                          gridTemplateColumns: `repeat(${data.rooms.length}, 1fr)`,
-                          height: `${HOUR_HEIGHT_PX}px`,
+                          gridTemplateColumns: `repeat(${data.rooms.length}, minmax(200px, 1fr))`,
+                          height: `${hourHeightPx}px`,
                         }}
                       >
                         {data.rooms.map((room) => (
@@ -425,7 +429,7 @@ export const ScheduleBlockComponent: React.FC<ScheduleBlockProps> = (props) => {
                   {/* Events overlay */}
                   <div
                     className="absolute inset-0 pointer-events-none grid h-full"
-                    style={{ gridTemplateColumns: `repeat(${data.rooms.length}, 1fr)` }}
+                    style={{ gridTemplateColumns: `repeat(${data.rooms.length}, minmax(200px, 1fr))` }}
                   >
                     {data.rooms.map((room) => (
                       <div key={room.id} className="relative h-full">
@@ -436,6 +440,7 @@ export const ScheduleBlockComponent: React.FC<ScheduleBlockProps> = (props) => {
                               key={event.id}
                               event={event}
                               rangeStartOffset={timeRange.startOffset}
+                              hourHeightPx={hourHeightPx}
                               category={getCategory(event.categoryId)}
                               presenterNames={getPresenterNames(event.presenterIds)}
                               onSelect={setSelectedEvent}
@@ -445,6 +450,12 @@ export const ScheduleBlockComponent: React.FC<ScheduleBlockProps> = (props) => {
                     ))}
                   </div>
                 </div>
+                {isMobile && (
+                  <div
+                    className="pointer-events-none absolute right-0 top-0 bottom-0 w-10 bg-gradient-to-l from-[#1a1a1a] via-[#1a1a1a]/80 to-transparent z-10"
+                    aria-hidden
+                  />
+                )}
               </div>
             </div>
 
@@ -460,15 +471,15 @@ export const ScheduleBlockComponent: React.FC<ScheduleBlockProps> = (props) => {
           </div>
 
           {showExpand && (
-            <div className="flex justify-center border-t border-white/5 bg-[#1a1a1a]/80 py-4">
+            <div className="flex justify-center border-t border-white/5 bg-[#1a1a1a]/80 py-3 px-3 md:py-4 md:px-0">
               <button
                 type="button"
                 onClick={() => setExpanded((v) => !v)}
                 className={cn(
-                  'inline-flex items-center gap-2 px-8 py-3 rounded-[32px]',
-                  'text-[12px] font-bold uppercase tracking-widest transition-all duration-300',
+                  'inline-flex items-center justify-center gap-2 w-full max-w-sm md:w-auto md:max-w-none px-6 md:px-8 py-3 rounded-[24px] md:rounded-[32px]',
+                  'text-[11px] md:text-[12px] font-bold uppercase tracking-widest transition-all duration-300',
                   'border border-white/15 bg-white/[0.05] text-zinc-300',
-                  'hover:text-white hover:bg-white/10 hover:border-orange/30',
+                  'hover:text-white hover:bg-white/10 hover:border-orange/30 active:scale-[0.98]',
                 )}
               >
                 {expanded ? (
@@ -488,32 +499,46 @@ export const ScheduleBlockComponent: React.FC<ScheduleBlockProps> = (props) => {
         </div>
       </div>
 
-      <p className="mt-8 text-zinc-500 text-xs font-mono text-center uppercase tracking-widest opacity-40">
-        Przesuń tabelę w poziomie, aby zobaczyć wszystkie sale →
+      <p className="mt-4 md:mt-8 text-zinc-500 text-[10px] md:text-xs font-mono text-center uppercase tracking-widest opacity-50 md:opacity-40 px-2">
+        <span className="md:hidden">Przesuń palcem w poziomie · więcej sal →</span>
+        <span className="hidden md:inline">Przesuń tabelę w poziomie, aby zobaczyć wszystkie sale →</span>
       </p>
 
       {selectedEvent && (
-        <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 md:p-8 animate-in fade-in duration-300">
+        <div
+          className={cn(
+            'fixed inset-0 z-[100] flex p-0 md:p-8 animate-in fade-in duration-300',
+            'items-end md:items-center justify-center',
+          )}
+        >
           <div
             className="absolute inset-0 bg-graphite/80 backdrop-blur-md"
             onClick={() => setSelectedEvent(null)}
           />
 
-          <div className="relative bg-zinc-900 border border-white/10 rounded-[40px] w-full max-w-2xl overflow-hidden shadow-2xl animate-in zoom-in-95 duration-300">
+          <div
+            className={cn(
+              'relative bg-zinc-900 border border-white/10 w-full overflow-hidden shadow-2xl',
+              'animate-in slide-in-from-bottom-4 md:zoom-in-95 duration-300',
+              'rounded-t-[28px] rounded-b-none max-h-[min(92dvh,720px)] overflow-y-auto',
+              'md:rounded-[40px] md:max-w-2xl md:max-h-none',
+            )}
+          >
             <div
-              className="h-4 sm:h-6 w-full"
+              className="h-3 md:h-6 w-full shrink-0"
               style={{ backgroundColor: getCategory(selectedEvent.categoryId)?.color }}
             />
 
             <button
               type="button"
               onClick={() => setSelectedEvent(null)}
-              className="absolute top-8 right-8 p-2 rounded-full bg-white/5 hover:bg-white/10 text-zinc-400 hover:text-white transition-all z-10"
+              className="absolute top-4 right-4 md:top-8 md:right-8 p-2 rounded-full bg-white/5 hover:bg-white/10 text-zinc-400 hover:text-white transition-all z-10"
+              aria-label="Zamknij"
             >
               <X size={20} />
             </button>
 
-            <div className="p-8 md:p-12">
+            <div className="p-6 pb-8 md:p-12">
               <div className="flex items-center gap-3 mb-6">
                 <span
                   className="px-3 py-1 rounded-full text-[10px] font-bold uppercase tracking-widest border"
@@ -530,7 +555,7 @@ export const ScheduleBlockComponent: React.FC<ScheduleBlockProps> = (props) => {
                 </span>
               </div>
 
-              <h3 className="text-4xl md:text-5xl font-bold uppercase tracking-tight font-rajdhani mb-8 text-white leading-none">
+              <h3 className="text-3xl md:text-5xl font-bold uppercase tracking-tight font-rajdhani mb-6 md:mb-8 text-white leading-none pr-10">
                 <HighlightedText>{selectedEvent.title}</HighlightedText>
               </h3>
 
