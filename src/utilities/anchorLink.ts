@@ -15,12 +15,14 @@ export function scrollToAnchorHash(hash: string, behavior: ScrollBehavior = getS
 }
 
 export type NormalizedAnchorHref = {
-  /** Path without hash, always starts with `/` */
+  /** Path without hash, always starts with `/` (internal links only) */
   pathname: string
   /** Fragment including `#`, or null */
   hash: string | null
-  /** Full path for Next.js `Link` */
+  /** Resolved href for Next.js `Link` or `<a>` */
   href: string
+  /** Absolute / special-scheme URLs must not be rewritten to site-relative paths */
+  isExternal: boolean
 }
 
 /**
@@ -31,38 +33,30 @@ export function normalizeAnchorHref(rawHref: string): NormalizedAnchorHref {
   const trimmed = rawHref.trim()
 
   if (!trimmed) {
-    return { pathname: '/', hash: null, href: '/' }
+    return { pathname: '/', hash: null, href: '/', isExternal: false }
+  }
+
+  if (/^(https?:|mailto:|tel:)/i.test(trimmed)) {
+    return { pathname: '/', hash: null, href: trimmed, isExternal: true }
   }
 
   let pathname = '/'
   let hash: string | null = null
+  const hashIndex = trimmed.indexOf('#')
 
-  if (/^https?:\/\//i.test(trimmed)) {
-    try {
-      const url = new URL(trimmed)
-      pathname = url.pathname || '/'
-      hash = url.hash && url.hash.length > 1 ? `#${url.hash.slice(1).split('#')[0]?.split('?')[0] ?? ''}` : null
-      if (hash === '#') hash = null
-    } catch {
+  if (hashIndex >= 0) {
+    const pathPart = trimmed.slice(0, hashIndex)
+    const fragment = trimmed.slice(hashIndex + 1)
+    const id = fragment.split('#')[0]?.split('?')[0]?.trim() ?? ''
+    hash = id ? `#${id}` : null
+
+    if (pathPart === '' || pathPart === '/') {
       pathname = '/'
+    } else {
+      pathname = pathPart.startsWith('/') ? pathPart : `/${pathPart}`
     }
   } else {
-    const hashIndex = trimmed.indexOf('#')
-
-    if (hashIndex >= 0) {
-      const pathPart = trimmed.slice(0, hashIndex)
-      const fragment = trimmed.slice(hashIndex + 1)
-      const id = fragment.split('#')[0]?.split('?')[0]?.trim() ?? ''
-      hash = id ? `#${id}` : null
-
-      if (pathPart === '' || pathPart === '/') {
-        pathname = '/'
-      } else {
-        pathname = pathPart.startsWith('/') ? pathPart : `/${pathPart}`
-      }
-    } else {
-      pathname = trimmed.startsWith('/') ? trimmed : `/${trimmed}`
-    }
+    pathname = trimmed.startsWith('/') ? trimmed : `/${trimmed}`
   }
 
   if (pathname === '') pathname = '/'
@@ -74,11 +68,11 @@ export function normalizeAnchorHref(rawHref: string): NormalizedAnchorHref {
 
   const href = hash ? `${pathname}${hash}` : pathname
 
-  return { pathname, hash, href }
+  return { pathname, hash, href, isExternal: false }
 }
 
 export function isSamePageAnchor(pathname: string, target: NormalizedAnchorHref): boolean {
-  if (!target.hash) return false
+  if (target.isExternal || !target.hash) return false
   return target.pathname === pathname
 }
 

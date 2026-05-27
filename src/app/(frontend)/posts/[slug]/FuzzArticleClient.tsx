@@ -2,9 +2,8 @@
 
 import React, { useState, useEffect, useRef } from 'react'
 import Link from 'next/link'
-import { ButtonArrow } from '@/components/ui/button'
+import { ActionButton } from '@/components/ActionButton'
 import type { Post, SiteSetting } from '@/payload-types'
-import { CMSLink } from '@/components/Link'
 import { PostHeroImage } from '@/components/PostHeroImage'
 import RichText from '@/components/RichText'
 import { CategoryBadge } from '@/components/CategoryBadge'
@@ -361,9 +360,7 @@ const PostSidebarCtaCard: React.FC<{
       {description && (
         <p className="text-[14px] text-[#E8E2D6]/60 mb-4 leading-snug">{description}</p>
       )}
-      <CMSLink {...link} appearance="default" size="sm" className="w-full">
-        <ButtonArrow />
-      </CMSLink>
+      <ActionButton link={link} size="sm" className="w-full justify-center" />
     </div>
   )
 }

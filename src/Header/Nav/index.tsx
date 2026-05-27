@@ -4,10 +4,10 @@ import React from 'react'
 
 import type { Header as HeaderType } from '@/payload-types'
 
+import { ActionButton } from '@/components/ActionButton'
 import { CMSLink } from '@/components/Link'
 import Link from 'next/link'
 import { Menu, SearchIcon, X } from 'lucide-react'
-import { ButtonArrow } from '@/components/ui/button'
 import { cn } from '@/utilities/ui'
 
 type HeaderNavProps = {
@@ -51,13 +51,7 @@ export const HeaderNav: React.FC<HeaderNavProps> = ({ data, mobileOpen, onMobile
           <SearchIcon className="h-4 w-4" />
         </Link>
         {showCta && (
-          <CMSLink
-            {...(cta?.link ?? defaultHeaderCtaLink)}
-            appearance="default"
-            className="ml-2"
-          >
-            <ButtonArrow />
-          </CMSLink>
+          <ActionButton link={cta?.link ?? defaultHeaderCtaLink} className="ml-2" />
         )}
       </nav>
 

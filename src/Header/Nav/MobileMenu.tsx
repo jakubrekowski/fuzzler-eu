@@ -4,10 +4,10 @@ import React from 'react'
 
 import type { Header as HeaderType } from '@/payload-types'
 
+import { ActionButton } from '@/components/ActionButton'
 import { CMSLink } from '@/components/Link'
 import Link from 'next/link'
 import { SearchIcon } from 'lucide-react'
-import { ButtonArrow } from '@/components/ui/button'
 
 type HeaderMobileMenuProps = {
   data: HeaderType
@@ -49,14 +49,11 @@ export const HeaderMobileMenu: React.FC<HeaderMobileMenuProps> = ({ data, onNavi
           Szukaj
         </Link>
         {showCta && (
-          <CMSLink
-            {...(cta?.link ?? defaultHeaderCtaLink)}
-            appearance="default"
+          <ActionButton
+            link={cta?.link ?? defaultHeaderCtaLink}
             className="w-full justify-center"
             onClick={onNavigate}
-          >
-            <ButtonArrow />
-          </CMSLink>
+          />
         )}
       </div>
     </nav>

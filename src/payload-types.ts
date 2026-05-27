@@ -2486,6 +2486,10 @@ export interface Header {
           } | null);
       url?: string | null;
       label: string;
+      /**
+       * Choose how the link should be rendered.
+       */
+      appearance?: ('default' | 'outline' | 'disabled') | null;
     };
   };
   updatedAt?: string | null;
@@ -2601,6 +2605,10 @@ export interface SiteSetting {
           } | null);
       url?: string | null;
       label: string;
+      /**
+       * Choose how the link should be rendered.
+       */
+      appearance?: ('default' | 'outline' | 'disabled') | null;
     };
   };
   updatedAt?: string | null;
@@ -2640,6 +2648,7 @@ export interface HeaderSelect<T extends boolean = true> {
               reference?: T;
               url?: T;
               label?: T;
+              appearance?: T;
             };
       };
   updatedAt?: T;
@@ -2723,6 +2732,7 @@ export interface SiteSettingsSelect<T extends boolean = true> {
               reference?: T;
               url?: T;
               label?: T;
+              appearance?: T;
             };
       };
   updatedAt?: T;

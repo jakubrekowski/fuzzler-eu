@@ -58,8 +58,8 @@ export const CMSLink: React.FC<CMSLinkType> = (props) => {
 
   const rawHref = href || url || ''
   const normalized = normalizeAnchorHref(rawHref)
-  const { href: resolvedHref, hash } = normalized
-  const hasInPageHash = Boolean(hash)
+  const { href: resolvedHref, hash, isExternal } = normalized
+  const hasInPageHash = Boolean(hash) && !isExternal
   const samePageAnchor = isSamePageAnchor(pathname, normalized)
   const size = appearance === 'link' ? 'clear' : sizeFromProps
   const newTabProps = newTab ? { rel: 'noopener noreferrer', target: '_blank' } : {}
@@ -85,6 +85,27 @@ export const CMSLink: React.FC<CMSLinkType> = (props) => {
     ...(hasInPageHash ? { scroll: false as const } : {}),
     ...newTabProps,
     onClick: handleClick,
+  }
+
+  if (isExternal) {
+    if (appearance === 'inline') {
+      return (
+        <a className={cn(className)} {...linkProps}>
+          {linkContent}
+        </a>
+      )
+    }
+
+    return (
+      <Button asChild className={className} size={size} variant={appearance}>
+        <a
+          className={cn(className, appearance === 'disabled' && 'pointer-events-none')}
+          {...linkProps}
+        >
+          {linkContent}
+        </a>
+      </Button>
+    )
   }
 
   /* Ensure we don't break any styles set by richText */

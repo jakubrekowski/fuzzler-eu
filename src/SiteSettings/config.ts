@@ -78,7 +78,6 @@ export const SiteSettings: GlobalConfig = {
                   defaultValue: 'Nie zwlekaj! Rejestracja trwa.',
                 },
                 link({
-                  appearances: false,
                   overrides: {
                     admin: {
                       description: 'Docelowy adres przycisku (np. sekcja zapisu na stronie głównej).',

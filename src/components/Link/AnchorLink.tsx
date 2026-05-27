@@ -35,13 +35,21 @@ export const AnchorLink: React.FC<AnchorLinkProps> = ({
     onClick?.(event)
   }
 
+  const anchorProps = {
+    className: cn(className),
+    href: normalized.href,
+    onClick: handleClick,
+    ...rest,
+  }
+
+  if (normalized.isExternal) {
+    return <a {...anchorProps}>{children}</a>
+  }
+
   return (
     <Link
-      className={cn(className)}
-      href={normalized.href}
+      {...anchorProps}
       scroll={normalized.hash ? false : undefined}
-      onClick={handleClick}
-      {...rest}
     >
       {children}
     </Link>

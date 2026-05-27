@@ -68,7 +68,6 @@ export const Header: GlobalConfig = {
           defaultValue: true,
         },
         link({
-          appearances: false,
           overrides: {
             admin: {
               description: 'Link docelowy (np. kotwica #zapis na stronie głównej).',
