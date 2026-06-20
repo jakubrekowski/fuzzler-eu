@@ -44,6 +44,7 @@ export const PostsArchiveClient: React.FC<PostsArchiveClientProps> = (props) => 
 
 const PostCard = ({ post }: { post: Post }) => {
   const { slug, categories, title, publishedAt, heroImage, description } = post
+  const displayTitle = title ?? slug ?? ''
   const excerpt = description || post.meta?.description || null
   const readingMinutes = getReadingTimeMinutes(post.content)
 
@@ -56,7 +57,7 @@ const PostCard = ({ post }: { post: Post }) => {
     'from-[#79E69C] to-[#4B0082]',
     'from-[#2A0049] to-[#FF9A42]',
   ]
-  const gradient = gradients[Math.abs(title.length % gradients.length)]
+  const gradient = gradients[Math.abs(displayTitle.length % gradients.length)]
 
   return (
     <article className="group bg-[#2D2D2A] border border-white/[0.1] rounded-[24px] overflow-hidden flex flex-col transition-all duration-300 hover:-translate-y-1 hover:border-orange/40">
@@ -77,7 +78,7 @@ const PostCard = ({ post }: { post: Post }) => {
         </div>
         <h3 className="font-bold text-xl leading-[1.15] uppercase tracking-tight text-white mb-3 group-hover:text-orange transition-colors">
           <Link href={`/posts/${slug}`}>
-            <HighlightedText>{title}</HighlightedText>
+            <HighlightedText>{displayTitle || 'Bez tytułu'}</HighlightedText>
           </Link>
         </h3>
         {excerpt && (

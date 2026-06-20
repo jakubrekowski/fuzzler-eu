@@ -1,6 +1,6 @@
 import { defaultTheme, themeLocalStorageKey } from './ThemeSelector/types'
 
-/** Inline script for <head> — must not be rendered via next/script inside a client tree (React 19). */
+/** Inline script for root layout — use with next/script strategy="beforeInteractive". */
 export function getThemeInitScript(): string {
   return `
 (function () {
