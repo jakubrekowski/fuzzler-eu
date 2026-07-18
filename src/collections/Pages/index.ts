@@ -20,6 +20,7 @@ import { PostsArchiveBlock } from '../../blocks/PostsArchive/config'
 import { EventBanner } from '../../blocks/EventBanner/config'
 import { CrewList } from '../../blocks/CrewList/config'
 import { RecommendedOrganizations } from '../../blocks/RecommendedOrganizations/config'
+import { withAdminPreview } from '../../blocks/adminPreview'
 import { hero } from '@/heros/config'
 import { slugField } from 'payload'
 import { populatePublishedAt } from '../../hooks/populatePublishedAt'
@@ -86,7 +87,7 @@ export const Pages: CollectionConfig<'pages'> = {
             {
               name: 'layout',
               type: 'blocks',
-              blocks: [CallToAction, EventBanner, CrewList, RecommendedOrganizations, Content, MediaBlock, Archive, FormBlock, MarqueeBlock, FeaturesBlock, PricingBlock, Schedule, Countdown, Dashboard, FAQ, SocialBlock, PostsArchiveBlock],
+              blocks: [CallToAction, EventBanner, CrewList, RecommendedOrganizations, Content, MediaBlock, Archive, FormBlock, MarqueeBlock, FeaturesBlock, PricingBlock, Schedule, Countdown, Dashboard, FAQ, SocialBlock, PostsArchiveBlock].map(withAdminPreview),
               required: true,
               admin: {
                 initCollapsed: true,
