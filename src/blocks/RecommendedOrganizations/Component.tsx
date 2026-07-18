@@ -56,9 +56,6 @@ export const RecommendedOrganizationsBlockComponent: React.FC<
   const contentCard = (
     <div className="flex min-h-full w-full flex-col justify-between gap-6 rounded-[28px] border border-cream/15 bg-graphite-dark p-6 shadow-2xl transition-colors duration-300 group-hover:border-orange/60 sm:p-7 lg:p-8">
       <div>
-        <p className="mb-4 font-mono text-xs uppercase tracking-[0.24em] text-orange">
-          // POLECAM ALLEGROWICZA
-        </p>
         <h3 className="font-rajdhani text-3xl font-bold uppercase leading-none tracking-tight text-cream sm:text-4xl">
           <HighlightedText>{organization.name}</HighlightedText>
         </h3>
