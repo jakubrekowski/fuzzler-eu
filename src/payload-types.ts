@@ -667,6 +667,7 @@ export interface RecommendedOrganizationsBlock {
         link: {
           url: string;
           newTab?: boolean | null;
+          label: string;
         };
         id?: string | null;
       }[]
@@ -1725,6 +1726,7 @@ export interface RecommendedOrganizationsBlockSelect<T extends boolean = true> {
           | {
               url?: T;
               newTab?: T;
+              label?: T;
             };
         id?: T;
       };
