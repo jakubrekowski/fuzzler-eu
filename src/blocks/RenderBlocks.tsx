@@ -19,6 +19,7 @@ import { PostsArchiveBlockComponent } from '@/blocks/PostsArchive/Component'
 import { EventBannerBlockComponent } from '@/blocks/EventBanner/Component'
 import { CrewListBlockComponent } from '@/blocks/CrewList/Component'
 import { RecommendedOrganizationsBlockComponent } from '@/blocks/RecommendedOrganizations/Component'
+import { GalleryBlock } from '@/blocks/Gallery/Component'
 
 const blockComponents = {
   archive: ArchiveBlock,
@@ -27,6 +28,7 @@ const blockComponents = {
   eventBanner: EventBannerBlockComponent,
   crewList: CrewListBlockComponent,
   recommendations: RecommendedOrganizationsBlockComponent,
+  gallery: GalleryBlock,
   formBlock: FormBlock,
   mediaBlock: MediaBlock,
   marquee: MarqueeBlockComponent,

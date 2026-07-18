@@ -40,7 +40,7 @@ export const RecommendedOrganizationsBlockComponent: React.FC<
   const hasLink = Boolean(organization.link?.url)
   const content = (
     <>
-      <div className="relative min-h-64 overflow-hidden bg-graphite sm:min-h-80 lg:min-h-full">
+      <div className="relative aspect-video overflow-hidden bg-graphite">
         {image ? (
           <MediaComponent
             resource={image}
@@ -52,21 +52,21 @@ export const RecommendedOrganizationsBlockComponent: React.FC<
         <div className="absolute inset-0 bg-gradient-to-t from-graphite/80 via-transparent to-transparent" />
       </div>
 
-      <div className="flex min-w-0 flex-1 flex-col justify-between gap-8 p-7 sm:p-10 lg:p-12">
+      <div className="flex min-w-0 flex-1 flex-col justify-between gap-6 p-6 sm:p-7 lg:p-8">
         <div>
           <p className="mb-4 font-mono text-xs uppercase tracking-[0.24em] text-orange">
             // POLECAM ALLEGROWICZA
           </p>
-          <h3 className="font-rajdhani text-4xl font-bold uppercase leading-none tracking-tight text-cream sm:text-5xl">
+          <h3 className="font-rajdhani text-3xl font-bold uppercase leading-none tracking-tight text-cream sm:text-4xl">
             <HighlightedText>{organization.name}</HighlightedText>
           </h3>
-          <p className="mt-6 max-w-xl text-base leading-relaxed text-zinc-400 sm:text-lg">
+          <p className="mt-4 max-w-xl text-base leading-relaxed text-zinc-400">
             <HighlightedText>{organization.description}</HighlightedText>
           </p>
         </div>
         {hasLink && (
-          <span className="font-mono text-xs font-bold uppercase tracking-[0.18em] text-orange">
-            Poznaj organizację <span aria-hidden>→</span>
+          <span className="inline-flex self-start rounded-full border border-orange/70 px-4 py-2 font-mono text-xs font-bold uppercase tracking-[0.14em] text-orange transition-colors group-hover:bg-orange group-hover:text-graphite">
+            {organization.link.label} <span aria-hidden>→</span>
           </span>
         )}
       </div>
@@ -77,12 +77,12 @@ export const RecommendedOrganizationsBlockComponent: React.FC<
     'group grid overflow-hidden rounded-[28px] border border-cream/15 bg-graphite-dark shadow-2xl transition-colors duration-300 hover:border-orange/60 lg:grid-cols-[minmax(280px,0.8fr)_minmax(0,1.2fr)]'
 
   return (
-    <section className="container py-24" id={anchor || undefined}>
+    <section className="container py-14 sm:py-16" id={anchor || undefined}>
       <SectionHeader
         tagline={tagline || undefined}
         title={title}
         description={description || undefined}
-        className="mb-12"
+        className="mb-8 sm:mb-10"
       />
 
       <div className="relative">

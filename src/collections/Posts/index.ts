@@ -18,6 +18,7 @@ import { authenticatedOrPublished } from '../../access/authenticatedOrPublished'
 import { Banner } from '../../blocks/Banner/config'
 import { Code } from '../../blocks/Code/config'
 import { MediaBlock } from '../../blocks/MediaBlock/config'
+import { Gallery } from '../../blocks/Gallery/config'
 import { generatePreviewPath } from '../../utilities/generatePreviewPath'
 import { populateAuthors } from './hooks/populateAuthors'
 import { revalidateDelete, revalidatePost } from './hooks/revalidatePost'
@@ -102,8 +103,7 @@ export const Posts: CollectionConfig<'posts'> = {
               type: 'textarea',
               label: 'Opis (karty)',
               admin: {
-                description:
-                  'Krótki opis na karty i listy wpisów. Oddzielny od leadu i opisu SEO.',
+                description: 'Krótki opis na karty i listy wpisów. Oddzielny od leadu i opisu SEO.',
               },
             },
             {
@@ -125,7 +125,7 @@ export const Posts: CollectionConfig<'posts'> = {
                     UnorderedListFeature(),
                     OrderedListFeature(),
                     BlockquoteFeature(),
-                    BlocksFeature({ blocks: [Banner, Code, MediaBlock] }),
+                    BlocksFeature({ blocks: [Banner, Code, MediaBlock, Gallery] }),
                     FixedToolbarFeature(),
                     InlineToolbarFeature(),
                     HorizontalRuleFeature(),

@@ -80,6 +80,13 @@ export const RecommendedOrganizations: Block = {
               label: 'Otwórz w nowej karcie',
               defaultValue: true,
             },
+            {
+              name: 'label',
+              type: 'text',
+              label: 'Tekst przycisku',
+              required: true,
+              defaultValue: 'Poznaj organizację',
+            },
           ],
         },
       ],

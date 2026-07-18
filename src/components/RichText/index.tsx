@@ -16,16 +16,20 @@ import { CodeBlock, CodeBlockProps } from '@/blocks/Code/Component'
 import type {
   BannerBlock as BannerBlockProps,
   CallToActionBlock as CTABlockProps,
+  GalleryBlock as GalleryBlockProps,
   MediaBlock as MediaBlockProps,
 } from '@/payload-types'
 import { BannerBlock } from '@/blocks/Banner/Component'
 import { CallToActionBlock } from '@/blocks/CallToAction/Component'
+import { GalleryBlock } from '@/blocks/Gallery/Component'
 import { cn } from '@/utilities/ui'
 import { highlightedTextJSXConverter } from '@/components/RichText/highlightedTextConverter'
 
 type NodeTypes =
   | DefaultNodeTypes
-  | SerializedBlockNode<CTABlockProps | MediaBlockProps | BannerBlockProps | CodeBlockProps>
+  | SerializedBlockNode<
+      CTABlockProps | MediaBlockProps | GalleryBlockProps | BannerBlockProps | CodeBlockProps
+    >
 
 const internalDocToHref = ({ linkNode }: { linkNode: SerializedLinkNode }) => {
   const { value, relationTo } = linkNode.fields.doc!
@@ -50,6 +54,13 @@ const jsxConverters: JSXConvertersFunction<NodeTypes> = ({ defaultConverters }) 
         captionClassName="mx-auto max-w-[48rem]"
         enableGutter={false}
         disableInnerContainer={true}
+      />
+    ),
+    gallery: ({ node }) => (
+      <GalleryBlock
+        className="col-start-1 col-span-3 my-4"
+        disableInnerContainer={true}
+        {...node.fields}
       />
     ),
     code: ({ node }) => <CodeBlock className="col-start-2" {...node.fields} />,
