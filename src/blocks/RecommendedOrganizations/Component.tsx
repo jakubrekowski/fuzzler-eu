@@ -39,43 +39,42 @@ export const RecommendedOrganizationsBlockComponent: React.FC<
   const image = typeof organization.image === 'object' ? (organization.image as Media) : null
   const hasLink = Boolean(organization.link?.url)
   const { label: linkLabel, ...linkProps } = organization.link
-  const content = (
-    <>
-      <div className="relative aspect-video overflow-hidden bg-graphite">
-        {image ? (
-          <MediaComponent
-            resource={image}
-            fill
-            className="absolute inset-0"
-            imgClassName="object-cover"
-          />
-        ) : null}
-        <div className="absolute inset-0 bg-gradient-to-t from-graphite/80 via-transparent to-transparent" />
-      </div>
-
-      <div className="flex min-w-0 flex-1 flex-col justify-between gap-6 p-6 sm:p-7 lg:p-8">
-        <div>
-          <p className="mb-4 font-mono text-xs uppercase tracking-[0.24em] text-orange">
-            // POLECAM ALLEGROWICZA
-          </p>
-          <h3 className="font-rajdhani text-3xl font-bold uppercase leading-none tracking-tight text-cream sm:text-4xl">
-            <HighlightedText>{organization.name}</HighlightedText>
-          </h3>
-          <p className="mt-4 max-w-xl text-base leading-relaxed text-zinc-400">
-            <HighlightedText>{organization.description}</HighlightedText>
-          </p>
-        </div>
-        {hasLink && (
-          <span className="inline-flex self-start rounded-full border border-orange/70 px-4 py-2 font-mono text-xs font-bold uppercase tracking-[0.14em] text-orange transition-colors group-hover:bg-orange group-hover:text-graphite">
-            {linkLabel} <span aria-hidden>→</span>
-          </span>
-        )}
-      </div>
-    </>
+  const imageCard = (
+    <div className="relative aspect-video w-full overflow-hidden rounded-[28px] border border-cream/15 bg-graphite shadow-2xl transition-colors duration-300 group-hover:border-orange/60">
+      {image ? (
+        <MediaComponent
+          resource={image}
+          fill
+          className="absolute inset-0"
+          imgClassName="object-cover"
+        />
+      ) : null}
+      <div className="absolute inset-0 bg-gradient-to-t from-graphite/80 via-transparent to-transparent" />
+    </div>
   )
 
-  const cardClassName =
-    'group grid overflow-hidden rounded-[28px] border border-cream/15 bg-graphite-dark shadow-2xl transition-colors duration-300 hover:border-orange/60 lg:grid-cols-[minmax(280px,0.8fr)_minmax(0,1.2fr)]'
+  const contentCard = (
+    <div className="flex min-h-full w-full flex-col justify-between gap-6 rounded-[28px] border border-cream/15 bg-graphite-dark p-6 shadow-2xl transition-colors duration-300 group-hover:border-orange/60 sm:p-7 lg:p-8">
+      <div>
+        <p className="mb-4 font-mono text-xs uppercase tracking-[0.24em] text-orange">
+          // POLECAM ALLEGROWICZA
+        </p>
+        <h3 className="font-rajdhani text-3xl font-bold uppercase leading-none tracking-tight text-cream sm:text-4xl">
+          <HighlightedText>{organization.name}</HighlightedText>
+        </h3>
+        <p className="mt-4 max-w-xl text-base leading-relaxed text-zinc-400">
+          <HighlightedText>{organization.description}</HighlightedText>
+        </p>
+      </div>
+      {hasLink && (
+        <span className="inline-flex self-start rounded-full border border-orange/70 px-4 py-2 font-mono text-xs font-bold uppercase tracking-[0.14em] text-orange transition-colors group-hover:bg-orange group-hover:text-graphite">
+          {linkLabel} <span className="ml-2" aria-hidden>→</span>
+        </span>
+      )}
+    </div>
+  )
+
+  const cardsClassName = 'group grid items-stretch gap-4 sm:gap-5 lg:grid-cols-3 lg:gap-6'
 
   return (
     <section className="container py-14 sm:py-16" id={anchor || undefined}>
@@ -91,13 +90,23 @@ export const RecommendedOrganizationsBlockComponent: React.FC<
           className="animate-in fade-in slide-in-from-bottom-3 duration-700"
           key={organization.id ?? activeIndex}
         >
-          {hasLink ? (
-            <CMSLink {...linkProps} className={cardClassName}>
-              {content}
-            </CMSLink>
-          ) : (
-            <article className={cardClassName}>{content}</article>
-          )}
+          <div className={cardsClassName}>
+            {hasLink ? (
+              <CMSLink {...linkProps} className="group block min-w-0 lg:col-span-1">
+                {imageCard}
+              </CMSLink>
+            ) : (
+              <article className="min-w-0 lg:col-span-1">{imageCard}</article>
+            )}
+
+            {hasLink ? (
+              <CMSLink {...linkProps} className="group block min-w-0 lg:col-span-2">
+                {contentCard}
+              </CMSLink>
+            ) : (
+              <article className="min-w-0 lg:col-span-2">{contentCard}</article>
+            )}
+          </div>
         </div>
 
         {items.length > 1 && (
