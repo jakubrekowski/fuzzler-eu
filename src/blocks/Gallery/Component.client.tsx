@@ -20,6 +20,7 @@ export const GalleryClient = ({
 }: Props) => {
   const [activeIndex, setActiveIndex] = useState(0)
   const [thumbnailStart, setThumbnailStart] = useState(0)
+  const [thumbnailDirection, setThumbnailDirection] = useState<'up' | 'down'>('down')
   const items = images?.filter((item) => item.image) || []
   const total = items.length
   const supportsActiveImage = layout === 'carousel' || layout === 'mainGallery'
@@ -133,11 +134,16 @@ export const GalleryClient = ({
     const visibleThumbnails = items.slice(thumbnailStart, thumbnailStart + 4)
     const maxThumbnailStart = Math.max(0, total - 4)
     const scrollThumbnails = (direction: 'up' | 'down') => {
+      setThumbnailDirection(direction)
       setThumbnailStart((currentStart) => {
         const nextStart = currentStart + (direction === 'down' ? 1 : -1)
         return Math.min(maxThumbnailStart, Math.max(0, nextStart))
       })
     }
+    const thumbnailAnimation =
+      thumbnailDirection === 'down'
+        ? 'animate-in fade-in slide-in-from-bottom-2 duration-300'
+        : 'animate-in fade-in slide-in-from-top-2 duration-300'
 
     return (
       <section className={containerClass} aria-label="Galeria zdjęć">
@@ -159,37 +165,57 @@ export const GalleryClient = ({
           </div>
           {total > 1 && (
             <div className="relative min-h-0 lg:h-full lg:overflow-hidden">
-              <div className="flex gap-2 overflow-hidden lg:h-full lg:flex-col">
-                {visibleThumbnails.map((item, visibleIndex) => {
-                  const index = thumbnailStart + visibleIndex
+              <div className={cn(thumbnailAnimation, 'lg:h-full')} key={thumbnailStart}>
+                <div className="flex gap-2 overflow-hidden lg:h-full lg:flex-col">
+                  {visibleThumbnails.map((item, visibleIndex) => {
+                    const index = thumbnailStart + visibleIndex
 
-                  return (
-                    <button
-                      aria-label={`Pokaż grafikę ${index + 1}`}
-                      aria-current={index === activeIndex}
-                      className={cn(
-                        'relative h-16 w-24 shrink-0 overflow-hidden rounded-[0.65rem] border-2 transition lg:h-auto lg:min-h-0 lg:w-full lg:flex-1',
-                        index === activeIndex
-                          ? 'border-primary opacity-100'
-                          : 'border-transparent opacity-65 hover:opacity-100',
-                      )}
-                      key={item.id}
-                      onClick={() => setActiveIndex(index)}
-                      type="button"
-                    >
-                      <Media
-                        className="absolute inset-0"
-                        fill
-                        imgClassName="object-cover"
-                        mediaSize="medium"
-                        resource={item.image}
-                      />
-                    </button>
-                  )
-                })}
+                    return (
+                      <button
+                        aria-label={`Pokaż grafikę ${index + 1}`}
+                        aria-current={index === activeIndex}
+                        className={cn(
+                          'relative h-16 min-w-0 flex-1 overflow-hidden rounded-[0.65rem] border-2 transition lg:h-auto lg:min-h-0 lg:w-full lg:flex-1',
+                          index === activeIndex
+                            ? 'border-primary opacity-100'
+                            : 'border-transparent opacity-65 hover:opacity-100',
+                        )}
+                        key={item.id}
+                        onClick={() => setActiveIndex(index)}
+                        type="button"
+                      >
+                        <Media
+                          className="absolute inset-0"
+                          fill
+                          imgClassName="object-cover"
+                          mediaSize="medium"
+                          resource={item.image}
+                        />
+                      </button>
+                    )
+                  })}
+                </div>
               </div>
               {total > 4 && (
                 <>
+                  <button
+                    aria-label="Przewiń miniatury w lewo"
+                    className="absolute left-2 top-1/2 flex -translate-y-1/2 rounded-full bg-background/90 p-1.5 text-foreground shadow-sm disabled:cursor-not-allowed disabled:opacity-40 lg:hidden"
+                    disabled={thumbnailStart === 0}
+                    onClick={() => scrollThumbnails('up')}
+                    type="button"
+                  >
+                    <ChevronLeft aria-hidden="true" size={16} />
+                  </button>
+                  <button
+                    aria-label="Przewiń miniatury w prawo"
+                    className="absolute right-2 top-1/2 flex -translate-y-1/2 rounded-full bg-background/90 p-1.5 text-foreground shadow-sm disabled:cursor-not-allowed disabled:opacity-40 lg:hidden"
+                    disabled={thumbnailStart === maxThumbnailStart}
+                    onClick={() => scrollThumbnails('down')}
+                    type="button"
+                  >
+                    <ChevronRight aria-hidden="true" size={16} />
+                  </button>
                   <button
                     aria-label="Przewiń miniatury w górę"
                     className="absolute left-1/2 top-2 hidden -translate-x-1/2 rounded-full bg-background/90 p-1.5 text-foreground shadow-sm disabled:cursor-not-allowed disabled:opacity-40 lg:flex"
