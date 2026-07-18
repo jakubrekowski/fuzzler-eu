@@ -686,7 +686,7 @@ export interface GalleryBlock {
     image: number | Media;
     id?: string | null;
   }[];
-  layout: 'grid' | 'masonry' | 'carousel';
+  layout: 'grid' | 'grid2' | 'masonry' | 'featured' | 'carousel' | 'mainGallery';
   autoplay?: boolean | null;
   /**
    * Od 2 do 60 sekund.

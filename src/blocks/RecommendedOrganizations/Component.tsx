@@ -38,6 +38,7 @@ export const RecommendedOrganizationsBlockComponent: React.FC<
   const organization = items[activeIndex] as Organization
   const image = typeof organization.image === 'object' ? (organization.image as Media) : null
   const hasLink = Boolean(organization.link?.url)
+  const { label: linkLabel, ...linkProps } = organization.link
   const content = (
     <>
       <div className="relative aspect-video overflow-hidden bg-graphite">
@@ -66,7 +67,7 @@ export const RecommendedOrganizationsBlockComponent: React.FC<
         </div>
         {hasLink && (
           <span className="inline-flex self-start rounded-full border border-orange/70 px-4 py-2 font-mono text-xs font-bold uppercase tracking-[0.14em] text-orange transition-colors group-hover:bg-orange group-hover:text-graphite">
-            {organization.link.label} <span aria-hidden>→</span>
+            {linkLabel} <span aria-hidden>→</span>
           </span>
         )}
       </div>
@@ -91,7 +92,7 @@ export const RecommendedOrganizationsBlockComponent: React.FC<
           key={organization.id ?? activeIndex}
         >
           {hasLink ? (
-            <CMSLink {...organization.link} className={cardClassName}>
+            <CMSLink {...linkProps} className={cardClassName}>
               {content}
             </CMSLink>
           ) : (
