@@ -51,32 +51,32 @@ export async function up({ db }: MigrateUpArgs): Promise<void> {
     );
 
     DO $$ BEGIN
-      ALTER TABLE "pages_blocks_recommendations" ADD CONSTRAINT "pages_blocks_recommendations_parent_id_fk" FOREIGN KEY ("_parent_id") REFERENCES "public"."pages"("id") ON DELETE cascade ON UPDATE no action;
+      ALTER TABLE "pages_blocks_recommendations" ADD CONSTRAINT "pages_recs_parent_fk" FOREIGN KEY ("_parent_id") REFERENCES "public"."pages"("id") ON DELETE cascade ON UPDATE no action;
     EXCEPTION WHEN duplicate_object THEN NULL;
     END $$;
 
     DO $$ BEGIN
-      ALTER TABLE "pages_blocks_recommendations_organizations" ADD CONSTRAINT "pages_blocks_recommendations_organizations_parent_id_fk" FOREIGN KEY ("_parent_id") REFERENCES "public"."pages_blocks_recommendations"("id") ON DELETE cascade ON UPDATE no action;
+      ALTER TABLE "pages_blocks_recommendations_organizations" ADD CONSTRAINT "pages_recs_org_parent_fk" FOREIGN KEY ("_parent_id") REFERENCES "public"."pages_blocks_recommendations"("id") ON DELETE cascade ON UPDATE no action;
     EXCEPTION WHEN duplicate_object THEN NULL;
     END $$;
 
     DO $$ BEGIN
-      ALTER TABLE "pages_blocks_recommendations_organizations" ADD CONSTRAINT "pages_blocks_recommendations_organizations_image_id_media_id_fk" FOREIGN KEY ("image_id") REFERENCES "public"."media"("id") ON DELETE set null ON UPDATE no action;
+      ALTER TABLE "pages_blocks_recommendations_organizations" ADD CONSTRAINT "pages_recs_org_image_fk" FOREIGN KEY ("image_id") REFERENCES "public"."media"("id") ON DELETE set null ON UPDATE no action;
     EXCEPTION WHEN duplicate_object THEN NULL;
     END $$;
 
     DO $$ BEGIN
-      ALTER TABLE "_pages_v_blocks_recommendations" ADD CONSTRAINT "_pages_v_blocks_recommendations_parent_id_fk" FOREIGN KEY ("_parent_id") REFERENCES "public"."_pages_v"("id") ON DELETE cascade ON UPDATE no action;
+      ALTER TABLE "_pages_v_blocks_recommendations" ADD CONSTRAINT "pages_v_recs_parent_fk" FOREIGN KEY ("_parent_id") REFERENCES "public"."_pages_v"("id") ON DELETE cascade ON UPDATE no action;
     EXCEPTION WHEN duplicate_object THEN NULL;
     END $$;
 
     DO $$ BEGIN
-      ALTER TABLE "_pages_v_blocks_recommendations_organizations" ADD CONSTRAINT "_pages_v_blocks_recommendations_organizations_parent_id_fk" FOREIGN KEY ("_parent_id") REFERENCES "public"."_pages_v_blocks_recommendations"("id") ON DELETE cascade ON UPDATE no action;
+      ALTER TABLE "_pages_v_blocks_recommendations_organizations" ADD CONSTRAINT "pages_v_recs_org_parent_fk" FOREIGN KEY ("_parent_id") REFERENCES "public"."_pages_v_blocks_recommendations"("id") ON DELETE cascade ON UPDATE no action;
     EXCEPTION WHEN duplicate_object THEN NULL;
     END $$;
 
     DO $$ BEGIN
-      ALTER TABLE "_pages_v_blocks_recommendations_organizations" ADD CONSTRAINT "_pages_v_blocks_recommendations_organizations_image_id_media_id_fk" FOREIGN KEY ("image_id") REFERENCES "public"."media"("id") ON DELETE set null ON UPDATE no action;
+      ALTER TABLE "_pages_v_blocks_recommendations_organizations" ADD CONSTRAINT "pages_v_recs_org_image_fk" FOREIGN KEY ("image_id") REFERENCES "public"."media"("id") ON DELETE set null ON UPDATE no action;
     EXCEPTION WHEN duplicate_object THEN NULL;
     END $$;
 

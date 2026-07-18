@@ -100,7 +100,10 @@ export const RecommendedOrganizationsBlockComponent: React.FC<
         </div>
 
         {items.length > 1 && (
-          <div className="mt-5 flex items-center justify-center gap-2" aria-label="Polecane organizacje">
+          <div
+            className="mt-5 flex items-center justify-center gap-2"
+            aria-label="Polecane organizacje"
+          >
             {items.map((item, index) => (
               <button
                 aria-label={`Pokaż: ${item.name}`}
