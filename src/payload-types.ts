@@ -236,6 +236,7 @@ export interface Page {
     | CallToActionBlock
     | EventBannerBlock
     | CrewListBlock
+    | RecommendedOrganizationsBlock
     | ContentBlock
     | MediaBlock
     | ArchiveBlock
@@ -645,6 +646,34 @@ export interface CrewListBlock {
   id?: string | null;
   blockName?: string | null;
   blockType: 'crewList';
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "RecommendedOrganizationsBlock".
+ */
+export interface RecommendedOrganizationsBlock {
+  anchor?: string | null;
+  tagline?: string | null;
+  /**
+   * Użyj [[tekst]] aby wyróżnić fragment kolorem.
+   */
+  title: string;
+  description?: string | null;
+  organizations?:
+    | {
+        name: string;
+        description: string;
+        image: number | Media;
+        link: {
+          url: string;
+          newTab?: boolean | null;
+        };
+        id?: string | null;
+      }[]
+    | null;
+  id?: string | null;
+  blockName?: string | null;
+  blockType: 'recommendations';
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
@@ -1566,6 +1595,7 @@ export interface PagesSelect<T extends boolean = true> {
         cta?: T | CallToActionBlockSelect<T>;
         eventBanner?: T | EventBannerBlockSelect<T>;
         crewList?: T | CrewListBlockSelect<T>;
+        recommendations?: T | RecommendedOrganizationsBlockSelect<T>;
         content?: T | ContentBlockSelect<T>;
         mediaBlock?: T | MediaBlockSelect<T>;
         archive?: T | ArchiveBlockSelect<T>;
@@ -1669,6 +1699,32 @@ export interface CrewListBlockSelect<T extends boolean = true> {
               url?: T;
               label?: T;
               appearance?: T;
+            };
+        id?: T;
+      };
+  id?: T;
+  blockName?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "RecommendedOrganizationsBlock_select".
+ */
+export interface RecommendedOrganizationsBlockSelect<T extends boolean = true> {
+  anchor?: T;
+  tagline?: T;
+  title?: T;
+  description?: T;
+  organizations?:
+    | T
+    | {
+        name?: T;
+        description?: T;
+        image?: T;
+        link?:
+          | T
+          | {
+              url?: T;
+              newTab?: T;
             };
         id?: T;
       };

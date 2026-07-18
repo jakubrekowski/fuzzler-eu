@@ -6,6 +6,7 @@ import React from 'react'
 import type { Post } from '@/payload-types'
 import { mergeOpenGraph } from '@/utilities/mergeOpenGraph'
 import { getPostsListOgImageUrl } from '@/utilities/og/url'
+import { publishedPostsWhere } from '@/utilities/publishedPosts'
 import { FuzzNewsClient } from './FuzzNewsClient'
 
 export const dynamic = 'force-static'
@@ -27,6 +28,7 @@ export default async function Page() {
       limit: 3,
       sort: '-publishedAt',
       overrideAccess: false,
+      where: publishedPostsWhere(),
       select: {
         title: true,
         slug: true,
@@ -49,6 +51,7 @@ export default async function Page() {
       page: 1,
       sort: '-publishedAt',
       overrideAccess: false,
+      where: publishedPostsWhere(),
       select: {
         title: true,
         slug: true,

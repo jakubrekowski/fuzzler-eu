@@ -9,6 +9,7 @@ import React from 'react'
 import PageClient from './page.client'
 import { notFound } from 'next/navigation'
 import type { Post } from '@/payload-types'
+import { publishedPostsWhere } from '@/utilities/publishedPosts'
 
 export const revalidate = 600
 
@@ -39,6 +40,7 @@ export default async function Page({ params: paramsPromise }: Args) {
       limit: 12,
       page: sanitizedPageNumber,
       overrideAccess: false,
+      where: publishedPostsWhere(),
     })
   } catch (error) {
     console.error('Error fetching posts for pagination:', error)
@@ -86,6 +88,7 @@ export async function generateStaticParams() {
     const { totalDocs } = await payload.count({
       collection: 'posts',
       overrideAccess: false,
+      where: publishedPostsWhere(),
     })
 
     const totalPages = Math.ceil(totalDocs / 10)

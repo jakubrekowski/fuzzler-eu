@@ -6,6 +6,7 @@ import React from 'react'
 import RichText from '@/components/RichText'
 
 import { CollectionArchive } from '@/components/CollectionArchive'
+import { publishedPostsByCategoriesWhere, publishedPostsWhere } from '@/utilities/publishedPosts'
 
 export const ArchiveBlock: React.FC<
   ArchiveBlockProps & {
@@ -30,15 +31,10 @@ export const ArchiveBlock: React.FC<
         collection: 'posts',
         depth: 1,
         limit,
-        ...(flattenedCategories && flattenedCategories.length > 0
-          ? {
-              where: {
-                categories: {
-                  in: flattenedCategories,
-                },
-              },
-            }
-          : {}),
+        where:
+          flattenedCategories && flattenedCategories.length > 0
+            ? publishedPostsByCategoriesWhere(flattenedCategories)
+            : publishedPostsWhere(),
       })
 
       posts = fetchedPosts.docs
@@ -48,11 +44,34 @@ export const ArchiveBlock: React.FC<
     }
   } else {
     if (selectedDocs?.length) {
-      const filteredSelectedPosts = selectedDocs.map((post) => {
-        if (typeof post.value === 'object') return post.value
-      }) as Post[]
+      const selectedPostIDs = selectedDocs
+        .map((post) => (typeof post.value === 'object' ? post.value.id : post.value))
+        .filter((id): id is number => typeof id === 'number')
 
-      posts = filteredSelectedPosts
+      if (selectedPostIDs.length > 0) {
+        try {
+          const payload = await getPayload({ config: configPromise })
+          const fetchedPosts = await payload.find({
+            collection: 'posts',
+            depth: 1,
+            limit: selectedPostIDs.length,
+            where: {
+              and: [
+                ...(publishedPostsWhere().and ?? []),
+                {
+                  id: {
+                    in: selectedPostIDs,
+                  },
+                },
+              ],
+            },
+          })
+
+          posts = fetchedPosts.docs
+        } catch (error) {
+          console.error('Error fetching selected posts for ArchiveBlock:', error)
+        }
+      }
     }
   }
 
