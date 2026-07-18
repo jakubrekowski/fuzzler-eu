@@ -18,6 +18,7 @@ import { SocialBlockComponent } from '@/blocks/Social/Component'
 import { PostsArchiveBlockComponent } from '@/blocks/PostsArchive/Component'
 import { EventBannerBlockComponent } from '@/blocks/EventBanner/Component'
 import { CrewListBlockComponent } from '@/blocks/CrewList/Component'
+import { RecommendedOrganizationsBlockComponent } from '@/blocks/RecommendedOrganizations/Component'
 
 const blockComponents = {
   archive: ArchiveBlock,
@@ -25,6 +26,7 @@ const blockComponents = {
   cta: CallToActionBlock,
   eventBanner: EventBannerBlockComponent,
   crewList: CrewListBlockComponent,
+  recommendations: RecommendedOrganizationsBlockComponent,
   formBlock: FormBlock,
   mediaBlock: MediaBlock,
   marquee: MarqueeBlockComponent,

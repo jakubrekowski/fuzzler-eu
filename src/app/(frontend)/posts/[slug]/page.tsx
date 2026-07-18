@@ -11,6 +11,7 @@ import { getCachedGlobal } from '@/utilities/getGlobals'
 import { LivePreviewListener } from '@/components/LivePreviewListener'
 import PageClient from './page.client'
 import { FuzzArticleClient } from './FuzzArticleClient'
+import { publishedPostsWhere } from '@/utilities/publishedPosts'
 
 export async function generateStaticParams() {
   try {
@@ -55,7 +56,9 @@ export default async function Page({ params: paramsPromise }: Args) {
         limit: 3,
         sort: '-publishedAt',
         overrideAccess: false,
-        where: { slug: { not_equals: decodedSlug } },
+        where: {
+          and: [...publishedPostsWhere().and, { slug: { not_equals: decodedSlug } }],
+        },
       })
       recentPosts = result.docs as Post[]
     } catch (error) {
@@ -95,7 +98,9 @@ const queryPostBySlug = cache(async ({ slug }: { slug: string }) => {
       limit: 1,
       overrideAccess: draft,
       pagination: false,
-      where: { slug: { equals: slug } },
+      where: draft
+        ? { slug: { equals: slug } }
+        : { and: [...publishedPostsWhere().and, { slug: { equals: slug } }] },
     })
     return result.docs?.[0] || null
   } catch (error) {

@@ -2,6 +2,7 @@ import configPromise from '@payload-config'
 import { getPayload } from 'payload'
 import { PostsArchiveClient } from '@/blocks/PostsArchive/Client'
 import type { Post } from '@/payload-types'
+import { publishedPostsByCategoriesWhere, publishedPostsWhere } from '@/utilities/publishedPosts'
 
 export const PostsArchiveBlockComponent = async (props: any) => {
   const { tagline, title, description, categories, limit, anchor } = props
@@ -20,15 +21,10 @@ export const PostsArchiveBlockComponent = async (props: any) => {
       depth: 1,
       limit: limit || 12,
       sort: '-publishedAt',
-      ...(flattenedCategories && flattenedCategories.length > 0
-        ? {
-            where: {
-              categories: {
-                in: flattenedCategories,
-              },
-            },
-          }
-        : {}),
+      where:
+        flattenedCategories && flattenedCategories.length > 0
+          ? publishedPostsByCategoriesWhere(flattenedCategories)
+          : publishedPostsWhere(),
     })
   } catch (error) {
     console.error('Error fetching posts for PostsArchiveBlock:', error)
