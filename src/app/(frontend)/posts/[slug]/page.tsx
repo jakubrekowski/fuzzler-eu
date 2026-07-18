@@ -57,7 +57,7 @@ export default async function Page({ params: paramsPromise }: Args) {
         sort: '-publishedAt',
         overrideAccess: false,
         where: {
-          and: [...publishedPostsWhere().and, { slug: { not_equals: decodedSlug } }],
+          and: [...(publishedPostsWhere().and ?? []), { slug: { not_equals: decodedSlug } }],
         },
       })
       recentPosts = result.docs as Post[]
@@ -100,7 +100,7 @@ const queryPostBySlug = cache(async ({ slug }: { slug: string }) => {
       pagination: false,
       where: draft
         ? { slug: { equals: slug } }
-        : { and: [...publishedPostsWhere().and, { slug: { equals: slug } }] },
+        : { and: [...(publishedPostsWhere().and ?? []), { slug: { equals: slug } }] },
     })
     return result.docs?.[0] || null
   } catch (error) {
