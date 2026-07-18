@@ -237,6 +237,7 @@ export interface Page {
     | EventBannerBlock
     | CrewListBlock
     | RecommendedOrganizationsBlock
+    | GalleryBlock
     | ContentBlock
     | MediaBlock
     | ArchiveBlock
@@ -675,6 +676,25 @@ export interface RecommendedOrganizationsBlock {
   id?: string | null;
   blockName?: string | null;
   blockType: 'recommendations';
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "GalleryBlock".
+ */
+export interface GalleryBlock {
+  images: {
+    image: number | Media;
+    id?: string | null;
+  }[];
+  layout: 'grid' | 'masonry' | 'carousel';
+  autoplay?: boolean | null;
+  /**
+   * Od 2 do 60 sekund.
+   */
+  autoplayInterval?: number | null;
+  id?: string | null;
+  blockName?: string | null;
+  blockType: 'gallery';
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
@@ -1597,6 +1617,7 @@ export interface PagesSelect<T extends boolean = true> {
         eventBanner?: T | EventBannerBlockSelect<T>;
         crewList?: T | CrewListBlockSelect<T>;
         recommendations?: T | RecommendedOrganizationsBlockSelect<T>;
+        gallery?: T | GalleryBlockSelect<T>;
         content?: T | ContentBlockSelect<T>;
         mediaBlock?: T | MediaBlockSelect<T>;
         archive?: T | ArchiveBlockSelect<T>;
@@ -1730,6 +1751,23 @@ export interface RecommendedOrganizationsBlockSelect<T extends boolean = true> {
             };
         id?: T;
       };
+  id?: T;
+  blockName?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "GalleryBlock_select".
+ */
+export interface GalleryBlockSelect<T extends boolean = true> {
+  images?:
+    | T
+    | {
+        image?: T;
+        id?: T;
+      };
+  layout?: T;
+  autoplay?: T;
+  autoplayInterval?: T;
   id?: T;
   blockName?: T;
 }

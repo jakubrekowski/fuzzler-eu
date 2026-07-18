@@ -12,6 +12,7 @@ import * as migration_20260527_post_sidebar_and_header_cta from './20260527_post
 import * as migration_20260527_header_post_cta_link_appearance from './20260527_header_post_cta_link_appearance'
 import * as migration_20260718_recommended_organizations_block from './20260718_recommended_organizations_block'
 import * as migration_20260718_recommended_organizations_link_label from './20260718_recommended_organizations_link_label'
+import * as migration_20260718_gallery_block from './20260718_gallery_block'
 
 export const migrations = [
   {
@@ -83,5 +84,10 @@ export const migrations = [
     up: migration_20260718_recommended_organizations_link_label.up,
     down: migration_20260718_recommended_organizations_link_label.down,
     name: '20260718_recommended_organizations_link_label',
+  },
+  {
+    up: migration_20260718_gallery_block.up,
+    down: migration_20260718_gallery_block.down,
+    name: '20260718_gallery_block',
   },
 ]
