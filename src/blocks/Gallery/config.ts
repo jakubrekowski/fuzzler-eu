@@ -35,9 +35,12 @@ export const Gallery: Block = {
       defaultValue: 'grid',
       required: true,
       options: [
-        { label: 'Siatka', value: 'grid' },
+        { label: 'Siatka (3 kolumny)', value: 'grid' },
+        { label: 'Siatka (2 kolumny)', value: 'grid2' },
         { label: 'Mozaika', value: 'masonry' },
+        { label: 'Wyróżnione zdjęcie + kafelki', value: 'featured' },
         { label: 'Karuzela', value: 'carousel' },
+        { label: 'Main + gallery (duże zdjęcie i miniatury)', value: 'mainGallery' },
       ],
     },
     {
@@ -46,7 +49,8 @@ export const Gallery: Block = {
       label: 'Automatycznie zmieniaj grafikę',
       defaultValue: false,
       admin: {
-        condition: (_, siblingData) => siblingData.layout === 'carousel',
+        condition: (_, siblingData) =>
+          siblingData.layout === 'carousel' || siblingData.layout === 'mainGallery',
       },
     },
     {
@@ -57,7 +61,9 @@ export const Gallery: Block = {
       min: 2,
       max: 60,
       admin: {
-        condition: (_, siblingData) => siblingData.layout === 'carousel' && siblingData.autoplay,
+        condition: (_, siblingData) =>
+          (siblingData.layout === 'carousel' || siblingData.layout === 'mainGallery') &&
+          siblingData.autoplay,
         description: 'Od 2 do 60 sekund.',
       },
     },

@@ -7,6 +7,6 @@ type Props = GalleryBlockProps & {
   disableInnerContainer?: boolean
 }
 
-export const GalleryBlock = ({ className, disableInnerContainer, ...props }: Props) => (
-  <GalleryClient className={className} disableInnerContainer={disableInnerContainer} {...props} />
+export const GalleryBlock = ({ className, ...props }: Props) => (
+  <GalleryClient className={className} {...props} />
 )
