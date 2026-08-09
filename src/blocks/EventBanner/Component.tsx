@@ -11,6 +11,7 @@ import { getPublicApiUrl } from '@/utilities/publicApi'
 
 interface Capacity {
   totalCapacity: number
+  blockedUnoccupiedCapacity: number
   availableUnoccupiedCapacity: number
 }
 
@@ -23,9 +24,10 @@ function sumCapacity(capacities: Capacity[]): Capacity {
   return capacities.reduce(
     (sum, capacity) => ({
       totalCapacity: sum.totalCapacity + capacity.totalCapacity,
+      blockedUnoccupiedCapacity: sum.blockedUnoccupiedCapacity + capacity.blockedUnoccupiedCapacity,
       availableUnoccupiedCapacity: sum.availableUnoccupiedCapacity + capacity.availableUnoccupiedCapacity,
     }),
-    { totalCapacity: 0, availableUnoccupiedCapacity: 0 },
+    { totalCapacity: 0, blockedUnoccupiedCapacity: 0, availableUnoccupiedCapacity: 0 },
   )
 }
 
@@ -102,7 +104,7 @@ export const EventBannerBlockComponent: React.FC<EventBannerBlockProps> = ({
   const displayedCapacity = usesApiCapacity
     ? apiCapacity && {
         limit: apiCapacity.totalCapacity,
-        remaining: apiCapacity.availableUnoccupiedCapacity,
+        remaining: apiCapacity.availableUnoccupiedCapacity + apiCapacity.blockedUnoccupiedCapacity,
       }
     : capacityLimit != null && spotsRemaining != null && { limit: capacityLimit, remaining: spotsRemaining }
 

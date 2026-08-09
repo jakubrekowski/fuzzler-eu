@@ -27,6 +27,7 @@ interface Day {
   id: string
   date: string
   label: string
+  roomOrder?: string[]
 }
 interface Room {
   id: string
@@ -94,9 +95,8 @@ function ScheduleEventCard({
     <div
       onClick={() => onSelect(event)}
       className={cn(
-        'absolute left-0.5 right-0.5 sm:left-1 sm:right-1 rounded-xl sm:rounded-2xl border pointer-events-auto transition-all duration-300',
-        'touch-manipulation active:scale-[0.98] md:hover:scale-[1.02] md:hover:shadow-2xl md:hover:z-10',
-        'group overflow-hidden cursor-pointer flex flex-col',
+        'absolute left-0.5 right-0.5 sm:left-1 sm:right-1 rounded-xl sm:rounded-2xl border pointer-events-auto',
+        'touch-manipulation cursor-pointer flex flex-col',
         isShort ? 'p-2 px-2.5 sm:p-2.5 sm:px-3' : 'p-3 sm:p-4',
       )}
       style={{
@@ -115,7 +115,7 @@ function ScheduleEventCard({
       >
         <span
           className={cn(
-            'font-black uppercase rounded backdrop-blur-sm leading-tight',
+            'font-black uppercase rounded leading-tight',
             isShort ? 'text-[9px] px-1.5 py-0.5' : 'text-[11px] px-2 py-1',
             badgeBg,
             textColor,
@@ -126,7 +126,7 @@ function ScheduleEventCard({
         <span
           className={cn(
             'font-mono font-bold shrink-0',
-            isShort ? 'text-[9px] opacity-90' : 'text-[11px] opacity-70 group-hover:opacity-100',
+            isShort ? 'text-[9px] opacity-90' : 'text-[11px] opacity-70',
             subtextColor,
           )}
         >
@@ -166,8 +166,6 @@ function ScheduleEventCard({
           </p>
         )}
       </div>
-
-      <div className="absolute top-0 -left-[100%] w-[50%] h-full bg-gradient-to-r from-transparent via-white/20 to-transparent skew-x-[-25deg] transition-all duration-1000 group-hover:left-[150%] pointer-events-none" />
     </div>
   )
 }
@@ -181,6 +179,9 @@ export const ScheduleBlockComponent: React.FC<ScheduleBlockProps> = (props) => {
   const [expanded, setExpanded] = useState(false)
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
+  const headerScrollRef = useRef<HTMLDivElement | null>(null)
+  const bodyScrollRef = useRef<HTMLDivElement | null>(null)
+  const syncingRef = useRef(false)
 
   useEffect(() => {
     let source: string
@@ -226,18 +227,29 @@ export const ScheduleBlockComponent: React.FC<ScheduleBlockProps> = (props) => {
     return () => controller.abort()
   }, [scheduleFile, dataSource, apiProtocol, apiDomain])
 
-  const headerScrollRef = useRef<HTMLDivElement | null>(null)
-  const bodyScrollRef = useRef<HTMLDivElement | null>(null)
-  const syncingRef = useRef(false)
-
   const scrollerClass = useMemo(
     () =>
       cn(
-        'overflow-x-auto overflow-y-visible',
+        'overflow-x-auto overflow-y-hidden',
         '[scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden',
       ),
     [],
   )
+
+  const activeDay = useMemo(
+    () => data?.days.find((day) => day.id === activeDayId),
+    [activeDayId, data],
+  )
+  const rooms = useMemo(() => {
+    const sourceRooms = data?.rooms ?? []
+    const roomOrder = activeDay?.roomOrder ?? []
+    if (roomOrder.length === 0) return sourceRooms
+
+    const positions = new Map(roomOrder.map((roomId, index) => [roomId, index]))
+    return [...sourceRooms].sort(
+      (a, b) => (positions.get(a.id) ?? Number.MAX_SAFE_INTEGER) - (positions.get(b.id) ?? Number.MAX_SAFE_INTEGER),
+    )
+  }, [activeDay?.roomOrder, data?.rooms])
 
   const syncScroll = (from: 'header' | 'body') => {
     const src = from === 'header' ? headerScrollRef.current : bodyScrollRef.current
@@ -259,14 +271,13 @@ export const ScheduleBlockComponent: React.FC<ScheduleBlockProps> = (props) => {
   if (error) return <div className="container py-12 md:py-24 text-center text-red-500 px-4">{error}</div>
   if (!data || !activeDayId) return null
 
-  const activeDay = data.days.find((d) => d.id === activeDayId)
   const dayEvents = data.events.filter((e) => e.dayId === activeDayId)
   const timeRange = getDayTimeRange(dayEvents, hourHeightPx)
   const gridColumns = `${timeColWidth}px 1fr`
   const collapsedMaxHeight = COLLAPSED_VISIBLE_HOURS * hourHeightPx
   const showExpand = timeRange.totalHeightPx > collapsedMaxHeight
   const roomsGridStyle = {
-    gridTemplateColumns: `repeat(${data.rooms.length}, minmax(200px, 1fr))`,
+    gridTemplateColumns: `repeat(${rooms.length}, minmax(200px, 1fr))`,
     minWidth: roomsMinWidth,
   } as const
 
@@ -292,6 +303,7 @@ export const ScheduleBlockComponent: React.FC<ScheduleBlockProps> = (props) => {
         Rounded corners: top on sticky strip, bottom on the body/footer block.
       */}
       <div
+        key={activeDayId}
         className={cn(
           'relative bg-[#1a1a1a]/50 border border-white/10 shadow-2xl',
           'max-md:-mx-[1.75rem] max-md:w-[calc(100%+3.5rem)] max-md:rounded-none max-md:border-x-0',
@@ -301,7 +313,7 @@ export const ScheduleBlockComponent: React.FC<ScheduleBlockProps> = (props) => {
         {/* Sticky: day picker + room headers — flush under fixed site header (--header-h) */}
         <div
           className={cn(
-            'sticky z-[35] bg-[#1a1a1a]/95 backdrop-blur-md border-b border-white/10',
+            'sticky z-[35] bg-[#1a1a1a] border-b border-white/10',
             'top-[var(--header-h)]',
             'rounded-t-none md:rounded-t-[32px]',
           )}
@@ -373,7 +385,7 @@ export const ScheduleBlockComponent: React.FC<ScheduleBlockProps> = (props) => {
                 className={cn(scrollerClass, 'relative')}
               >
                 <div className="grid" style={roomsGridStyle}>
-                  {data.rooms.map((room) => (
+                  {rooms.map((room) => (
                     <div
                       key={room.id}
                       className="py-3 px-2 md:p-4 text-[10px] md:text-[11px] font-bold uppercase tracking-[0.15em] md:tracking-[0.2em] text-zinc-400 text-center leading-tight"
@@ -394,10 +406,10 @@ export const ScheduleBlockComponent: React.FC<ScheduleBlockProps> = (props) => {
         </div>
 
         {/* Body: one horizontal scroller (no visible scrollbar) */}
-        <div className="relative overflow-hidden rounded-b-none md:rounded-b-[32px]">
+        <div className="relative rounded-b-none md:rounded-b-[32px]">
           <div
             className={cn(
-              'relative transition-[max-height] duration-500 ease-out',
+              'relative',
               !expanded && showExpand && 'overflow-hidden',
             )}
             style={!expanded && showExpand ? { maxHeight: `${collapsedMaxHeight}px` } : undefined}
@@ -433,11 +445,11 @@ export const ScheduleBlockComponent: React.FC<ScheduleBlockProps> = (props) => {
                         key={hourIdx}
                         className="grid border-b border-white/5"
                         style={{
-                          gridTemplateColumns: `repeat(${data.rooms.length}, minmax(200px, 1fr))`,
+                          gridTemplateColumns: `repeat(${rooms.length}, minmax(200px, 1fr))`,
                           height: `${hourHeightPx}px`,
                         }}
                       >
-                        {data.rooms.map((room) => (
+                        {rooms.map((room) => (
                           <div key={room.id} className="border-r border-white/5 last:border-r-0" />
                         ))}
                       </div>
@@ -447,9 +459,9 @@ export const ScheduleBlockComponent: React.FC<ScheduleBlockProps> = (props) => {
                   {/* Events overlay */}
                   <div
                     className="absolute inset-0 pointer-events-none grid h-full"
-                    style={{ gridTemplateColumns: `repeat(${data.rooms.length}, minmax(200px, 1fr))` }}
+                    style={{ gridTemplateColumns: `repeat(${rooms.length}, minmax(200px, 1fr))` }}
                   >
-                    {data.rooms.map((room) => (
+                    {rooms.map((room) => (
                       <div key={room.id} className="relative h-full">
                         {dayEvents
                           .filter((e) => e.roomId === room.id)
@@ -525,19 +537,18 @@ export const ScheduleBlockComponent: React.FC<ScheduleBlockProps> = (props) => {
       {selectedEvent && (
         <div
           className={cn(
-            'fixed inset-0 z-[100] flex p-0 md:p-8 animate-in fade-in duration-300',
+            'fixed inset-0 z-[100] flex p-0 md:p-8',
             'items-end md:items-center justify-center',
           )}
         >
           <div
-            className="absolute inset-0 bg-graphite/80 backdrop-blur-md"
+            className="absolute inset-0 bg-graphite/90"
             onClick={() => setSelectedEvent(null)}
           />
 
           <div
             className={cn(
               'relative bg-zinc-900 border border-white/10 w-full overflow-hidden shadow-2xl',
-              'animate-in slide-in-from-bottom-4 md:zoom-in-95 duration-300',
               'rounded-t-[28px] rounded-b-none max-h-[min(92dvh,720px)] overflow-y-auto',
               'md:rounded-[40px] md:max-w-2xl md:max-h-none',
             )}
