@@ -13,6 +13,7 @@ import * as migration_20260527_header_post_cta_link_appearance from './20260527_
 import * as migration_20260718_recommended_organizations_block from './20260718_recommended_organizations_block'
 import * as migration_20260718_recommended_organizations_link_label from './20260718_recommended_organizations_link_label'
 import * as migration_20260718_gallery_block from './20260718_gallery_block'
+import * as migration_20260809_public_api_sources from './20260809_public_api_sources'
 
 export const migrations = [
   {
@@ -89,5 +90,10 @@ export const migrations = [
     up: migration_20260718_gallery_block.up,
     down: migration_20260718_gallery_block.down,
     name: '20260718_gallery_block',
+  },
+  {
+    up: migration_20260809_public_api_sources.up,
+    down: migration_20260809_public_api_sources.down,
+    name: '20260809_public_api_sources',
   },
 ]

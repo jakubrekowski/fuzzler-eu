@@ -570,8 +570,19 @@ export interface EventBannerBlock {
    */
   heading: string;
   showCapacity?: boolean | null;
+  capacitySource?: ('static' | 'api') | null;
   capacityLimit?: number | null;
   spotsRemaining?: number | null;
+  capacityApiProtocol?: ('https' | 'http') | null;
+  /**
+   * Np. event.example.org. Podaj samą domenę, bez protokołu i ścieżki.
+   */
+  capacityApiDomain?: string | null;
+  capacityScope?: ('overall' | 'selectedHotels') | null;
+  /**
+   * Wpisz identyfikatory UUID oddzielone przecinkami. Są dostępne w odpowiedzi API hoteli.
+   */
+  selectedHotelIds?: string | null;
   showCheckIcon?: boolean | null;
   button: {
     type?: ('reference' | 'custom') | null;
@@ -1133,10 +1144,16 @@ export interface ScheduleBlock {
   tagline?: string | null;
   title: string;
   description?: string | null;
+  dataSource: 'file' | 'api';
   /**
    * Upload/select a JSON file from Media.
    */
-  scheduleFile: number | Media;
+  scheduleFile?: (number | null) | Media;
+  apiProtocol?: ('https' | 'http') | null;
+  /**
+   * Np. event.example.org. Podaj samą domenę, bez protokołu i ścieżki.
+   */
+  apiDomain?: string | null;
   id?: string | null;
   blockName?: string | null;
   blockType: 'schedule';
@@ -1678,8 +1695,13 @@ export interface EventBannerBlockSelect<T extends boolean = true> {
   metaLine?: T;
   heading?: T;
   showCapacity?: T;
+  capacitySource?: T;
   capacityLimit?: T;
   spotsRemaining?: T;
+  capacityApiProtocol?: T;
+  capacityApiDomain?: T;
+  capacityScope?: T;
+  selectedHotelIds?: T;
   showCheckIcon?: T;
   button?:
     | T
@@ -1951,7 +1973,10 @@ export interface ScheduleBlockSelect<T extends boolean = true> {
   tagline?: T;
   title?: T;
   description?: T;
+  dataSource?: T;
   scheduleFile?: T;
+  apiProtocol?: T;
+  apiDomain?: T;
   id?: T;
   blockName?: T;
 }

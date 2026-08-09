@@ -16,6 +16,7 @@ import {
   timeToOffset,
 } from './utils'
 import { useScheduleLayout } from './useScheduleLayout'
+import { getPublicApiUrl } from '@/utilities/publicApi'
 
 function getScheduleFileUrl(scheduleFile: number | Media | null | undefined): string | null {
   if (!scheduleFile || typeof scheduleFile === 'number') return null
@@ -172,7 +173,7 @@ function ScheduleEventCard({
 }
 
 export const ScheduleBlockComponent: React.FC<ScheduleBlockProps> = (props) => {
-  const { tagline, title, description, anchor, scheduleFile } = props
+  const { tagline, title, description, anchor, scheduleFile, dataSource, apiProtocol, apiDomain } = props
   const { isMobile, hourHeightPx, timeColWidth, roomsMinWidth } = useScheduleLayout()
   const [data, setData] = useState<ScheduleData | null>(null)
   const [activeDayId, setActiveDayId] = useState<string | null>(null)
@@ -182,19 +183,34 @@ export const ScheduleBlockComponent: React.FC<ScheduleBlockProps> = (props) => {
   const [error, setError] = useState<string | null>(null)
 
   useEffect(() => {
-    const source = getScheduleFileUrl(scheduleFile)
-    if (!source) {
-      setError('Nie wybrano pliku harmonogramu (JSON).')
+    let source: string
+    try {
+      if (dataSource === 'api') {
+        source = getPublicApiUrl(apiProtocol, apiDomain, '/api/public/v1/program')
+      } else {
+        const fileUrl = getScheduleFileUrl(scheduleFile)
+        if (!fileUrl) throw new Error('Nie wybrano pliku harmonogramu (JSON).')
+        source = fileUrl
+      }
+    } catch (err) {
+      setData(null)
+      setError(err instanceof Error ? err.message : 'Nie udało się ustawić źródła programu.')
       setLoading(false)
       return
     }
 
-    fetch(source)
+    const controller = new AbortController()
+    setLoading(true)
+    setError(null)
+    fetch(source, { signal: controller.signal })
       .then((res) => {
-        if (!res.ok) throw new Error('Failed to fetch schedule data')
+        if (!res.ok) throw new Error(`Nie udało się pobrać programu (HTTP ${res.status}).`)
         return res.json()
       })
       .then((json) => {
+        if (!Array.isArray(json.days) || !Array.isArray(json.events)) {
+          throw new Error('API zwróciło nieprawidłowy format programu.')
+        }
         setData(json)
         if (json.days?.length > 0) {
           setActiveDayId(json.days[0].id)
@@ -202,11 +218,13 @@ export const ScheduleBlockComponent: React.FC<ScheduleBlockProps> = (props) => {
         setLoading(false)
       })
       .catch((err) => {
+        if (err.name === 'AbortError') return
         console.error(err)
-        setError(err.message)
+        setError(err instanceof Error ? err.message : 'Nie udało się pobrać programu.')
         setLoading(false)
       })
-  }, [scheduleFile])
+    return () => controller.abort()
+  }, [scheduleFile, dataSource, apiProtocol, apiDomain])
 
   const headerScrollRef = useRef<HTMLDivElement | null>(null)
   const bodyScrollRef = useRef<HTMLDivElement | null>(null)

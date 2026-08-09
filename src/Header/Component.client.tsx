@@ -75,7 +75,8 @@ export const HeaderClient: React.FC<HeaderClientProps> = ({ data }) => {
                 <Media
                   resource={logoMedia}
                   mediaSize="thumbnail"
-                  priority
+                  loading="eager"
+                  size="160px"
                   htmlElement={null}
                   pictureClassName="block max-w-full"
                   imgClassName="h-7 max-h-8 w-auto max-w-full object-contain object-left sm:h-8 sm:max-h-9 md:h-9 md:max-h-10"

@@ -5,6 +5,8 @@ declare global {
       DATABASE_URL: string
       NEXT_PUBLIC_SERVER_URL: string
       VERCEL_PROJECT_PRODUCTION_URL: string
+      CLOUDFLARE_ZONE_ID?: string
+      CLOUDFLARE_API_TOKEN?: string
     }
   }
 }

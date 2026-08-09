@@ -1,10 +1,11 @@
 import type { CollectionAfterChangeHook, CollectionAfterDeleteHook } from 'payload'
 
-import { revalidatePath, revalidateTag } from 'next/cache'
+import { revalidateTag } from 'next/cache'
+import { invalidatePublicCache } from '@/utilities/cache/invalidatePublicCache'
 
 import type { Page } from '../../../payload-types'
 
-export const revalidatePage: CollectionAfterChangeHook<Page> = ({
+export const revalidatePage: CollectionAfterChangeHook<Page> = async ({
   doc,
   previousDoc,
   req: { payload, context },
@@ -15,7 +16,7 @@ export const revalidatePage: CollectionAfterChangeHook<Page> = ({
 
       payload.logger.info(`Revalidating page at path: ${path}`)
 
-      revalidatePath(path)
+      await invalidatePublicCache({ paths: [path] })
       revalidateTag('pages-sitemap', 'max')
     }
 
@@ -25,17 +26,17 @@ export const revalidatePage: CollectionAfterChangeHook<Page> = ({
 
       payload.logger.info(`Revalidating old page at path: ${oldPath}`)
 
-      revalidatePath(oldPath)
+      await invalidatePublicCache({ paths: [oldPath] })
       revalidateTag('pages-sitemap', 'max')
     }
   }
   return doc
 }
 
-export const revalidateDelete: CollectionAfterDeleteHook<Page> = ({ doc, req: { context } }) => {
+export const revalidateDelete: CollectionAfterDeleteHook<Page> = async ({ doc, req: { context } }) => {
   if (!context.disableRevalidate) {
     const path = doc?.slug === 'home' ? '/' : `/${doc?.slug}`
-    revalidatePath(path)
+    await invalidatePublicCache({ paths: [path] })
     revalidateTag('pages-sitemap', 'max')
   }
 
