@@ -1,10 +1,33 @@
-import React from 'react'
+"use client"
+
+import React, { useEffect, useState } from 'react'
 
 import type { EventBannerBlock as EventBannerBlockProps } from '@/payload-types'
 
 import { CMSLink } from '@/components/Link'
 import { HighlightedText } from '@/components/HighlightedText'
 import { cn } from '@/utilities/ui'
+import { getPublicApiUrl } from '@/utilities/publicApi'
+
+interface Capacity {
+  totalCapacity: number
+  availableUnoccupiedCapacity: number
+}
+
+interface HotelAvailabilityResponse {
+  overall: Capacity
+  hotels: Array<{ id: string; availability: Capacity }>
+}
+
+function sumCapacity(capacities: Capacity[]): Capacity {
+  return capacities.reduce(
+    (sum, capacity) => ({
+      totalCapacity: sum.totalCapacity + capacity.totalCapacity,
+      availableUnoccupiedCapacity: sum.availableUnoccupiedCapacity + capacity.availableUnoccupiedCapacity,
+    }),
+    { totalCapacity: 0, availableUnoccupiedCapacity: 0 },
+  )
+}
 
 export const EventBannerBlockComponent: React.FC<EventBannerBlockProps> = ({
   metaLine,
@@ -12,12 +35,78 @@ export const EventBannerBlockComponent: React.FC<EventBannerBlockProps> = ({
   showCapacity,
   capacityLimit,
   spotsRemaining,
+  capacitySource,
+  capacityApiProtocol,
+  capacityApiDomain,
+  capacityScope,
+  selectedHotelIds,
   button,
 }) => {
-  const capacityVisible =
-    showCapacity &&
-    capacityLimit != null &&
-    spotsRemaining != null
+  const [apiCapacity, setApiCapacity] = useState<Capacity | null>(null)
+  const [capacityError, setCapacityError] = useState<string | null>(null)
+  const usesApiCapacity = showCapacity && capacitySource === 'api'
+
+  useEffect(() => {
+    if (!usesApiCapacity) {
+      setApiCapacity(null)
+      setCapacityError(null)
+      return
+    }
+
+    let endpoint: string
+    try {
+      endpoint = getPublicApiUrl(capacityApiProtocol, capacityApiDomain, '/api/public/v1/hotels/availability')
+    } catch (error) {
+      setApiCapacity(null)
+      setCapacityError(error instanceof Error ? error.message : 'Nie udało się ustawić API hoteli.')
+      return
+    }
+
+    const controller = new AbortController()
+    setApiCapacity(null)
+    setCapacityError(null)
+    fetch(endpoint, { signal: controller.signal })
+      .then((res) => {
+        if (!res.ok) throw new Error(`Nie udało się pobrać liczby miejsc (HTTP ${res.status}).`)
+        return res.json() as Promise<HotelAvailabilityResponse>
+      })
+      .then((data) => {
+        if (!data.overall || !Array.isArray(data.hotels)) {
+          throw new Error('API zwróciło nieprawidłowy format dostępności hoteli.')
+        }
+
+        if (capacityScope === 'selectedHotels') {
+          const ids = new Set(
+            (selectedHotelIds ?? '')
+              .split(',')
+              .map((id) => id.trim())
+              .filter(Boolean),
+          )
+          const hotels = data.hotels.filter((hotel) => ids.has(hotel.id))
+          if (ids.size === 0) throw new Error('Nie wybrano hoteli do wyświetlenia.')
+          if (hotels.length !== ids.size) throw new Error('Nie znaleziono co najmniej jednego wybranego hotelu.')
+          setApiCapacity(sumCapacity(hotels.map((hotel) => hotel.availability)))
+        } else {
+          setApiCapacity(data.overall)
+        }
+      })
+      .catch((error: unknown) => {
+        if (typeof error === 'object' && error && 'name' in error && error.name === 'AbortError') return
+        setApiCapacity(null)
+        setCapacityError(error instanceof Error ? error.message : 'Nie udało się pobrać liczby miejsc.')
+      })
+
+    return () => controller.abort()
+  }, [usesApiCapacity, capacityApiProtocol, capacityApiDomain, capacityScope, selectedHotelIds])
+
+  const displayedCapacity = usesApiCapacity
+    ? apiCapacity && {
+        limit: apiCapacity.totalCapacity,
+        remaining: apiCapacity.availableUnoccupiedCapacity,
+      }
+    : capacityLimit != null && spotsRemaining != null && { limit: capacityLimit, remaining: spotsRemaining }
+
+  const capacityVisible = showCapacity && displayedCapacity
 
   return (
     <div className="container py-8">
@@ -48,7 +137,17 @@ export const EventBannerBlockComponent: React.FC<EventBannerBlockProps> = ({
 
           {capacityVisible && (
             <p className="font-mono text-xs sm:text-sm uppercase tracking-[0.2em] text-graphite">
-              LIMIT MIEJSC: {capacityLimit} · ZOSTAŁO: {spotsRemaining}
+              LIMIT MIEJSC: {displayedCapacity.limit} · ZOSTAŁO: {displayedCapacity.remaining}
+            </p>
+          )}
+          {showCapacity && usesApiCapacity && !displayedCapacity && !capacityError && (
+            <p className="font-mono text-xs sm:text-sm uppercase tracking-[0.2em] text-graphite">
+              ŁADOWANIE DOSTĘPNOŚCI…
+            </p>
+          )}
+          {showCapacity && capacityError && (
+            <p className="font-mono text-xs sm:text-sm uppercase tracking-[0.12em] text-graphite">
+              {capacityError}
             </p>
           )}
         </div>

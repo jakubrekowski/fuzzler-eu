@@ -13,6 +13,9 @@ const NEXT_PUBLIC_SERVER_URL = process.env.VERCEL_PROJECT_PRODUCTION_URL
 
 const nextConfig: NextConfig = {
   output: 'standalone',
+  // Payload dynamically imports jose for JWT handling. Explicitly externalize
+  // it so Next copies the package into the standalone Railway image.
+  serverExternalPackages: ['jose'],
   // Temporarily required on Windows until Next.js fixes Turbopack Sass resolution.
   // See: https://github.com/vercel/next.js/issues/86431
   sassOptions: {

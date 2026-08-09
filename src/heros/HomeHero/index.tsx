@@ -60,6 +60,7 @@ export const HomeHero: React.FC<Page['hero']> = (props) => {
                   resource={titleMedia}
                   mediaSize="medium"
                   priority
+                  size="(max-width: 1023px) 80vw, 400px"
                   htmlElement={null}
                   pictureClassName="block w-full max-w-full"
                   imgClassName="h-auto w-full max-w-full object-contain object-left"
@@ -159,6 +160,8 @@ export const HomeHero: React.FC<Page['hero']> = (props) => {
                 <Media
                   resource={homeArt.image}
                   mediaSize="large"
+                  priority
+                  size="(max-width: 1023px) 78vw, 550px"
                   htmlElement={null}
                   imgClassName="relative z-10 h-auto w-full max-w-full object-contain drop-shadow-[0_30px_50_rgba(0,0,0,0.55)] transition-transform duration-700 hover:scale-[1.02] block"
                 />

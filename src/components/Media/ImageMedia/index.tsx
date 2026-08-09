@@ -8,10 +8,7 @@ import React from 'react'
 
 import type { Props as MediaProps } from '../types'
 
-import { cssVariables } from '@/cssVariables'
 import { getMediaUrl } from '@/utilities/getMediaUrl'
-
-const { breakpoints } = cssVariables
 
 /**
  * ImageMedia
@@ -89,12 +86,10 @@ export const ImageMedia: React.FC<MediaProps> = (props) => {
 
   const loading = loadingFromProps || (!priority ? 'lazy' : undefined)
 
-  // NOTE: this is used by the browser to determine which image to download at different screen sizes
-  const sizes = sizeFromProps
-    ? sizeFromProps
-    : Object.entries(breakpoints)
-        .map(([, value]) => `(max-width: ${value}px) ${value * 2}w`)
-        .join(', ')
+  // The former fallback advertised widths larger than the rendered element,
+  // making mobile browsers request 3840px variants. Constrained layouts pass
+  // `size`; the safe default is the viewport width.
+  const sizes = sizeFromProps || '100vw'
 
   return (
     <picture className={cn(pictureClassName)}>

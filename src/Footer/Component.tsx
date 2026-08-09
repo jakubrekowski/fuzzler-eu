@@ -34,7 +34,7 @@ export async function Footer() {
                 <Media
                   resource={logoMedia}
                   mediaSize="thumbnail"
-                  priority
+                  size="180px"
                   htmlElement={null}
                   imgClassName="h-10 w-auto object-contain"
                 />

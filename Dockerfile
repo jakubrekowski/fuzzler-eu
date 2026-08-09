@@ -27,14 +27,16 @@ COPY . .
 
 RUN bun run build
 
-# Production image, copy all the files and run next
-FROM base AS runner
+# Production image. Next's standalone server is a Node.js server; running it
+# with Node also preserves Payload's dynamic dependency resolution.
+FROM node:22-alpine AS runner
 WORKDIR /app
 
 ENV NODE_ENV=production
 # Uncomment the following line in case you want to disable telemetry during runtime.
 # ENV NEXT_TELEMETRY_DISABLED 1
 
+RUN apk add --no-cache libc6-compat
 RUN addgroup --system --gid 1001 nodejs
 RUN adduser --system --uid 1001 nextjs
 
@@ -59,4 +61,4 @@ ENV HOSTNAME="0.0.0.0"
 
 # server.js is created by next build from the standalone output
 # https://nextjs.org/docs/pages/api-reference/next-config-js/output
-CMD ["bun", "server.js"]
+CMD ["node", "server.js"]

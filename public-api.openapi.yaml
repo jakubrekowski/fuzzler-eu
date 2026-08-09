@@ -1,0 +1,170 @@
+openapi: 3.1.1
+info:
+  title: Jungle Public API
+  version: 1.0.0
+  description: |
+    Read-only public API scoped exclusively to the tenant resolved from the request hostname.
+    No tenant identifier is accepted in paths, query parameters, or request headers.
+servers:
+  - url: https://{tenant-domain}
+    variables:
+      tenant-domain:
+        default: event.example.org
+        description: A verified hostname belonging to the tenant.
+paths:
+  /api/public/v1/program:
+    get:
+      summary: Get the public event program
+      operationId: getPublicProgram
+      responses:
+        '200':
+          description: Public program export. Its root shape is compatible with the administrator export, excluding participant state and non-public labels.
+          headers:
+            Access-Control-Allow-Origin:
+              schema: { type: string }
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PublicProgramExport'
+        '404': { $ref: '#/components/responses/ModuleDisabled' }
+        '500': { $ref: '#/components/responses/ServerError' }
+    options:
+      summary: CORS preflight
+      operationId: preflightPublicProgram
+      responses:
+        '204': { description: CORS preflight accepted when the Origin is allow-listed. }
+        '404': { $ref: '#/components/responses/ModuleDisabled' }
+  /api/public/v1/hotels/availability:
+    get:
+      summary: Get aggregate hotel capacity and occupancy
+      operationId: getPublicHotelAvailability
+      responses:
+        '200':
+          description: Aggregate capacity across active hotels and rooms, plus per-hotel values.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HotelAvailabilityResponse'
+        '404': { $ref: '#/components/responses/ModuleDisabled' }
+        '500': { $ref: '#/components/responses/ServerError' }
+    options:
+      summary: CORS preflight
+      operationId: preflightPublicHotelAvailability
+      responses:
+        '204': { description: CORS preflight accepted when the Origin is allow-listed. }
+        '404': { $ref: '#/components/responses/ModuleDisabled' }
+components:
+  responses:
+    ModuleDisabled:
+      description: The requested module is not enabled for this tenant.
+      content:
+        application/json:
+          schema: { $ref: '#/components/schemas/Error' }
+    ServerError:
+      description: An unexpected server error occurred.
+      content:
+        application/json:
+          schema: { $ref: '#/components/schemas/Error' }
+  schemas:
+    Error:
+      type: object
+      required: [error]
+      properties:
+        error: { type: string }
+    PublicProgramExport:
+      type: object
+      description: Compatible with the required public subset of the admin ProgramExport shape.
+      required: [days, rooms, categories, presenters, labels, events]
+      properties:
+        days:
+          type: array
+          items: { $ref: '#/components/schemas/ProgramDay' }
+        rooms:
+          type: array
+          items: { $ref: '#/components/schemas/ProgramRoom' }
+        categories:
+          type: array
+          items: { $ref: '#/components/schemas/ProgramCategory' }
+        presenters:
+          type: array
+          items: { $ref: '#/components/schemas/ProgramPresenter' }
+        labels:
+          type: array
+          items: { $ref: '#/components/schemas/ProgramLabel' }
+        events:
+          type: array
+          items: { $ref: '#/components/schemas/ProgramItem' }
+    ProgramDay:
+      type: object
+      required: [id, label, date]
+      properties:
+        id: { type: string, format: uuid }
+        label: { type: string }
+        date: { type: [string, 'null'], format: date }
+        roomOrder: { type: array, items: { type: string, format: uuid } }
+    ProgramRoom:
+      type: object
+      required: [id, name]
+      properties:
+        id: { type: string, format: uuid }
+        name: { type: string }
+    ProgramCategory:
+      type: object
+      required: [id, name, color]
+      properties:
+        id: { type: string, format: uuid }
+        name: { type: string }
+        color: { type: string }
+    ProgramPresenter:
+      type: object
+      required: [id, name]
+      properties:
+        id: { type: string, format: uuid }
+        name: { type: string }
+    ProgramLabel:
+      type: object
+      required: [id, key, displayName, isPublic]
+      properties:
+        id: { type: string, format: uuid }
+        key: { type: string }
+        displayName: { type: string }
+        isPublic: { type: boolean, const: true }
+    ProgramItem:
+      type: object
+      required: [id, dayId, roomId, categoryId, startTime, endTime, title, presenterIds]
+      properties:
+        id: { type: string, format: uuid }
+        dayId: { type: string, format: uuid }
+        roomId: { type: [string, 'null'], format: uuid }
+        categoryId: { type: [string, 'null'], format: uuid }
+        title: { type: string }
+        startTime: { type: string, pattern: '^[0-2][0-9]:[0-5][0-9]$' }
+        endTime: { type: string, pattern: '^[0-2][0-9]:[0-5][0-9]$' }
+        noticeStatus: { type: string, enum: [normal, changed, moved, cancelled] }
+        presenterIds: { type: array, items: { type: string, format: uuid } }
+        labelKeys: { type: array, items: { type: string } }
+        description: { type: string }
+        location_detail: { type: string }
+    Capacity:
+      type: object
+      description: All values are numbers of places. The four fields always satisfy totalCapacity = occupiedCapacity + blockedUnoccupiedCapacity + availableUnoccupiedCapacity.
+      required: [totalCapacity, occupiedCapacity, blockedUnoccupiedCapacity, availableUnoccupiedCapacity]
+      properties:
+        totalCapacity: { type: integer, minimum: 0 }
+        occupiedCapacity: { type: integer, minimum: 0 }
+        blockedUnoccupiedCapacity: { type: integer, minimum: 0 }
+        availableUnoccupiedCapacity: { type: integer, minimum: 0 }
+    HotelAvailabilityResponse:
+      type: object
+      required: [overall, hotels]
+      properties:
+        overall: { $ref: '#/components/schemas/Capacity' }
+        hotels:
+          type: array
+          items:
+            type: object
+            required: [id, name, availability]
+            properties:
+              id: { type: string, format: uuid }
+              name: { type: string }
+              availability: { $ref: '#/components/schemas/Capacity' }
